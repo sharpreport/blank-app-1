@@ -4,9 +4,12 @@ import json
 import io
 
 from urllib.request import urlopen, Request
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
-
+from first_inning_history import (
+    get_season_first_innings,
+    get_pitcher_first_inning_history,
+)
 
 
 
@@ -1266,7 +1269,183 @@ if st.button(
                 hide_index=True,
             )
 
+            # ---------------------------------------------
+            # PITCHER FIRST-INNING HISTORY
+            # ---------------------------------------------
 
+            st.subheader(
+                "Pitcher YTD First-Inning History"
+            )
+
+            st.caption(
+                "Regular-season results through "
+                "yesterday. Current-day games are "
+                "excluded to prevent data leakage."
+            )
+
+
+            with st.spinner(
+                "Loading YTD first-inning history..."
+            ):
+
+                history_end_date = (
+                    TODAY
+                    - timedelta(days=1)
+                )
+
+
+                season_first_innings = (
+                    get_season_first_innings(
+                        YEAR,
+                        history_end_date.isoformat()
+                    )
+                )
+
+
+                first_inning_rows = []
+
+
+                for game in games:
+
+                    pitchers = [
+
+                        (
+                            game["Away Team"],
+                            game["Away SP"],
+                            game["Away SP ID"],
+                        ),
+
+                        (
+                            game["Home Team"],
+                            game["Home SP"],
+                            game["Home SP ID"],
+                        ),
+                    ]
+
+
+                    for (
+                        team,
+                        pitcher_name,
+                        pitcher_id
+                    ) in pitchers:
+
+
+                        if not pitcher_id:
+
+                            first_inning_rows.append({
+
+                                "Game":
+                                    game["Game"],
+
+                                "Team":
+                                    team,
+
+                                "Pitcher":
+                                    pitcher_name,
+
+                                "Starts":
+                                    "—",
+
+                                "Scoreless 1st":
+                                    "—",
+
+                                "Scoreless 1st %":
+                                    "—",
+
+                                "1st-Inning Runs/Start":
+                                    "—",
+
+                                "NRFI Record":
+                                    "—",
+
+                                "NRFI %":
+                                    "—",
+                            })
+
+                            continue
+
+
+                        history = (
+                            get_pitcher_first_inning_history(
+                                pitcher_id,
+                                YEAR,
+                                season_first_innings,
+                            )
+                        )
+
+
+                        starts = history[
+                            "starts"
+                        ]
+
+
+                        if starts:
+
+                            scoreless_rate = (
+                                f"{history['scoreless_percent']:.1f}%"
+                            )
+
+                            runs_per_start = (
+                                f"{history['runs_per_start']:.2f}"
+                            )
+
+                            nrfi_record = (
+                                f"{history['nrfi']}-"
+                                f"{history['yrfi']}"
+                            )
+
+                            nrfi_rate = (
+                                f"{history['nrfi_percent']:.1f}%"
+                            )
+
+                        else:
+
+                            scoreless_rate = "—"
+                            runs_per_start = "—"
+                            nrfi_record = "—"
+                            nrfi_rate = "—"
+
+
+                        first_inning_rows.append({
+
+                            "Game":
+                                game["Game"],
+
+                            "Team":
+                                team,
+
+                            "Pitcher":
+                                pitcher_name,
+
+                            "Starts":
+                                starts,
+
+                            "Scoreless 1st":
+                                history[
+                                    "scoreless"
+                                ],
+
+                            "Scoreless 1st %":
+                                scoreless_rate,
+
+                            "1st-Inning Runs/Start":
+                                runs_per_start,
+
+                            "NRFI Record":
+                                nrfi_record,
+
+                            "NRFI %":
+                                nrfi_rate,
+                        })
+
+
+            st.dataframe(
+                pd.DataFrame(
+                    first_inning_rows
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
             # ---------------------------------------------
             # HITTER DATA
             # ---------------------------------------------
