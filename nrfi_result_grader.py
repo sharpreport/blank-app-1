@@ -514,6 +514,18 @@ def _latest_final_pregame_snapshot(
             continue
 
 
+        collection_mode = (
+            snapshot
+            .get("model", {})
+            .get("collection_mode")
+        )
+
+        # Near-close snapshots are NEVER allowed to replace the
+        # original entry/ROI snapshot.
+        if collection_mode == "scheduled_near_close":
+            continue
+
+
         row = _matching_game_row(
             snapshot,
             completed_game[
@@ -565,6 +577,85 @@ def _latest_final_pregame_snapshot(
     )
 
 
+
+def _latest_near_close_snapshot(
+    snapshots,
+    completed_game,
+):
+    game_start = _parse_datetime(
+        completed_game.get(
+            "game_start_utc"
+        )
+    )
+
+    if game_start is None:
+        return None
+
+    eligible = []
+
+    for snapshot in snapshots:
+        snapshot_time = snapshot.get(
+            "_snapshot_time"
+        )
+
+        if (
+            snapshot_time is None
+            or
+            snapshot_time >= game_start
+        ):
+            continue
+
+        collection_mode = (
+            snapshot
+            .get("model", {})
+            .get("collection_mode")
+        )
+
+        if collection_mode != "scheduled_near_close":
+            continue
+
+        row = _matching_game_row(
+            snapshot,
+            completed_game[
+                "game_id"
+            ],
+        )
+
+        if row is None:
+            continue
+
+        if row.get(
+            "Status"
+        ) != "FINAL":
+            continue
+
+        if row.get(
+            "Market Status"
+        ) != "LIVE":
+            continue
+
+        eligible.append({
+            "snapshot":
+                snapshot,
+
+            "row":
+                row,
+
+            "snapshot_time":
+                snapshot_time,
+        })
+
+    if not eligible:
+        return None
+
+    return max(
+        eligible,
+        key=lambda item:
+            item[
+                "snapshot_time"
+            ],
+    )
+
 def _grade_side(
     actual_side,
     side,
@@ -601,6 +692,7 @@ def _grade_side(
 def _build_game_grade(
     completed_game,
     selected,
+    close_selected=None,
 ):
     base = {
         **completed_game,
@@ -693,6 +785,42 @@ def _build_game_grade(
             None,
 
         "yrfi_profit_units_1u_risk":
+            None,
+
+        "close_snapshot_path":
+            None,
+
+        "close_snapshot_time_utc":
+            None,
+
+        "close_minutes_before_first_pitch":
+            None,
+
+        "close_price":
+            None,
+
+        "close_book":
+            None,
+
+        "close_no_vig":
+            None,
+
+        "close_break_even":
+            None,
+
+        "no_vig_clv_pp":
+            None,
+
+        "raw_price_clv_pp":
+            None,
+
+        "beat_close":
+            None,
+
+        "entry_edge_at_close_no_vig":
+            None,
+
+        "entry_price_edge_at_close":
             None,
     }
 
@@ -927,6 +1055,213 @@ def _build_game_grade(
             ],
     })
 
+    # -------------------------------------------------
+    # Near-close / CLV tracking for the ORIGINAL entry side.
+    # All stored market probabilities are percentage points.
+    # Positive CLV means the market moved toward our entry side.
+    # -------------------------------------------------
+
+    if close_selected is not None:
+
+        close_snapshot = close_selected[
+            "snapshot"
+        ]
+
+        close_row = close_selected[
+            "row"
+        ]
+
+        close_snapshot_time = close_selected[
+            "snapshot_time"
+        ]
+
+        close_game_start = _parse_datetime(
+            completed_game[
+                "game_start_utc"
+            ]
+        )
+
+        close_minutes_before = (
+            (
+                close_game_start
+                - close_snapshot_time
+            ).total_seconds()
+            / 60.0
+        )
+
+        if model_side == "NRFI":
+            close_price = close_row.get(
+                "Best NRFI Price"
+            )
+
+            close_book = close_row.get(
+                "Best NRFI Book"
+            )
+
+            close_no_vig = close_row.get(
+                "Market NRFI No-Vig"
+            )
+
+            close_break_even = close_row.get(
+                "NRFI Break-Even"
+            )
+
+        elif model_side == "YRFI":
+            close_price = close_row.get(
+                "Best YRFI Price"
+            )
+
+            close_book = close_row.get(
+                "Best YRFI Book"
+            )
+
+            close_no_vig = close_row.get(
+                "Market YRFI No-Vig"
+            )
+
+            close_break_even = close_row.get(
+                "YRFI Break-Even"
+            )
+
+        else:
+            close_price = None
+            close_book = None
+            close_no_vig = None
+            close_break_even = None
+
+
+        entry_no_vig = row.get(
+            "Market No-Vig"
+        )
+
+        entry_break_even = row.get(
+            "Market Raw Implied"
+        )
+
+        entry_model_probability = row.get(
+            "Model Probability"
+        )
+
+
+        no_vig_clv = (
+            (
+                float(
+                    close_no_vig
+                )
+                - float(
+                    entry_no_vig
+                )
+            )
+            if (
+                close_no_vig is not None
+                and
+                entry_no_vig is not None
+            )
+            else None
+        )
+
+        raw_price_clv = (
+            (
+                float(
+                    close_break_even
+                )
+                - float(
+                    entry_break_even
+                )
+            )
+            if (
+                close_break_even is not None
+                and
+                entry_break_even is not None
+            )
+            else None
+        )
+
+        entry_edge_at_close = (
+            (
+                float(
+                    entry_model_probability
+                )
+                - float(
+                    close_no_vig
+                )
+            )
+            if (
+                entry_model_probability is not None
+                and
+                close_no_vig is not None
+            )
+            else None
+        )
+
+        entry_price_edge_at_close = (
+            (
+                float(
+                    entry_model_probability
+                )
+                - float(
+                    close_break_even
+                )
+            )
+            if (
+                entry_model_probability is not None
+                and
+                close_break_even is not None
+            )
+            else None
+        )
+
+
+        base.update({
+            "close_snapshot_path":
+                close_snapshot.get(
+                    "_path"
+                ),
+
+            "close_snapshot_time_utc":
+                close_snapshot.get(
+                    "snapshot_time_utc"
+                ),
+
+            "close_minutes_before_first_pitch":
+                round(
+                    close_minutes_before,
+                    2,
+                ),
+
+            "close_price":
+                close_price,
+
+            "close_book":
+                close_book,
+
+            "close_no_vig":
+                close_no_vig,
+
+            "close_break_even":
+                close_break_even,
+
+            "no_vig_clv_pp":
+                no_vig_clv,
+
+            "raw_price_clv_pp":
+                raw_price_clv,
+
+            "beat_close":
+                (
+                    raw_price_clv > 0
+                    if raw_price_clv is not None
+                    else None
+                ),
+
+            "entry_edge_at_close_no_vig":
+                entry_edge_at_close,
+
+            "entry_price_edge_at_close":
+                entry_price_edge_at_close,
+        })
+
+
     # Preserve research-only rolling pitcher first-inning
     # fields from the exact selected FINAL pregame snapshot.
     # These values are not used to change Model v1.
@@ -1036,6 +1371,13 @@ def grade_date(
             )
         )
 
+        close_selected = (
+            _latest_near_close_snapshot(
+                snapshots=snapshots,
+                completed_game=completed_game,
+            )
+        )
+
         grades.append(
             _build_game_grade(
                 completed_game=
@@ -1043,6 +1385,9 @@ def grade_date(
 
                 selected=
                     selected,
+
+                close_selected=
+                    close_selected,
             )
         )
 
@@ -1081,8 +1426,10 @@ def grade_date(
 
         "grading_rule":
             (
-                "Latest FINAL snapshot strictly before first pitch "
-                "with LIVE first-inning market and a best available price."
+                "Latest FINAL non-near-close snapshot strictly before "
+                "first pitch with LIVE first-inning market and a best "
+                "available price. Near-close snapshots are used separately "
+                "for CLV."
             ),
 
         "profit_convention":

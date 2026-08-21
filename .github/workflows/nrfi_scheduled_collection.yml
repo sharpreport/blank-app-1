@@ -46,5 +46,8 @@ jobs:
           GITHUB_DATA_REPO: ${{ secrets.SHARPREPORT_DATA_REPO }}
           NRFI_CAPTURE_MIN_MINUTES: "5"
           NRFI_CAPTURE_MAX_MINUTES: "60"
+          NRFI_CLOSE_MIN_MINUTES: "0"
+          NRFI_CLOSE_MAX_MINUTES: "25"
+          NRFI_CLV_MIN_PRICE_EDGE: "2.0"
         run: |
           python nrfi_scheduled_collector.py

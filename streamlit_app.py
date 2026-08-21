@@ -58,6 +58,10 @@ from nrfi_pitcher_history_research import (
     render_pitcher_history_research,
 )
 
+from nrfi_clv_dashboard import (
+    render_clv_dashboard,
+)
+
 
 
 
@@ -3630,6 +3634,35 @@ if st.button(
                     st.warning(
                         "The live scanner is working, but the "
                         "edge performance dashboard could not load: "
+                        f"{error}"
+                    )
+
+
+            # ---------------------------------------------
+            # NEAR-CLOSE / CLV TRACKING
+            # ---------------------------------------------
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    render_clv_dashboard(
+                        token=
+                            github_data_token,
+
+                        repo=
+                            github_data_repo,
+                    )
+
+                except Exception as error:
+
+                    st.warning(
+                        "The live scanner is working, but the "
+                        "near-close / CLV dashboard could not load: "
                         f"{error}"
                     )
 

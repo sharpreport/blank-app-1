@@ -69,6 +69,28 @@ CAPTURE_MIN_MINUTES = int(
 )
 
 
+CLOSE_MAX_MINUTES = int(
+    os.getenv(
+        "NRFI_CLOSE_MAX_MINUTES",
+        "25",
+    )
+)
+
+CLOSE_MIN_MINUTES = int(
+    os.getenv(
+        "NRFI_CLOSE_MIN_MINUTES",
+        "0",
+    )
+)
+
+CLV_MIN_ENTRY_PRICE_EDGE = float(
+    os.getenv(
+        "NRFI_CLV_MIN_PRICE_EDGE",
+        "2.0",
+    )
+)
+
+
 # =========================================================
 # CONFIG
 # =========================================================
@@ -508,6 +530,141 @@ def find_final_capture_candidates(
         if str(
             game_id
         ) in captured_game_ids:
+            continue
+
+        if (
+            not game.get(
+                "Away SP ID"
+            )
+            or
+            not game.get(
+                "Home SP ID"
+            )
+        ):
+            continue
+
+        away_top4, home_top4 = (
+            get_lineups(
+                game_id
+            )
+        )
+
+        if (
+            len(
+                away_top4
+            ) != 4
+            or
+            len(
+                home_top4
+            ) != 4
+        ):
+            continue
+
+        game = dict(
+            game
+        )
+
+        game[
+            "Away Top 4"
+        ] = away_top4
+
+        game[
+            "Home Top 4"
+        ] = home_top4
+
+        game[
+            "Lineups"
+        ] = "✅ Confirmed"
+
+        game[
+            "Minutes Before First Pitch"
+        ] = minutes
+
+        game_time = parse_game_time(
+            game.get(
+                "Game Date"
+            )
+        )
+
+        game[
+            "Start Time"
+        ] = (
+            game_time
+            .strftime(
+                "%I:%M %p ET"
+            )
+            .lstrip(
+                "0"
+            )
+            if game_time is not None
+            else "TBA"
+        )
+
+        candidates.append(
+            game
+        )
+
+    return candidates
+
+
+def find_near_close_candidates(
+    games,
+    now_et,
+    initial_capture_state,
+    near_close_capture_state,
+):
+    candidates = []
+
+    for game in games:
+        game_id = game.get(
+            "Game ID"
+        )
+
+        game_key = str(
+            game_id
+        )
+
+        entry = initial_capture_state.get(
+            game_key
+        )
+
+        if not entry:
+            continue
+
+        if game_key in near_close_capture_state:
+            continue
+
+        try:
+            entry_price_edge = float(
+                entry.get(
+                    "price_edge"
+                )
+            )
+        except Exception:
+            continue
+
+        # Spend a second Odds API credit only on actual edge candidates.
+        if (
+            entry_price_edge
+            < CLV_MIN_ENTRY_PRICE_EDGE
+        ):
+            continue
+
+        minutes = minutes_until_game(
+            game,
+            now_et,
+        )
+
+        if minutes is None:
+            continue
+
+        if (
+            minutes
+            < CLOSE_MIN_MINUTES
+            or
+            minutes
+            > CLOSE_MAX_MINUTES
+        ):
             continue
 
         if (
@@ -2017,6 +2174,17 @@ def main():
         {},
     )
 
+    near_close_captured = state.get(
+        "near_close_captured",
+        {},
+    )
+
+    # A game must have been captured on a PRIOR automation run
+    # before it can receive a separate near-close pull.
+    captured_before_run = dict(
+        captured
+    )
+
     games = get_schedule(
         today
     )
@@ -2026,7 +2194,7 @@ def main():
         f"{len(games)}"
     )
 
-    candidates = (
+    initial_candidates = (
         find_final_capture_candidates(
             games=
                 games,
@@ -2045,14 +2213,66 @@ def main():
         f"FINAL uncaptured games within "
         f"{CAPTURE_MIN_MINUTES}-"
         f"{CAPTURE_MAX_MINUTES} minutes: "
-        f"{len(candidates)}"
+        f"{len(initial_candidates)}"
     )
 
-    snapshot_result = None
-    live_market_rows = []
+    near_close_candidates = (
+        find_near_close_candidates(
+            games=
+                games,
+
+            now_et=
+                now_et,
+
+            initial_capture_state=
+                captured_before_run,
+
+            near_close_capture_state=
+                near_close_captured,
+        )
+    )
+
+    print(
+        f"Near-close candidates within "
+        f"{CLOSE_MIN_MINUTES}-"
+        f"{CLOSE_MAX_MINUTES} minutes "
+        f"with entry Price Edge >= "
+        f"{CLV_MIN_ENTRY_PRICE_EDGE:.1f}%: "
+        f"{len(near_close_candidates)}"
+    )
+
+
+    all_model_candidates = []
+
+    seen_game_ids = set()
+
+    for game in (
+        initial_candidates
+        +
+        near_close_candidates
+    ):
+        game_key = str(
+            game.get(
+                "Game ID"
+            )
+        )
+
+        if game_key in seen_game_ids:
+            continue
+
+        seen_game_ids.add(
+            game_key
+        )
+
+        all_model_candidates.append(
+            game
+        )
+
+
     last_usage = None
 
-    if candidates:
+    if all_model_candidates:
+
         print(
             "Loading current pitcher/hitter "
             "metrics and model inputs..."
@@ -2084,7 +2304,7 @@ def main():
         probability_rows = (
             build_probability_rows(
                 games=
-                    candidates,
+                    all_model_candidates,
 
                 pitcher_xwoba=
                     pitcher_xwoba,
@@ -2106,12 +2326,9 @@ def main():
             )
         )
 
-        # -------------------------------------------------
-        # Rolling pitcher first-inning history is research
-        # context only. It is logged for future validation
-        # and does NOT alter Model v1 probabilities.
-        # -------------------------------------------------
 
+        # Rolling pitcher first-inning history remains
+        # research-only and does NOT alter Model v1.
         history_end_date = (
             today
             - timedelta(
@@ -2123,7 +2340,7 @@ def main():
 
         unique_pitcher_ids = sorted({
             int(pitcher_id)
-            for game in candidates
+            for game in all_model_candidates
             for pitcher_id in [
                 game.get(
                     "Away SP ID"
@@ -2154,10 +2371,13 @@ def main():
                 ] = empty_pitcher_first_inning_windows(
                     pitcher_id=
                         pitcher_id,
+
                     season=
                         year,
+
                     end_date=
                         history_end_date.isoformat(),
+
                     error=
                         error,
                 )
@@ -2175,7 +2395,9 @@ def main():
 
             away_history = (
                 pitcher_history_lookup.get(
-                    int(away_pitcher_id)
+                    int(
+                        away_pitcher_id
+                    )
                 )
                 if away_pitcher_id
                 else None
@@ -2183,7 +2405,9 @@ def main():
 
             home_history = (
                 pitcher_history_lookup.get(
-                    int(home_pitcher_id)
+                    int(
+                        home_pitcher_id
+                    )
                 )
                 if home_pitcher_id
                 else None
@@ -2210,202 +2434,469 @@ def main():
             "(Season/L30/L20/L10; research only)."
         )
 
-        print(
-            "Fetching first-inning market only "
-            "for eligible FINAL games..."
-        )
 
-        (
-            live_market_rows,
-            last_usage,
-        ) = attach_market(
-            games=
-                candidates,
+        probability_lookup = {
+            row[
+                "Game"
+            ]:
+                row
+            for row in probability_rows
+        }
 
-            probability_rows=
-                probability_rows,
 
-            api_key=
-                config[
-                    "odds_api_key"
-                ],
-        )
+        # =================================================
+        # INITIAL FINAL CAPTURE
+        # =================================================
 
-        if live_market_rows:
-            model_metadata = {
-                "model_name":
-                    trained_model.get(
-                        "model_name",
-                        "SharpReport NRFI/YRFI Model v1",
-                    ),
+        if initial_candidates:
 
-                "training_start_date":
-                    trained_model.get(
-                        "training_start_date"
-                    ),
-
-                "training_end_date":
-                    trained_model.get(
-                        "training_end_date"
-                    ),
-
-                "training_games":
-                    trained_model.get(
-                        "training_games"
-                    ),
-
-                "collection_mode":
-                    "scheduled_final_pregame",
-
-                "capture_window_minutes":
-                    {
-                        "minimum":
-                            CAPTURE_MIN_MINUTES,
-
-                        "maximum":
-                            CAPTURE_MAX_MINUTES,
-                    },
-            }
-
-            snapshot_result = (
-                save_slate_snapshot(
-                    token=
-                        config[
-                            "github_data_token"
-                        ],
-
-                    repo=
-                        config[
-                            "github_data_repo"
-                        ],
-
-                    rows=
-                        live_market_rows,
-
-                    snapshot_time=
-                        now_et,
-
-                    model_metadata=
-                        model_metadata,
-
-                    odds_usage=
-                        last_usage,
-                )
+            print(
+                "Fetching initial FINAL first-inning market "
+                "for eligible games..."
             )
 
-            for row in live_market_rows:
-                game_id = str(
-                    row[
-                        "Game ID"
+            initial_probability_rows = [
+                probability_lookup[
+                    game[
+                        "Game"
                     ]
-                )
+                ]
+                for game in initial_candidates
+            ]
 
-                captured[
-                    game_id
-                ] = {
-                    "game":
-                        row[
-                            "Game"
-                        ],
+            (
+                initial_market_rows,
+                initial_usage,
+            ) = attach_market(
+                games=
+                    initial_candidates,
 
-                    "snapshot_path":
-                        snapshot_result.get(
-                            "path"
+                probability_rows=
+                    initial_probability_rows,
+
+                api_key=
+                    config[
+                        "odds_api_key"
+                    ],
+            )
+
+            if initial_market_rows:
+
+                initial_metadata = {
+                    "model_name":
+                        trained_model.get(
+                            "model_name",
+                            "SharpReport NRFI/YRFI Model v1",
                         ),
 
-                    "snapshot_time_et":
-                        now_et.isoformat(),
-
-                    "minutes_before_first_pitch":
-                        row.get(
-                            "Scheduled Capture Minutes Before First Pitch"
+                    "training_start_date":
+                        trained_model.get(
+                            "training_start_date"
                         ),
 
-                    "model_side":
-                        row.get(
-                            "Model Side"
+                    "training_end_date":
+                        trained_model.get(
+                            "training_end_date"
                         ),
 
-                    "model_probability":
-                        row.get(
-                            "Model Probability"
+                    "training_games":
+                        trained_model.get(
+                            "training_games"
                         ),
 
-                    "price_edge":
-                        row.get(
-                            "Price Edge"
-                        ),
+                    "collection_mode":
+                        "scheduled_final_pregame",
 
-                    "best_price":
-                        row.get(
-                            "Best Price"
-                        ),
+                    "capture_window_minutes":
+                        {
+                            "minimum":
+                                CAPTURE_MIN_MINUTES,
 
-                    "best_book":
-                        row.get(
-                            "Best Book"
-                        ),
+                            "maximum":
+                                CAPTURE_MAX_MINUTES,
+                        },
                 }
 
-            state[
-                "captured"
-            ] = captured
+                initial_snapshot = (
+                    save_slate_snapshot(
+                        token=
+                            config[
+                                "github_data_token"
+                            ],
 
-            state[
-                "updated_at_et"
-            ] = now_et.isoformat()
+                        repo=
+                            config[
+                                "github_data_repo"
+                            ],
 
-            save_capture_state(
-                token=
-                    config[
-                        "github_data_token"
-                    ],
+                        rows=
+                            initial_market_rows,
 
-                repo=
-                    config[
-                        "github_data_repo"
-                    ],
+                        snapshot_time=
+                            now_et,
 
-                game_date=
-                    today,
+                        model_metadata=
+                            initial_metadata,
 
-                state=
-                    state,
-            )
-
-            print(
-                f"Saved scheduled snapshot: "
-                f"{snapshot_result.get('path')}"
-            )
-
-            print(
-                f"Games captured this run: "
-                f"{len(live_market_rows)}"
-            )
-
-            if last_usage:
-                remaining = (
-                    last_usage.get(
-                        "requests_remaining"
+                        odds_usage=
+                            initial_usage,
                     )
                 )
 
-                if remaining is not None:
-                    print(
-                        "Odds API credits remaining: "
-                        f"{remaining}"
+                for row in initial_market_rows:
+                    game_key = str(
+                        row[
+                            "Game ID"
+                        ]
                     )
 
-        else:
+                    captured[
+                        game_key
+                    ] = {
+                        "game":
+                            row[
+                                "Game"
+                            ],
+
+                        "snapshot_path":
+                            initial_snapshot.get(
+                                "path"
+                            ),
+
+                        "snapshot_time_et":
+                            now_et.isoformat(),
+
+                        "minutes_before_first_pitch":
+                            row.get(
+                                "Scheduled Capture Minutes Before First Pitch"
+                            ),
+
+                        "model_side":
+                            row.get(
+                                "Model Side"
+                            ),
+
+                        "model_probability":
+                            row.get(
+                                "Model Probability"
+                            ),
+
+                        "market_no_vig":
+                            row.get(
+                                "Market No-Vig"
+                            ),
+
+                        "break_even":
+                            row.get(
+                                "Market Raw Implied"
+                            ),
+
+                        "price_edge":
+                            row.get(
+                                "Price Edge"
+                            ),
+
+                        "best_price":
+                            row.get(
+                                "Best Price"
+                            ),
+
+                        "best_book":
+                            row.get(
+                                "Best Book"
+                            ),
+                    }
+
+                last_usage = initial_usage
+
+                print(
+                    f"Saved initial FINAL snapshot: "
+                    f"{initial_snapshot.get('path')}"
+                )
+
+                print(
+                    f"Initial games captured this run: "
+                    f"{len(initial_market_rows)}"
+                )
+
+            else:
+
+                print(
+                    "No initial FINAL candidates had a live "
+                    "first-inning market."
+                )
+
+
+        # =================================================
+        # ONE NEAR-CLOSE CAPTURE FOR QUALIFIED EDGE GAMES
+        # =================================================
+
+        if near_close_candidates:
+
             print(
-                "No eligible games had a live "
-                "first-inning market. Nothing was marked captured."
+                "Fetching one near-close first-inning market "
+                "for qualified edge candidates..."
             )
 
-    else:
-        print(
-            "No odds request needed on this run."
+            close_probability_rows = [
+                probability_lookup[
+                    game[
+                        "Game"
+                    ]
+                ]
+                for game in near_close_candidates
+            ]
+
+            (
+                close_market_rows,
+                close_usage,
+            ) = attach_market(
+                games=
+                    near_close_candidates,
+
+                probability_rows=
+                    close_probability_rows,
+
+                api_key=
+                    config[
+                        "odds_api_key"
+                    ],
+            )
+
+            if close_market_rows:
+
+                close_metadata = {
+                    "model_name":
+                        trained_model.get(
+                            "model_name",
+                            "SharpReport NRFI/YRFI Model v1",
+                        ),
+
+                    "training_start_date":
+                        trained_model.get(
+                            "training_start_date"
+                        ),
+
+                    "training_end_date":
+                        trained_model.get(
+                            "training_end_date"
+                        ),
+
+                    "training_games":
+                        trained_model.get(
+                            "training_games"
+                        ),
+
+                    "collection_mode":
+                        "scheduled_near_close",
+
+                    "entry_price_edge_minimum":
+                        CLV_MIN_ENTRY_PRICE_EDGE,
+
+                    "capture_window_minutes":
+                        {
+                            "minimum":
+                                CLOSE_MIN_MINUTES,
+
+                            "maximum":
+                                CLOSE_MAX_MINUTES,
+                        },
+                }
+
+                close_snapshot = (
+                    save_slate_snapshot(
+                        token=
+                            config[
+                                "github_data_token"
+                            ],
+
+                        repo=
+                            config[
+                                "github_data_repo"
+                            ],
+
+                        rows=
+                            close_market_rows,
+
+                        snapshot_time=
+                            now_et,
+
+                        model_metadata=
+                            close_metadata,
+
+                        odds_usage=
+                            close_usage,
+                    )
+                )
+
+                for row in close_market_rows:
+                    game_key = str(
+                        row[
+                            "Game ID"
+                        ]
+                    )
+
+                    entry = captured_before_run.get(
+                        game_key,
+                        {},
+                    )
+
+                    entry_side = entry.get(
+                        "model_side"
+                    )
+
+                    if entry_side == "NRFI":
+                        close_price = row.get(
+                            "Best NRFI Price"
+                        )
+
+                        close_book = row.get(
+                            "Best NRFI Book"
+                        )
+
+                        close_no_vig = row.get(
+                            "Market NRFI No-Vig"
+                        )
+
+                        close_break_even = row.get(
+                            "NRFI Break-Even"
+                        )
+
+                    elif entry_side == "YRFI":
+                        close_price = row.get(
+                            "Best YRFI Price"
+                        )
+
+                        close_book = row.get(
+                            "Best YRFI Book"
+                        )
+
+                        close_no_vig = row.get(
+                            "Market YRFI No-Vig"
+                        )
+
+                        close_break_even = row.get(
+                            "YRFI Break-Even"
+                        )
+
+                    else:
+                        close_price = None
+                        close_book = None
+                        close_no_vig = None
+                        close_break_even = None
+
+                    near_close_captured[
+                        game_key
+                    ] = {
+                        "game":
+                            row[
+                                "Game"
+                            ],
+
+                        "snapshot_path":
+                            close_snapshot.get(
+                                "path"
+                            ),
+
+                        "snapshot_time_et":
+                            now_et.isoformat(),
+
+                        "minutes_before_first_pitch":
+                            row.get(
+                                "Scheduled Capture Minutes Before First Pitch"
+                            ),
+
+                        "entry_model_side":
+                            entry_side,
+
+                        "entry_price_edge":
+                            entry.get(
+                                "price_edge"
+                            ),
+
+                        "close_price":
+                            close_price,
+
+                        "close_book":
+                            close_book,
+
+                        "close_no_vig":
+                            close_no_vig,
+
+                        "close_break_even":
+                            close_break_even,
+                    }
+
+                last_usage = close_usage
+
+                print(
+                    f"Saved near-close snapshot: "
+                    f"{close_snapshot.get('path')}"
+                )
+
+                print(
+                    f"Near-close games captured this run: "
+                    f"{len(close_market_rows)}"
+                )
+
+            else:
+
+                print(
+                    "No qualified near-close candidates had a "
+                    "live first-inning market."
+                )
+
+
+        state[
+            "captured"
+        ] = captured
+
+        state[
+            "near_close_captured"
+        ] = near_close_captured
+
+        state[
+            "updated_at_et"
+        ] = now_et.isoformat()
+
+        save_capture_state(
+            token=
+                config[
+                    "github_data_token"
+                ],
+
+            repo=
+                config[
+                    "github_data_repo"
+                ],
+
+            game_date=
+                today,
+
+            state=
+                state,
         )
+
+
+        if last_usage:
+            remaining = (
+                last_usage.get(
+                    "requests_remaining"
+                )
+            )
+
+            if remaining is not None:
+                print(
+                    "Odds API credits remaining: "
+                    f"{remaining}"
+                )
+
+    else:
+
+        print(
+            "No initial or near-close odds request needed on this run."
+        )
+
 
     grading = grade_recent_results(
         token=
