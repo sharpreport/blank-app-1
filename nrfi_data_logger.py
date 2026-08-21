@@ -1,7 +1,6 @@
 import base64
 import json
 import math
-import re
 import uuid
 
 from datetime import date, datetime, timezone
@@ -81,17 +80,31 @@ def build_slate_snapshot(
             candidate
         ).strip()
 
-        # MLB schedule data may provide a full ISO timestamp
-        # such as 2026-08-21T20:10:00Z. The repository folder
-        # should be the baseball calendar date only.
-        match = re.match(
-            r"^(\d{4}-\d{2}-\d{2})",
-            candidate_text,
-        )
+        try:
+            candidate_dt = datetime.fromisoformat(
+                candidate_text.replace(
+                    "Z",
+                    "+00:00",
+                )
+            )
 
-        if match:
-            game_date = match.group(1)
+            # Convert MLB's UTC gameDate to the same timezone
+            # as the scanner snapshot. This keeps late West Coast
+            # games in the correct Eastern-time baseball slate date.
+            candidate_local = candidate_dt.astimezone(
+                snapshot_time.tzinfo
+            )
+
+            game_date = (
+                candidate_local
+                .date()
+                .isoformat()
+            )
+
             break
+
+        except Exception:
+            continue
 
     if game_date is None:
         game_date = snapshot_time.date().isoformat()
@@ -267,6 +280,352 @@ def write_json_file(
 
         raise RuntimeError(
             f"GitHub data write failed "
+            f"(HTTP {error.code}): {message}"
+        ) from error
+
+
+
+def _github_headers(
+    token,
+):
+    return {
+        "Accept":
+            "application/vnd.github+json",
+
+        "Authorization":
+            f"Bearer {str(token).strip()}",
+
+        "X-GitHub-Api-Version":
+            "2022-11-28",
+
+        "User-Agent":
+            "SharpReport-NRFI-Data-Logger",
+    }
+
+
+def read_json_file(
+    token,
+    repo,
+    path,
+):
+    request = Request(
+        _github_contents_url(
+            repo,
+            path,
+        ),
+        method="GET",
+        headers=_github_headers(
+            token
+        ),
+    )
+
+    try:
+        with urlopen(
+            request,
+            timeout=30,
+        ) as response:
+
+            payload = json.load(
+                response
+            )
+
+    except HTTPError as error:
+        if error.code == 404:
+            return None
+
+        try:
+            error_payload = json.loads(
+                error.read().decode(
+                    "utf-8"
+                )
+            )
+
+            message = error_payload.get(
+                "message",
+                str(error),
+            )
+
+        except Exception:
+            message = str(error)
+
+        raise RuntimeError(
+            f"GitHub data read failed "
+            f"(HTTP {error.code}): {message}"
+        ) from error
+
+
+    content = payload.get(
+        "content"
+    )
+
+    if content is None:
+        return None
+
+    decoded = base64.b64decode(
+        content
+    ).decode(
+        "utf-8"
+    )
+
+    return {
+        "path":
+            payload.get(
+                "path",
+                path,
+            ),
+
+        "sha":
+            payload.get(
+                "sha"
+            ),
+
+        "data":
+            json.loads(
+                decoded
+            ),
+    }
+
+
+def list_repo_directory(
+    token,
+    repo,
+    path,
+):
+    request = Request(
+        _github_contents_url(
+            repo,
+            path,
+        ),
+        method="GET",
+        headers=_github_headers(
+            token
+        ),
+    )
+
+    try:
+        with urlopen(
+            request,
+            timeout=30,
+        ) as response:
+
+            payload = json.load(
+                response
+            )
+
+    except HTTPError as error:
+        if error.code == 404:
+            return []
+
+        try:
+            error_payload = json.loads(
+                error.read().decode(
+                    "utf-8"
+                )
+            )
+
+            message = error_payload.get(
+                "message",
+                str(error),
+            )
+
+        except Exception:
+            message = str(error)
+
+        raise RuntimeError(
+            f"GitHub directory read failed "
+            f"(HTTP {error.code}): {message}"
+        ) from error
+
+
+    if not isinstance(
+        payload,
+        list
+    ):
+        return []
+
+    return [
+        {
+            "name":
+                item.get(
+                    "name"
+                ),
+
+            "path":
+                item.get(
+                    "path"
+                ),
+
+            "sha":
+                item.get(
+                    "sha"
+                ),
+
+            "type":
+                item.get(
+                    "type"
+                ),
+        }
+        for item in payload
+    ]
+
+
+def upsert_json_file(
+    token,
+    repo,
+    path,
+    payload,
+    commit_message,
+):
+    token = str(token).strip()
+    repo = str(repo).strip()
+
+    if not token:
+        raise ValueError(
+            "GitHub data token is empty."
+        )
+
+    if not repo:
+        raise ValueError(
+            "GitHub data repository is empty."
+        )
+
+    safe_payload = _json_safe(
+        payload
+    )
+
+    existing = read_json_file(
+        token=token,
+        repo=repo,
+        path=path,
+    )
+
+    if (
+        existing is not None
+        and
+        existing.get("data")
+        == safe_payload
+    ):
+        return {
+            "ok":
+                True,
+
+            "changed":
+                False,
+
+            "status":
+                200,
+
+            "path":
+                path,
+
+            "commit_sha":
+                None,
+        }
+
+
+    json_text = json.dumps(
+        safe_payload,
+        ensure_ascii=False,
+        indent=2,
+        sort_keys=False,
+    )
+
+    encoded_content = base64.b64encode(
+        json_text.encode(
+            "utf-8"
+        )
+    ).decode(
+        "ascii"
+    )
+
+    body_payload = {
+        "message":
+            commit_message,
+
+        "content":
+            encoded_content,
+    }
+
+    if existing is not None:
+        body_payload["sha"] = (
+            existing.get(
+                "sha"
+            )
+        )
+
+
+    body = json.dumps(
+        body_payload
+    ).encode(
+        "utf-8"
+    )
+
+    request = Request(
+        _github_contents_url(
+            repo,
+            path,
+        ),
+        data=body,
+        method="PUT",
+        headers={
+            **_github_headers(
+                token
+            ),
+
+            "Content-Type":
+                "application/json",
+        },
+    )
+
+    try:
+        with urlopen(
+            request,
+            timeout=30,
+        ) as response:
+
+            response_payload = json.load(
+                response
+            )
+
+            return {
+                "ok":
+                    True,
+
+                "changed":
+                    True,
+
+                "status":
+                    response.status,
+
+                "path":
+                    path,
+
+                "commit_sha":
+                    (
+                        response_payload
+                        .get("commit", {})
+                        .get("sha")
+                    ),
+            }
+
+    except HTTPError as error:
+        try:
+            error_payload = json.loads(
+                error.read().decode(
+                    "utf-8"
+                )
+            )
+
+            message = error_payload.get(
+                "message",
+                str(error),
+            )
+
+        except Exception:
+            message = str(error)
+
+        raise RuntimeError(
+            f"GitHub data upsert failed "
             f"(HTTP {error.code}): {message}"
         ) from error
 
