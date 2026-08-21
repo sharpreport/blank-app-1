@@ -11,6 +11,12 @@ from first_inning_history import (
     get_pitcher_first_inning_history,
 )
 
+from game_weather import (
+    get_venue_info,
+    get_game_weather,
+    weather_usage,
+)
+
 
 
 
@@ -657,10 +663,18 @@ def get_mlb_schedule(date):
                 game_time = "TBA"
 
 
-            venue = (
-                game
-                .get("venue", {})
-                .get("name", "")
+            venue_data = game.get(
+                "venue",
+                {}
+            )
+
+            venue = venue_data.get(
+                "name",
+                ""
+            )
+
+            venue_id = venue_data.get(
+                "id"
             )
 
             status = (
@@ -711,6 +725,12 @@ def get_mlb_schedule(date):
 
                 "Venue":
                     venue,
+
+                "Venue ID":
+                    venue_id,
+
+                "Game Date":
+                    game_date,
 
                 "Status":
                     status,
@@ -1220,6 +1240,212 @@ if st.button(
             st.dataframe(
                 pd.DataFrame(
                     game_table
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+
+            # ---------------------------------------------
+            # GAME WEATHER
+            # ---------------------------------------------
+
+            st.subheader(
+                "Game Weather & Roof Conditions"
+            )
+
+            st.caption(
+                "Game-time weather at the ballpark. "
+                "Indoor parks ignore outdoor weather. "
+                "Retractable-roof games require roof verification."
+            )
+
+            weather_rows = []
+
+            with st.spinner(
+                "Loading game-time weather..."
+            ):
+
+                for game in games:
+
+                    try:
+
+                        venue_info = get_venue_info(
+                            game["Venue ID"]
+                        )
+
+                        if not venue_info:
+                            raise Exception(
+                                "Venue data unavailable"
+                            )
+
+
+                        weather = get_game_weather(
+                            venue_info["latitude"],
+                            venue_info["longitude"],
+                            venue_info["timezone"],
+                            game["Game Date"],
+                        )
+
+                        if not weather:
+                            raise Exception(
+                                "Weather unavailable"
+                            )
+
+
+                        temperature = (
+                            f"{weather['temperature']:.1f}°F"
+                            if weather["temperature"] is not None
+                            else "—"
+                        )
+
+                        humidity = (
+                            f"{weather['humidity']:.0f}%"
+                            if weather["humidity"] is not None
+                            else "—"
+                        )
+
+                        dew_point = (
+                            f"{weather['dew_point']:.1f}°F"
+                            if weather["dew_point"] is not None
+                            else "—"
+                        )
+
+                        pressure = (
+                            f"{weather['pressure']:.1f} hPa"
+                            if weather["pressure"] is not None
+                            else "—"
+                        )
+
+                        wind = (
+                            f"{weather['wind_speed']:.1f} mph"
+                            if weather["wind_speed"] is not None
+                            else "—"
+                        )
+
+                        if (
+                            weather["wind_direction_degrees"]
+                            is not None
+                        ):
+
+                            wind_direction = (
+                                f"{weather['wind_direction']} "
+                                f"({weather['wind_direction_degrees']:.0f}°)"
+                            )
+
+                        else:
+
+                            wind_direction = "—"
+
+
+                        gusts = (
+                            f"{weather['wind_gusts']:.1f} mph"
+                            if weather["wind_gusts"] is not None
+                            else "—"
+                        )
+
+                        precip = (
+                            f"{weather['precipitation_probability']:.0f}%"
+                            if weather[
+                                "precipitation_probability"
+                            ] is not None
+                            else "—"
+                        )
+
+
+                        weather_rows.append({
+
+                            "Game":
+                                game["Game"],
+
+                            "Venue":
+                                venue_info["name"],
+
+                            "Roof":
+                                venue_info["roof_type"],
+
+                            "Weather Use":
+                                weather_usage(
+                                    venue_info["roof_type"]
+                                ),
+
+                            "Temp":
+                                temperature,
+
+                            "Humidity":
+                                humidity,
+
+                            "Dew Point":
+                                dew_point,
+
+                            "Pressure":
+                                pressure,
+
+                            "Wind":
+                                wind,
+
+                            "Wind Direction":
+                                wind_direction,
+
+                            "Wind Gusts":
+                                gusts,
+
+                            "Precip":
+                                precip,
+
+                            "Local Game Time":
+                                weather["game_local"],
+                        })
+
+
+                    except Exception as error:
+
+                        weather_rows.append({
+
+                            "Game":
+                                game["Game"],
+
+                            "Venue":
+                                game["Venue"],
+
+                            "Roof":
+                                "—",
+
+                            "Weather Use":
+                                f"ERROR: {error}",
+
+                            "Temp":
+                                "—",
+
+                            "Humidity":
+                                "—",
+
+                            "Dew Point":
+                                "—",
+
+                            "Pressure":
+                                "—",
+
+                            "Wind":
+                                "—",
+
+                            "Wind Direction":
+                                "—",
+
+                            "Wind Gusts":
+                                "—",
+
+                            "Precip":
+                                "—",
+
+                            "Local Game Time":
+                                game["Start Time"],
+                        })
+
+
+            st.dataframe(
+                pd.DataFrame(
+                    weather_rows
                 ),
                 use_container_width=True,
                 hide_index=True,
