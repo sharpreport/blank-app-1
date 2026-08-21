@@ -22,6 +22,10 @@ from park_factors import (
     classify_run_factor,
 )
 
+from model_inputs import (
+    build_half_inning_model_table,
+)
+
 
 
 
@@ -1858,6 +1862,46 @@ if st.button(
                     use_container_width=True,
                     hide_index=True,
                 )
+
+
+            # ---------------------------------------------
+            # COMBINED HALF-INNING MODEL INPUTS
+            # ---------------------------------------------
+
+            st.subheader(
+                "Combined Half-Inning Model Inputs"
+            )
+
+            st.caption(
+                "One row per half-inning. "
+                "No model weights or probabilities "
+                "are being applied yet."
+            )
+
+
+            combined_model_rows = (
+                build_half_inning_model_table(
+
+                    games,
+                    pitcher_rows,
+                    first_inning_rows,
+                    team_hitter_rows,
+                    weather_rows,
+                    park_rows,
+                )
+            )
+
+
+            combined_df = pd.DataFrame(
+                combined_model_rows
+            )
+
+
+            st.dataframe(
+                combined_df,
+                use_container_width=True,
+                hide_index=True,
+            )
 
 
     except Exception as error:
