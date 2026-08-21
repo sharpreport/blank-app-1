@@ -1,0 +1,106 @@
+SHARPREPORT WALK-FORWARD FEATURE STABILITY TEST
+==========================================================================
+
+METHOD:
+2023 holdout: train on 2022
+2024 holdout: train on 2022-2023
+2025 holdout: train on 2022-2024
+2026 holdout: train on 2022-2025
+
+Each holdout season is completely unseen when its bucket rates are built.
+Positive Brier improvement means the feature beat the Top/Bottom base rate.
+
+STABILITY RANKING
+--------------------------------------------------------------------------
+#1 Home/Away split runs/game
+Beat baseline: 3 of 4 holdout seasons
+Average Brier improvement: -0.000062
+Worst / Best improvement: -0.000377 / +0.000067
+Average coverage: 93.40%
+Average absolute bucket spread: 2.02 pp
+Screen: WEAK / DO NOT WEIGHT YET
+--------------------------------------------------------------------------
+#2 Home/Away split scoring %
+Beat baseline: 2 of 4 holdout seasons
+Average Brier improvement: +0.000096
+Worst / Best improvement: -0.000261 / +0.000593
+Average coverage: 93.40%
+Average absolute bucket spread: 2.40 pp
+Screen: MIXED / KEEP TESTING
+--------------------------------------------------------------------------
+#3 Pitcher scoreless 1st %
+Beat baseline: 2 of 4 holdout seasons
+Average Brier improvement: +0.000025
+Worst / Best improvement: -0.000370 / +0.000483
+Average coverage: 68.48%
+Average absolute bucket spread: 4.14 pp
+Screen: MIXED / KEEP TESTING
+--------------------------------------------------------------------------
+#4 Pitcher 1st-inning runs/start
+Beat baseline: 2 of 4 holdout seasons
+Average Brier improvement: -0.000092
+Worst / Best improvement: -0.000843 / +0.000600
+Average coverage: 68.48%
+Average absolute bucket spread: 5.78 pp
+Screen: WEAK / DO NOT WEIGHT YET
+--------------------------------------------------------------------------
+#5 Offense 1st-inning runs/game
+Beat baseline: 1 of 4 holdout seasons
+Average Brier improvement: -0.000020
+Worst / Best improvement: -0.000119 / +0.000100
+Average coverage: 93.41%
+Average absolute bucket spread: 2.46 pp
+Screen: WEAK / DO NOT WEIGHT YET
+--------------------------------------------------------------------------
+#6 Offense 1st-inning scoring %
+Beat baseline: 1 of 4 holdout seasons
+Average Brier improvement: -0.000031
+Worst / Best improvement: -0.000151 / +0.000243
+Average coverage: 93.41%
+Average absolute bucket spread: 2.66 pp
+Screen: WEAK / DO NOT WEIGHT YET
+--------------------------------------------------------------------------
+
+SEASON-BY-SEASON DETAIL
+--------------------------------------------------------------------------
+
+Home/Away split runs/game
+2023 | Brier improvement +0.000067 | coverage 93.83% | spread +4.10 pp
+2024 | Brier improvement +0.000039 | coverage 93.76% | spread +2.31 pp
+2025 | Brier improvement -0.000377 | coverage 93.83% | spread +1.12 pp
+2026 | Brier improvement +0.000024 | coverage 92.18% | spread +0.53 pp
+
+Home/Away split scoring %
+2023 | Brier improvement +0.000254 | coverage 93.83% | spread +2.78 pp
+2024 | Brier improvement +0.000593 | coverage 93.76% | spread +3.89 pp
+2025 | Brier improvement -0.000261 | coverage 93.83% | spread +2.66 pp
+2026 | Brier improvement -0.000201 | coverage 92.18% | spread -0.26 pp
+
+Pitcher scoreless 1st %
+2023 | Brier improvement +0.000264 | coverage 68.89% | spread -1.41 pp
+2024 | Brier improvement -0.000370 | coverage 69.68% | spread -3.84 pp
+2025 | Brier improvement -0.000275 | coverage 70.06% | spread -4.25 pp
+2026 | Brier improvement +0.000483 | coverage 65.29% | spread -7.06 pp
+
+Pitcher 1st-inning runs/start
+2023 | Brier improvement -0.000843 | coverage 68.89% | spread +5.67 pp
+2024 | Brier improvement -0.000451 | coverage 69.68% | spread +3.07 pp
+2025 | Brier improvement +0.000328 | coverage 70.06% | spread +6.39 pp
+2026 | Brier improvement +0.000600 | coverage 65.29% | spread +7.99 pp
+
+Offense 1st-inning runs/game
+2023 | Brier improvement -0.000009 | coverage 93.83% | spread +1.97 pp
+2024 | Brier improvement +0.000100 | coverage 93.82% | spread +5.45 pp
+2025 | Brier improvement -0.000051 | coverage 93.83% | spread +1.08 pp
+2026 | Brier improvement -0.000119 | coverage 92.18% | spread +1.34 pp
+
+Offense 1st-inning scoring %
+2023 | Brier improvement +0.000243 | coverage 93.83% | spread +4.03 pp
+2024 | Brier improvement -0.000120 | coverage 93.82% | spread +6.14 pp
+2025 | Brier improvement -0.000095 | coverage 93.83% | spread -0.37 pp
+2026 | Brier improvement -0.000151 | coverage 92.18% | spread -0.12 pp
+
+IMPORTANT:
+This is still screening, not the final model.
+Correlated features should not automatically receive separate weights.
+The next stage will test combinations of the stable candidates.

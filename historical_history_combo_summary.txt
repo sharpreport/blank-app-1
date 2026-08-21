@@ -1,0 +1,122 @@
+SHARPREPORT HISTORICAL COMBINATION TEST
+============================================================================
+
+METHOD:
+Walk-forward logistic regression with ridge regularization.
+Top 1st and Bottom 1st are fit separately.
+Missing early-season history is imputed using TRAINING data only.
+Sample size is included as a model input.
+
+2023 holdout: train on 2022
+2024 holdout: train on 2022-2023
+2025 holdout: train on 2022-2024
+2026 holdout: train on 2022-2025
+
+Positive Brier improvement means the combination beat
+the Top/Bottom historical base-rate forecast.
+
+MODEL RANKING
+----------------------------------------------------------------------------
+#1 Pitcher runs only
+Beat baseline: 4 of 4 holdouts
+Average improvement: +0.000186
+Worst / Best: +0.000145 / +0.000273
+2026 improvement: +0.000273
+Decision: PROMISING
+----------------------------------------------------------------------------
+#2 Pitcher history combo
+Beat baseline: 4 of 4 holdouts
+Average improvement: +0.000110
+Worst / Best: +0.000012 / +0.000264
+2026 improvement: +0.000264
+Decision: PROMISING
+----------------------------------------------------------------------------
+#3 Pitcher scoreless only
+Beat baseline: 3 of 4 holdouts
+Average improvement: +0.000140
+Worst / Best: -0.000053 / +0.000289
+2026 improvement: +0.000289
+Decision: PROMISING
+----------------------------------------------------------------------------
+#4 Pitcher + offense
+Beat baseline: 3 of 4 holdouts
+Average improvement: +0.000121
+Worst / Best: -0.000091 / +0.000318
+2026 improvement: +0.000185
+Decision: PROMISING
+----------------------------------------------------------------------------
+#5 All first-inning history
+Beat baseline: 2 of 4 holdouts
+Average improvement: +0.000019
+Worst / Best: -0.000233 / +0.000285
+2026 improvement: +0.000150
+Decision: MIXED
+----------------------------------------------------------------------------
+#6 Home/Away split combo
+Beat baseline: 2 of 4 holdouts
+Average improvement: -0.000008
+Worst / Best: -0.000135 / +0.000176
+2026 improvement: -0.000135
+Decision: WEAK
+----------------------------------------------------------------------------
+#7 Offense history combo
+Beat baseline: 2 of 4 holdouts
+Average improvement: -0.000012
+Worst / Best: -0.000227 / +0.000169
+2026 improvement: -0.000136
+Decision: WEAK
+----------------------------------------------------------------------------
+
+SEASON DETAIL
+----------------------------------------------------------------------------
+
+Pitcher runs only
+2023 | improvement +0.000145 | model Brier 0.208115
+2024 | improvement +0.000166 | model Brier 0.199252
+2025 | improvement +0.000160 | model Brier 0.207936
+2026 | improvement +0.000273 | model Brier 0.206200
+
+Pitcher history combo
+2023 | improvement +0.000012 | model Brier 0.208248
+2024 | improvement +0.000140 | model Brier 0.199278
+2025 | improvement +0.000025 | model Brier 0.208071
+2026 | improvement +0.000264 | model Brier 0.206209
+
+Pitcher scoreless only
+2023 | improvement +0.000099 | model Brier 0.208160
+2024 | improvement +0.000223 | model Brier 0.199195
+2025 | improvement -0.000053 | model Brier 0.208150
+2026 | improvement +0.000289 | model Brier 0.206184
+
+Pitcher + offense
+2023 | improvement +0.000072 | model Brier 0.208188
+2024 | improvement +0.000318 | model Brier 0.199100
+2025 | improvement -0.000091 | model Brier 0.208188
+2026 | improvement +0.000185 | model Brier 0.206289
+
+All first-inning history
+2023 | improvement -0.000125 | model Brier 0.208385
+2024 | improvement +0.000285 | model Brier 0.199132
+2025 | improvement -0.000233 | model Brier 0.208330
+2026 | improvement +0.000150 | model Brier 0.206323
+
+Home/Away split combo
+2023 | improvement +0.000035 | model Brier 0.208225
+2024 | improvement +0.000176 | model Brier 0.199242
+2025 | improvement -0.000108 | model Brier 0.208205
+2026 | improvement -0.000135 | model Brier 0.206609
+
+Offense history combo
+2023 | improvement +0.000144 | model Brier 0.208116
+2024 | improvement +0.000169 | model Brier 0.199248
+2025 | improvement -0.000227 | model Brier 0.208323
+2026 | improvement -0.000136 | model Brier 0.206609
+
+INTERPRETATION RULE:
+If the history combinations remain weak or unstable,
+we will NOT force them into the final model.
+
+The next major build is historical Statcast skill:
+pitcher xwOBA/K%/BB%/Barrel% and offense quality.
+Those are expected to be more informative than
+simple first-inning result history.

@@ -1,0 +1,89 @@
+SHARPREPORT HISTORICAL FEATURE TEST
+======================================================================
+
+METHOD:
+Training seasons: 2022-2025
+True holdout season: 2026
+Target: Did the offense score in its half of the 1st inning?
+
+Each feature is divided into five buckets using ONLY 2022-2025.
+The 2026 holdout is then scored using the historical bucket rates.
+Positive Brier improvement means the feature beat the simple
+Top/Bottom 1st historical base-rate forecast on 2026.
+
+BASE RATES
+----------------------------------------------------------------------
+Top 1st | 2022-25: 26.49% (9719 rows) | 2026: 26.42% (1919 rows)
+Bottom 1st | 2022-25: 30.73% (9719 rows) | 2026: 32.20% (1919 rows)
+
+FEATURE RANKING
+----------------------------------------------------------------------
+#1 Pitcher 1st-inning runs/start
+2026 rows: 2506 (65.29% coverage)
+Baseline Brier: 0.203889
+Feature Brier: 0.203289
+Brier improvement: +0.000600
+Lowest bucket scoring: 23.94%
+Highest bucket scoring: 31.92%
+High-low spread: +7.99 pp
+Direction: Higher value = more scoring
+----------------------------------------------------------------------
+#2 Pitcher scoreless 1st %
+2026 rows: 2506 (65.29% coverage)
+Baseline Brier: 0.203889
+Feature Brier: 0.203406
+Brier improvement: +0.000483
+Lowest bucket scoring: 33.06%
+Highest bucket scoring: 26.00%
+High-low spread: -7.06 pp
+Direction: Higher value = less scoring
+----------------------------------------------------------------------
+#3 Home/Away split runs/game
+2026 rows: 3538 (92.18% coverage)
+Baseline Brier: 0.207132
+Feature Brier: 0.207108
+Brier improvement: +0.000024
+Lowest bucket scoring: 28.57%
+Highest bucket scoring: 29.10%
+High-low spread: +0.53 pp
+Direction: Higher value = more scoring
+----------------------------------------------------------------------
+#4 Offense 1st-inning runs/game
+2026 rows: 3538 (92.18% coverage)
+Baseline Brier: 0.207514
+Feature Brier: 0.207633
+Brier improvement: -0.000119
+Lowest bucket scoring: 26.94%
+Highest bucket scoring: 28.28%
+High-low spread: +1.34 pp
+Direction: Higher value = more scoring
+----------------------------------------------------------------------
+#5 Offense 1st-inning scoring %
+2026 rows: 3538 (92.18% coverage)
+Baseline Brier: 0.207514
+Feature Brier: 0.207665
+Brier improvement: -0.000151
+Lowest bucket scoring: 28.33%
+Highest bucket scoring: 28.21%
+High-low spread: -0.12 pp
+Direction: Higher value = less scoring
+----------------------------------------------------------------------
+#6 Home/Away split scoring %
+2026 rows: 3538 (92.18% coverage)
+Baseline Brier: 0.207132
+Feature Brier: 0.207333
+Brier improvement: -0.000201
+Lowest bucket scoring: 30.65%
+Highest bucket scoring: 30.39%
+High-low spread: -0.26 pp
+Direction: Higher value = less scoring
+----------------------------------------------------------------------
+
+INITIAL SCREEN
+----------------------------------------------------------------------
+Features beating baseline on 2026: 3 of 6
+
+IMPORTANT:
+This is a feature-screening step, not the final prediction model.
+The next stage will test combinations and season-to-season stability
+before we convert anything into NRFI/YRFI probabilities.
