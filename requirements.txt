@@ -1,3 +1,3 @@
 streamlit
 pandas
-pybaseball
+pybaseball==2.2.7
