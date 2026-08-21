@@ -1,0 +1,10 @@
+SHARPREPORT HISTORICAL ACTUAL STARTERS
+============================================================
+
+Historical games: 11638
+Starter database games: 11638
+
+Games with both actual starters: 11638
+Games missing away starter: 0
+Games missing home starter: 0
+Complete-game starter coverage: 100.00%

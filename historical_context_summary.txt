@@ -1,0 +1,39 @@
+SHARPREPORT VERIFIED HISTORICAL PREGAME CONTEXT
+============================================================
+
+Historical games: 11638
+Half-inning rows: 23276
+
+Starter source: Actual completed-game boxscore
+Rows with verified starter: 23276
+Starter coverage: 100.00%
+
+Rows with prior pitcher history: 21450
+Rows with prior offense history: 23126
+
+NO-LOOKAHEAD CONTROLS:
+1. Every feature uses only games from PRIOR calendar dates.
+2. All games on the same date are scored before that date updates history.
+3. This prevents doubleheader and same-day outcome leakage.
+4. Histories reset at the beginning of each MLB season.
+5. Actual starting pitchers are used, not historical probable pitchers.
+
+2022
+Half-inning rows: 4860
+------------------------------------------------------------
+
+2023
+Half-inning rows: 4860
+------------------------------------------------------------
+
+2024
+Half-inning rows: 4858
+------------------------------------------------------------
+
+2025
+Half-inning rows: 4860
+------------------------------------------------------------
+
+2026
+Half-inning rows: 3838
+------------------------------------------------------------
