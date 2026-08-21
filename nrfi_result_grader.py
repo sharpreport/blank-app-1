@@ -927,6 +927,22 @@ def _build_game_grade(
             ],
     })
 
+    # Preserve research-only rolling pitcher first-inning
+    # fields from the exact selected FINAL pregame snapshot.
+    # These values are not used to change Model v1.
+    for key, value in row.items():
+        if (
+            str(key).startswith(
+                "Away Pitcher FI "
+            )
+            or
+            str(key).startswith(
+                "Home Pitcher FI "
+            )
+        ):
+            base[key] = value
+
+
     return base
 
 

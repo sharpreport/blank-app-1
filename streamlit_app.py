@@ -54,6 +54,10 @@ from nrfi_edge_dashboard import (
     render_edge_performance_dashboard,
 )
 
+from nrfi_pitcher_history_research import (
+    render_pitcher_history_research,
+)
+
 
 
 
@@ -3626,6 +3630,35 @@ if st.button(
                     st.warning(
                         "The live scanner is working, but the "
                         "edge performance dashboard could not load: "
+                        f"{error}"
+                    )
+
+
+            # ---------------------------------------------
+            # ROLLING PITCHER HISTORY CHALLENGER MONITOR
+            # ---------------------------------------------
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    render_pitcher_history_research(
+                        token=
+                            github_data_token,
+
+                        repo=
+                            github_data_repo,
+                    )
+
+                except Exception as error:
+
+                    st.warning(
+                        "The live scanner is working, but the rolling "
+                        "pitcher-history research monitor could not load: "
                         f"{error}"
                     )
 
