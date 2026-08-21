@@ -41,6 +41,10 @@ from nrfi_market_odds import (
     american_implied_probability,
 )
 
+from nrfi_data_logger import (
+    save_slate_snapshot,
+)
+
 
 
 
@@ -1202,6 +1206,15 @@ def _live_top4_model_inputs(
             "combined_pa": 0,
             "min_pa": 0,
             "complete_core": False,
+            "hitters": [
+                {
+                    "player_id":
+                        player.get("id"),
+                    "name":
+                        player.get("name"),
+                }
+                for player in top4
+            ],
         }
 
 
@@ -1210,6 +1223,7 @@ def _live_top4_model_inputs(
     bb_values = []
     barrel_values = []
     pa_values = []
+    hitter_rows = []
 
 
     for player in top4:
@@ -1250,6 +1264,39 @@ def _live_top4_model_inputs(
             if plate_appearances is not None
             else 0
         )
+
+        hitter_rows.append({
+            "player_id":
+                player_id,
+
+            "name":
+                player.get(
+                    "name"
+                ),
+
+            "xwoba":
+                hitter_xwoba.get(
+                    player_id
+                ),
+
+            "k_pct":
+                k_percent,
+
+            "bb_pct":
+                bb_percent,
+
+            "barrel_pct":
+                hitter_barrels.get(
+                    player_id
+                ),
+
+            "pa":
+                (
+                    plate_appearances
+                    if plate_appearances is not None
+                    else 0
+                ),
+        })
 
 
     team_xwoba = strict_average(
@@ -1296,6 +1343,9 @@ def _live_top4_model_inputs(
             else 0,
         "complete_core":
             complete_core,
+
+        "hitters":
+            hitter_rows,
     }
 
 
@@ -1596,6 +1646,156 @@ def build_trained_probability_rows(
             "Game":
                 game["Game"],
 
+            "Game ID":
+                game.get(
+                    "Game ID"
+                ),
+
+            "Game Date":
+                game.get(
+                    "Game Date"
+                ),
+
+            "Away Team":
+                game.get(
+                    "Away Team"
+                ),
+
+            "Home Team":
+                game.get(
+                    "Home Team"
+                ),
+
+            "Away SP":
+                game.get(
+                    "Away SP"
+                ),
+
+            "Away SP ID":
+                game.get(
+                    "Away SP ID"
+                ),
+
+            "Home SP":
+                game.get(
+                    "Home SP"
+                ),
+
+            "Home SP ID":
+                game.get(
+                    "Home SP ID"
+                ),
+
+            "Away Pitcher xwOBA":
+                away_pitcher[
+                    "xwoba"
+                ],
+
+            "Away Pitcher K%":
+                away_pitcher[
+                    "k_pct"
+                ],
+
+            "Away Pitcher PA":
+                away_pitcher[
+                    "pa"
+                ],
+
+            "Home Pitcher xwOBA":
+                home_pitcher[
+                    "xwoba"
+                ],
+
+            "Home Pitcher K%":
+                home_pitcher[
+                    "k_pct"
+                ],
+
+            "Home Pitcher PA":
+                home_pitcher[
+                    "pa"
+                ],
+
+            "Away Top4 xwOBA":
+                away_offense[
+                    "xwoba"
+                ],
+
+            "Away Top4 K%":
+                away_offense[
+                    "k_pct"
+                ],
+
+            "Away Top4 BB%":
+                away_offense[
+                    "bb_pct"
+                ],
+
+            "Away Top4 Barrel%":
+                away_offense[
+                    "barrel_pct"
+                ],
+
+            "Away Top4 Combined PA":
+                away_offense[
+                    "combined_pa"
+                ],
+
+            "Away Top4 Min PA":
+                away_offense[
+                    "min_pa"
+                ],
+
+            "Away Top4 Complete Core":
+                away_offense[
+                    "complete_core"
+                ],
+
+            "Away Top4 Hitters":
+                away_offense[
+                    "hitters"
+                ],
+
+            "Home Top4 xwOBA":
+                home_offense[
+                    "xwoba"
+                ],
+
+            "Home Top4 K%":
+                home_offense[
+                    "k_pct"
+                ],
+
+            "Home Top4 BB%":
+                home_offense[
+                    "bb_pct"
+                ],
+
+            "Home Top4 Barrel%":
+                home_offense[
+                    "barrel_pct"
+                ],
+
+            "Home Top4 Combined PA":
+                home_offense[
+                    "combined_pa"
+                ],
+
+            "Home Top4 Min PA":
+                home_offense[
+                    "min_pa"
+                ],
+
+            "Home Top4 Complete Core":
+                home_offense[
+                    "complete_core"
+                ],
+
+            "Home Top4 Hitters":
+                home_offense[
+                    "hitters"
+                ],
+
             "Model Side":
                 result["model_side"],
 
@@ -1668,7 +1868,7 @@ def format_probability(value):
 # =========================================================
 
 @st.cache_data(
-    ttl=300,
+    ttl=1800,
     show_spinner=False
 )
 def get_cached_mlb_odds_events(
@@ -1681,7 +1881,7 @@ def get_cached_mlb_odds_events(
 
 
 @st.cache_data(
-    ttl=300,
+    ttl=1800,
     show_spinner=False
 )
 def get_cached_first_inning_event_odds(
@@ -1760,6 +1960,45 @@ def attach_market_data(
 
             "Price Edge":
                 None,
+
+            "Market NRFI No-Vig":
+                None,
+
+            "Market YRFI No-Vig":
+                None,
+
+            "Best NRFI Price":
+                None,
+
+            "Best NRFI Book":
+                None,
+
+            "Best YRFI Price":
+                None,
+
+            "Best YRFI Book":
+                None,
+
+            "NRFI Break-Even":
+                None,
+
+            "YRFI Break-Even":
+                None,
+
+            "NRFI Market Edge":
+                None,
+
+            "YRFI Market Edge":
+                None,
+
+            "NRFI Price Edge":
+                None,
+
+            "YRFI Price Edge":
+                None,
+
+            "Market Bookmaker Rows":
+                [],
 
             "Best Price":
                 None,
@@ -1916,6 +2155,57 @@ def attach_market_data(
             )
 
 
+            nrfi_best_price = (
+                market_summary[
+                    "best_nrfi_price"
+                ]
+            )
+
+            yrfi_best_price = (
+                market_summary[
+                    "best_yrfi_price"
+                ]
+            )
+
+            nrfi_break_even = (
+                american_implied_probability(
+                    nrfi_best_price
+                )
+            )
+
+            yrfi_break_even = (
+                american_implied_probability(
+                    yrfi_best_price
+                )
+            )
+
+            nrfi_model_probability = (
+                probability_row[
+                    "NRFI Probability"
+                ]
+                / 100.0
+            )
+
+            yrfi_model_probability = (
+                probability_row[
+                    "YRFI Probability"
+                ]
+                / 100.0
+            )
+
+            nrfi_market_no_vig = (
+                market_summary[
+                    "consensus_nrfi_no_vig"
+                ]
+            )
+
+            yrfi_market_no_vig = (
+                market_summary[
+                    "consensus_yrfi_no_vig"
+                ]
+            )
+
+
             probability_row.update({
 
                 "Market No-Vig":
@@ -1937,6 +2227,85 @@ def attach_market_data(
                     * 100.0
                     if price_edge is not None
                     else None,
+
+                "Market NRFI No-Vig":
+                    nrfi_market_no_vig
+                    * 100.0,
+
+                "Market YRFI No-Vig":
+                    yrfi_market_no_vig
+                    * 100.0,
+
+                "Best NRFI Price":
+                    nrfi_best_price,
+
+                "Best NRFI Book":
+                    market_summary[
+                        "best_nrfi_book"
+                    ],
+
+                "Best YRFI Price":
+                    yrfi_best_price,
+
+                "Best YRFI Book":
+                    market_summary[
+                        "best_yrfi_book"
+                    ],
+
+                "NRFI Break-Even":
+                    (
+                        nrfi_break_even
+                        * 100.0
+                        if nrfi_break_even is not None
+                        else None
+                    ),
+
+                "YRFI Break-Even":
+                    (
+                        yrfi_break_even
+                        * 100.0
+                        if yrfi_break_even is not None
+                        else None
+                    ),
+
+                "NRFI Market Edge":
+                    (
+                        nrfi_model_probability
+                        - nrfi_market_no_vig
+                    )
+                    * 100.0,
+
+                "YRFI Market Edge":
+                    (
+                        yrfi_model_probability
+                        - yrfi_market_no_vig
+                    )
+                    * 100.0,
+
+                "NRFI Price Edge":
+                    (
+                        (
+                            nrfi_model_probability
+                            - nrfi_break_even
+                        )
+                        * 100.0
+                        if nrfi_break_even is not None
+                        else None
+                    ),
+
+                "YRFI Price Edge":
+                    (
+                        (
+                            yrfi_model_probability
+                            - yrfi_break_even
+                        )
+                        * 100.0
+                        if yrfi_break_even is not None
+                        else None
+                    ),
+
+                "Market Bookmaker Rows":
+                    bookmaker_rows,
 
                 "Best Price":
                     best_price,
@@ -2856,6 +3225,9 @@ if st.button(
                 odds_api_key = None
 
 
+            odds_usage = None
+
+
             if odds_api_key:
 
                 with st.spinner(
@@ -2878,7 +3250,7 @@ if st.button(
                     "Under 0.5 = NRFI; Over 0.5 = YRFI. "
                     "Consensus no-vig probability is the average "
                     "of each sportsbook's two-way no-vig market. "
-                    "Odds requests are cached for 5 minutes."
+                    "Odds requests are cached for 30 minutes to preserve API credits."
                 )
 
 
@@ -2920,6 +3292,45 @@ if st.button(
                         "Price Edge":
                             None,
 
+                        "Market NRFI No-Vig":
+                            None,
+
+                        "Market YRFI No-Vig":
+                            None,
+
+                        "Best NRFI Price":
+                            None,
+
+                        "Best NRFI Book":
+                            None,
+
+                        "Best YRFI Price":
+                            None,
+
+                        "Best YRFI Book":
+                            None,
+
+                        "NRFI Break-Even":
+                            None,
+
+                        "YRFI Break-Even":
+                            None,
+
+                        "NRFI Market Edge":
+                            None,
+
+                        "YRFI Market Edge":
+                            None,
+
+                        "NRFI Price Edge":
+                            None,
+
+                        "YRFI Price Edge":
+                            None,
+
+                        "Market Bookmaker Rows":
+                            [],
+
                         "Best Price":
                             None,
 
@@ -2938,6 +3349,127 @@ if st.button(
                     "ODDS_API_KEY was not found in "
                     "Streamlit secrets. Model probabilities "
                     "are available, but market edge is disabled."
+                )
+
+
+            # ---------------------------------------------
+            # PERSISTENT PREGAME DATA SNAPSHOT
+            # ---------------------------------------------
+
+            try:
+
+                github_data_token = (
+                    st.secrets[
+                        "GITHUB_DATA_TOKEN"
+                    ]
+                )
+
+                github_data_repo = (
+                    st.secrets[
+                        "GITHUB_DATA_REPO"
+                    ]
+                )
+
+            except Exception:
+
+                github_data_token = None
+                github_data_repo = None
+
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    snapshot_time = (
+                        datetime.now(
+                            ET
+                        )
+                    )
+
+                    model_metadata = {
+                        "model_name":
+                            trained_model.get(
+                                "model_name",
+                                "SharpReport NRFI/YRFI Model v1",
+                            ),
+
+                        "training_start_date":
+                            trained_model.get(
+                                "training_start_date"
+                            ),
+
+                        "training_end_date":
+                            trained_model.get(
+                                "training_end_date"
+                            ),
+
+                        "training_games":
+                            trained_model.get(
+                                "training_games"
+                            ),
+                    }
+
+
+                    with st.spinner(
+                        "Saving this pregame model + market "
+                        "snapshot to the private data repository..."
+                    ):
+
+                        snapshot_result = (
+                            save_slate_snapshot(
+                                token=
+                                    github_data_token,
+
+                                repo=
+                                    github_data_repo,
+
+                                rows=
+                                    market_rows,
+
+                                snapshot_time=
+                                    snapshot_time,
+
+                                model_metadata=
+                                    model_metadata,
+
+                                odds_usage=
+                                    odds_usage,
+                            )
+                        )
+
+
+                    if snapshot_result.get(
+                        "ok"
+                    ):
+
+                        st.success(
+                            "Pregame data snapshot saved "
+                            "to the private SharpReport data repository."
+                        )
+
+                        st.caption(
+                            "Saved snapshot: "
+                            f"{snapshot_result.get('path')}"
+                        )
+
+                except Exception as error:
+
+                    st.warning(
+                        "The scanner completed, but the private "
+                        "data snapshot could not be saved: "
+                        f"{error}"
+                    )
+
+            else:
+
+                st.info(
+                    "Persistent data logging is not active because "
+                    "GITHUB_DATA_TOKEN or GITHUB_DATA_REPO "
+                    "was not found in Streamlit secrets."
                 )
 
 
