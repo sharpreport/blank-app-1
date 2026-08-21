@@ -70,6 +70,12 @@ from nrfi_model_governance import (
     render_model_governance_dashboard,
 )
 
+from nrfi_model_alerts import (
+    update_model_attention_alerts,
+    render_model_attention_banner,
+    render_model_attention_dashboard,
+)
+
 
 
 
@@ -4010,6 +4016,43 @@ if st.button(
 
 
             # ---------------------------------------------
+            # MODEL ATTENTION ALERTS
+            # ---------------------------------------------
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    update_model_attention_alerts(
+                        token=
+                            github_data_token,
+
+                        repo=
+                            github_data_repo,
+                    )
+
+                    render_model_attention_banner(
+                        token=
+                            github_data_token,
+
+                        repo=
+                            github_data_repo,
+                    )
+
+                except Exception as error:
+
+                    st.warning(
+                        "The scanner completed, but the model-attention "
+                        "alert layer could not be refreshed: "
+                        f"{error}"
+                    )
+
+
+            # ---------------------------------------------
             # DAILY DECISION BOARD
             # ---------------------------------------------
 
@@ -4724,6 +4767,24 @@ if st.button(
                     and
                     github_data_repo
                 ):
+
+                    try:
+
+                        render_model_attention_dashboard(
+                            token=
+                                github_data_token,
+
+                            repo=
+                                github_data_repo,
+                        )
+
+                    except Exception as error:
+
+                        st.warning(
+                            "The live scanner is working, but the model "
+                            "attention dashboard could not load: "
+                            f"{error}"
+                        )
 
                     try:
 

@@ -41,6 +41,10 @@ from nrfi_model_governance import (
     update_model_governance,
 )
 
+from nrfi_model_alerts import (
+    update_model_attention_alerts,
+)
+
 from park_factors import (
     get_park_factors,
 )
@@ -2952,6 +2956,46 @@ def main():
 
         print(
             "Model governance update warning: "
+            f"{error}"
+        )
+
+
+    try:
+
+        alerts = update_model_attention_alerts(
+            token=
+                config[
+                    "github_data_token"
+                ],
+
+            repo=
+                config[
+                    "github_data_repo"
+                ],
+        )
+
+        print(
+            "Model attention alerts: "
+            f"status={alerts.get('overall_status', 'COLLECTING')}; "
+            f"unreviewed={alerts.get('unreviewed_alert_count', 0)}; "
+            f"research_watches="
+            f"{len(alerts.get('research_watches', []))}."
+        )
+
+        if alerts.get(
+            "unreviewed_alert_count",
+            0,
+        ):
+
+            print(
+                "ATTENTION: open the SharpReport scanner "
+                "Model Research & Governance section for review."
+            )
+
+    except Exception as error:
+
+        print(
+            "Model attention alert update warning: "
             f"{error}"
         )
 
