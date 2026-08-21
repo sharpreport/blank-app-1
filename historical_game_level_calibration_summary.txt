@@ -1,0 +1,73 @@
+SHARPREPORT GAME-LEVEL NRFI PROBABILITY CALIBRATION TEST
+========================================================================================
+
+METHOD:
+Logistic recalibration is trained ONLY on prior out-of-sample game predictions.
+This tests whether the model is systematically too aggressive or too conservative.
+Slope below 1.0 generally means the raw probabilities should be pulled toward the middle.
+Positive Brier / Log Loss improvement means calibration improved future probability accuracy.
+
+Core + Offense BB + Run Factor
+----------------------------------------------------------------------------------------
+Calibration improved Brier: 1/3 holdouts
+Calibration improved Log Loss: 1/3 holdouts
+Average Brier improvement from calibration: -0.000145
+Average Log Loss improvement from calibration: -0.000276
+Worst Brier calibration result: -0.000442
+
+2024: train games 2430 | intercept -0.0521 | slope 0.6063 | raw Brier 0.249650 | cal 0.250092 | gain -0.000442
+2025: train games 4859 | intercept +0.0327 | slope 0.4951 | raw Brier 0.249723 | cal 0.249492 | gain +0.000231
+2026: train games 7289 | intercept +0.0200 | slope 0.5312 | raw Brier 0.248582 | cal 0.248805 | gain -0.000223
+
+========================================================================================
+
+Core + Run Factor
+----------------------------------------------------------------------------------------
+Calibration improved Brier: 0/3 holdouts
+Calibration improved Log Loss: 0/3 holdouts
+Average Brier improvement from calibration: -0.000289
+Average Log Loss improvement from calibration: -0.000565
+Worst Brier calibration result: -0.000368
+
+2024: train games 2430 | intercept -0.0481 | slope 0.5214 | raw Brier 0.249867 | cal 0.250235 | gain -0.000368
+2025: train games 4859 | intercept +0.0379 | slope 0.4134 | raw Brier 0.249353 | cal 0.249497 | gain -0.000144
+2026: train games 7289 | intercept +0.0161 | slope 0.5119 | raw Brier 0.248525 | cal 0.248879 | gain -0.000354
+
+========================================================================================
+
+CALIBRATION RANKING
+----------------------------------------------------------------------------------------
+#1 Core + Offense BB + Run Factor | Brier wins 1/3 | avg gain -0.000145 | worst -0.000442
+#2 Core + Run Factor | Brier wins 0/3 | avg gain -0.000289 | worst -0.000368
+
+2026 RAW CALIBRATION — Core + Offense BB + Run Factor
+----------------------------------------------------------------------------------------
+(-0.001, 0.45] | games 245 | pred 0.424 | actual 0.449
+(0.45, 0.5] | games 720 | pred 0.479 | actual 0.468
+(0.5, 0.55] | games 726 | pred 0.522 | actual 0.521
+(0.55, 0.6] | games 204 | pred 0.567 | actual 0.569
+(0.6, 0.65] | games 23 | pred 0.613 | actual 0.565
+(0.65, 0.7] | games 1 | pred 0.655 | actual 0.000
+
+2026 CALIBRATED CALIBRATION — Core + Offense BB + Run Factor
+----------------------------------------------------------------------------------------
+(-0.001, 0.45] | games 29 | pred 0.441 | actual 0.310
+(0.45, 0.5] | games 771 | pred 0.484 | actual 0.466
+(0.5, 0.55] | games 1065 | pred 0.518 | actual 0.521
+(0.55, 0.6] | games 54 | pred 0.559 | actual 0.574
+
+2026 RAW CALIBRATION — Core + Run Factor
+----------------------------------------------------------------------------------------
+(-0.001, 0.45] | games 148 | pred 0.431 | actual 0.385
+(0.45, 0.5] | games 655 | pred 0.480 | actual 0.476
+(0.5, 0.55] | games 849 | pred 0.523 | actual 0.519
+(0.55, 0.6] | games 226 | pred 0.566 | actual 0.549
+(0.6, 0.65] | games 38 | pred 0.615 | actual 0.500
+(0.65, 0.7] | games 3 | pred 0.665 | actual 0.333
+
+2026 CALIBRATED CALIBRATION — Core + Run Factor
+----------------------------------------------------------------------------------------
+(-0.001, 0.45] | games 4 | pred 0.445 | actual 0.250
+(0.45, 0.5] | games 635 | pred 0.486 | actual 0.457
+(0.5, 0.55] | games 1224 | pred 0.518 | actual 0.516
+(0.55, 0.6] | games 56 | pred 0.562 | actual 0.554

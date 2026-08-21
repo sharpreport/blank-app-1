@@ -1,0 +1,149 @@
+SHARPREPORT HISTORICAL TOP-4 OFFENSE PREDICTIVE TEST
+==============================================================================
+
+Historical games: 11638
+Half-inning rows: 23276
+
+METHOD:
+Walk-forward out-of-sample testing.
+Top 1st and Bottom 1st modeled separately.
+Positive Brier improvement = better probability forecast.
+Every offensive skill model includes Top-4 sample-size controls and is also compared against a sample-only control.
+
+Sample only control
+------------------------------------------------------------------------------
+Beat half-specific baseline: 2/4 holdouts
+Beat sample-only control: 0/4 holdouts
+Average Brier improvement vs baseline: +0.000008
+Average Brier improvement vs sample-only: +0.000000
+Worst holdout improvement vs baseline: -0.000142
+Best holdout improvement vs baseline: +0.000153
+
+2023: baseline 0.208260 | model 0.208107 | vs baseline +0.000153 | vs sample +0.000000
+2024: baseline 0.199418 | model 0.199286 | vs baseline +0.000132 | vs sample +0.000000
+2025: baseline 0.208096 | model 0.208208 | vs baseline -0.000112 | vs sample +0.000000
+2026: baseline 0.206473 | model 0.206615 | vs baseline -0.000142 | vs sample +0.000000
+
+==============================================================================
+
+Top4 xwOBA + sample
+------------------------------------------------------------------------------
+Beat half-specific baseline: 3/4 holdouts
+Beat sample-only control: 4/4 holdouts
+Average Brier improvement vs baseline: +0.000216
+Average Brier improvement vs sample-only: +0.000208
+Worst holdout improvement vs baseline: -0.000044
+Best holdout improvement vs baseline: +0.000435
+
+2023: baseline 0.208260 | model 0.207825 | vs baseline +0.000435 | vs sample +0.000282
+2024: baseline 0.199418 | model 0.199046 | vs baseline +0.000372 | vs sample +0.000240
+2025: baseline 0.208096 | model 0.208140 | vs baseline -0.000044 | vs sample +0.000068
+2026: baseline 0.206473 | model 0.206371 | vs baseline +0.000102 | vs sample +0.000244
+
+==============================================================================
+
+Top4 K% + sample
+------------------------------------------------------------------------------
+Beat half-specific baseline: 1/4 holdouts
+Beat sample-only control: 2/4 holdouts
+Average Brier improvement vs baseline: -0.000026
+Average Brier improvement vs sample-only: -0.000034
+Worst holdout improvement vs baseline: -0.000142
+Best holdout improvement vs baseline: +0.000153
+
+2023: baseline 0.208260 | model 0.208286 | vs baseline -0.000027 | vs sample -0.000180
+2024: baseline 0.199418 | model 0.199265 | vs baseline +0.000153 | vs sample +0.000021
+2025: baseline 0.208096 | model 0.208239 | vs baseline -0.000142 | vs sample -0.000030
+2026: baseline 0.206473 | model 0.206561 | vs baseline -0.000087 | vs sample +0.000055
+
+==============================================================================
+
+Top4 BB% + sample
+------------------------------------------------------------------------------
+Beat half-specific baseline: 2/4 holdouts
+Beat sample-only control: 2/4 holdouts
+Average Brier improvement vs baseline: +0.000134
+Average Brier improvement vs sample-only: +0.000126
+Worst holdout improvement vs baseline: -0.000230
+Best holdout improvement vs baseline: +0.000585
+
+2023: baseline 0.208260 | model 0.207860 | vs baseline +0.000399 | vs sample +0.000246
+2024: baseline 0.199418 | model 0.198833 | vs baseline +0.000585 | vs sample +0.000452
+2025: baseline 0.208096 | model 0.208313 | vs baseline -0.000217 | vs sample -0.000105
+2026: baseline 0.206473 | model 0.206703 | vs baseline -0.000230 | vs sample -0.000088
+
+==============================================================================
+
+Top4 Barrel% + sample
+------------------------------------------------------------------------------
+Beat half-specific baseline: 3/4 holdouts
+Beat sample-only control: 4/4 holdouts
+Average Brier improvement vs baseline: +0.000191
+Average Brier improvement vs sample-only: +0.000183
+Worst holdout improvement vs baseline: -0.000020
+Best holdout improvement vs baseline: +0.000326
+
+2023: baseline 0.208260 | model 0.207954 | vs baseline +0.000306 | vs sample +0.000153
+2024: baseline 0.199418 | model 0.199092 | vs baseline +0.000326 | vs sample +0.000194
+2025: baseline 0.208096 | model 0.207945 | vs baseline +0.000152 | vs sample +0.000263
+2026: baseline 0.206473 | model 0.206493 | vs baseline -0.000020 | vs sample +0.000122
+
+==============================================================================
+
+Top4 xwOBA + K + sample
+------------------------------------------------------------------------------
+Beat half-specific baseline: 3/4 holdouts
+Beat sample-only control: 4/4 holdouts
+Average Brier improvement vs baseline: +0.000160
+Average Brier improvement vs sample-only: +0.000152
+Worst holdout improvement vs baseline: -0.000049
+Best holdout improvement vs baseline: +0.000355
+
+2023: baseline 0.208260 | model 0.208022 | vs baseline +0.000238 | vs sample +0.000084
+2024: baseline 0.199418 | model 0.199063 | vs baseline +0.000355 | vs sample +0.000223
+2025: baseline 0.208096 | model 0.208145 | vs baseline -0.000049 | vs sample +0.000063
+2026: baseline 0.206473 | model 0.206379 | vs baseline +0.000094 | vs sample +0.000236
+
+==============================================================================
+
+Top4 xwOBA + K + Barrel + sample
+------------------------------------------------------------------------------
+Beat half-specific baseline: 4/4 holdouts
+Beat sample-only control: 4/4 holdouts
+Average Brier improvement vs baseline: +0.000234
+Average Brier improvement vs sample-only: +0.000226
+Worst holdout improvement vs baseline: +0.000095
+Best holdout improvement vs baseline: +0.000417
+
+2023: baseline 0.208260 | model 0.208038 | vs baseline +0.000221 | vs sample +0.000068
+2024: baseline 0.199418 | model 0.199001 | vs baseline +0.000417 | vs sample +0.000285
+2025: baseline 0.208096 | model 0.208002 | vs baseline +0.000095 | vs sample +0.000207
+2026: baseline 0.206473 | model 0.206272 | vs baseline +0.000201 | vs sample +0.000343
+
+==============================================================================
+
+All 4 Top4 skill + sample
+------------------------------------------------------------------------------
+Beat half-specific baseline: 4/4 holdouts
+Beat sample-only control: 4/4 holdouts
+Average Brier improvement vs baseline: +0.000231
+Average Brier improvement vs sample-only: +0.000223
+Worst holdout improvement vs baseline: +0.000004
+Best holdout improvement vs baseline: +0.000709
+
+2023: baseline 0.208260 | model 0.208061 | vs baseline +0.000199 | vs sample +0.000046
+2024: baseline 0.199418 | model 0.198709 | vs baseline +0.000709 | vs sample +0.000576
+2025: baseline 0.208096 | model 0.208087 | vs baseline +0.000010 | vs sample +0.000122
+2026: baseline 0.206473 | model 0.206469 | vs baseline +0.000004 | vs sample +0.000146
+
+==============================================================================
+
+FINAL RANKING
+------------------------------------------------------------------------------
+#1 Top4 xwOBA + K + Barrel + sample | baseline wins 4/4 | sample wins 4/4 | avg baseline +0.000234 | avg sample +0.000226 | worst +0.000095
+#2 All 4 Top4 skill + sample | baseline wins 4/4 | sample wins 4/4 | avg baseline +0.000231 | avg sample +0.000223 | worst +0.000004
+#3 Top4 xwOBA + sample | baseline wins 3/4 | sample wins 4/4 | avg baseline +0.000216 | avg sample +0.000208 | worst -0.000044
+#4 Top4 Barrel% + sample | baseline wins 3/4 | sample wins 4/4 | avg baseline +0.000191 | avg sample +0.000183 | worst -0.000020
+#5 Top4 xwOBA + K + sample | baseline wins 3/4 | sample wins 4/4 | avg baseline +0.000160 | avg sample +0.000152 | worst -0.000049
+#6 Top4 BB% + sample | baseline wins 2/4 | sample wins 2/4 | avg baseline +0.000134 | avg sample +0.000126 | worst -0.000230
+#7 Top4 K% + sample | baseline wins 1/4 | sample wins 2/4 | avg baseline -0.000026 | avg sample -0.000034 | worst -0.000142

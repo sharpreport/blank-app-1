@@ -1,0 +1,110 @@
+SHARPREPORT PARK FACTOR INCREMENTAL TEST
+====================================================================================
+
+Historical games: 11638
+Half-inning rows: 23276
+
+METHOD:
+Walk-forward out-of-sample testing.
+Top and Bottom 1st modeled separately.
+Missing park values are neutralized to 100 and paired with a missing-park indicator.
+Positive improvement = lower (better) Brier score.
+
+Combined core
+------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 0/4
+Average improvement vs baseline: +0.000836
+Average incremental improvement vs core: +0.000000
+Worst holdout vs baseline: +0.000295
+
+2023: baseline 0.208260 | model 0.207093 | vs baseline +0.001167 | vs core +0.000000
+2024: baseline 0.199418 | model 0.199123 | vs baseline +0.000295 | vs core +0.000000
+2025: baseline 0.208096 | model 0.207588 | vs baseline +0.000508 | vs core +0.000000
+2026: baseline 0.206473 | model 0.205099 | vs baseline +0.001374 | vs core +0.000000
+
+====================================================================================
+
+Core + Run Factor
+------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 2/4
+Average improvement vs baseline: +0.000873
+Average incremental improvement vs core: +0.000037
+Worst holdout vs baseline: +0.000182
+
+2023: baseline 0.208260 | model 0.207334 | vs baseline +0.000926 | vs core -0.000241
+2024: baseline 0.199418 | model 0.199236 | vs baseline +0.000182 | vs core -0.000113
+2025: baseline 0.208096 | model 0.207309 | vs baseline +0.000787 | vs core +0.000279
+2026: baseline 0.206473 | model 0.204877 | vs baseline +0.001596 | vs core +0.000222
+
+====================================================================================
+
+Core + wOBA Factor
+------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 2/4
+Average improvement vs baseline: +0.000865
+Average incremental improvement vs core: +0.000029
+Worst holdout vs baseline: +0.000177
+
+2023: baseline 0.208260 | model 0.207354 | vs baseline +0.000906 | vs core -0.000261
+2024: baseline 0.199418 | model 0.199241 | vs baseline +0.000177 | vs core -0.000118
+2025: baseline 0.208096 | model 0.207308 | vs baseline +0.000789 | vs core +0.000281
+2026: baseline 0.206473 | model 0.204885 | vs baseline +0.001588 | vs core +0.000214
+
+====================================================================================
+
+Core + HR Factor
+------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 3/4
+Average improvement vs baseline: +0.000844
+Average incremental improvement vs core: +0.000008
+Worst holdout vs baseline: +0.000215
+
+2023: baseline 0.208260 | model 0.207091 | vs baseline +0.001169 | vs core +0.000002
+2024: baseline 0.199418 | model 0.199203 | vs baseline +0.000215 | vs core -0.000080
+2025: baseline 0.208096 | model 0.207535 | vs baseline +0.000562 | vs core +0.000054
+2026: baseline 0.206473 | model 0.205043 | vs baseline +0.001431 | vs core +0.000057
+
+====================================================================================
+
+Core + Run + wOBA
+------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 2/4
+Average improvement vs baseline: +0.000851
+Average incremental improvement vs core: +0.000015
+Worst holdout vs baseline: +0.000162
+
+2023: baseline 0.208260 | model 0.207361 | vs baseline +0.000898 | vs core -0.000268
+2024: baseline 0.199418 | model 0.199256 | vs baseline +0.000162 | vs core -0.000133
+2025: baseline 0.208096 | model 0.207336 | vs baseline +0.000760 | vs core +0.000252
+2026: baseline 0.206473 | model 0.204889 | vs baseline +0.001585 | vs core +0.000211
+
+====================================================================================
+
+Core + all park factors
+------------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat current combined core: 2/4
+Average improvement vs baseline: +0.000608
+Average incremental improvement vs core: -0.000228
+Worst holdout vs baseline: -0.000522
+
+2023: baseline 0.208260 | model 0.207084 | vs baseline +0.001176 | vs core +0.000009
+2024: baseline 0.199418 | model 0.199940 | vs baseline -0.000522 | vs core -0.000818
+2025: baseline 0.208096 | model 0.207941 | vs baseline +0.000155 | vs core -0.000353
+2026: baseline 0.206473 | model 0.204849 | vs baseline +0.001624 | vs core +0.000250
+
+====================================================================================
+
+FINAL RANKING
+------------------------------------------------------------------------------------
+#1 Core + Run Factor | baseline wins 4/4 | core wins 2/4 | avg baseline +0.000873 | avg core +0.000037 | worst +0.000182
+#2 Core + wOBA Factor | baseline wins 4/4 | core wins 2/4 | avg baseline +0.000865 | avg core +0.000029 | worst +0.000177
+#3 Core + Run + wOBA | baseline wins 4/4 | core wins 2/4 | avg baseline +0.000851 | avg core +0.000015 | worst +0.000162
+#4 Core + HR Factor | baseline wins 4/4 | core wins 3/4 | avg baseline +0.000844 | avg core +0.000008 | worst +0.000215
+#5 Combined core | baseline wins 4/4 | core wins 0/4 | avg baseline +0.000836 | avg core +0.000000 | worst +0.000295
+#6 Core + all park factors | baseline wins 3/4 | core wins 2/4 | avg baseline +0.000608 | avg core -0.000228 | worst -0.000522

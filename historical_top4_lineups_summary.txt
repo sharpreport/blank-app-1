@@ -1,0 +1,18 @@
+SHARPREPORT HISTORICAL TOP-4 LINEUP SUMMARY
+======================================================================
+
+Historical games: 11638
+
+Away Top-4 complete: 11638 (100.00%)
+Home Top-4 complete: 11638 (100.00%)
+Both teams Top-4 complete: 11638 (100.00%)
+
+EXTRACTION METHODS
+----------------------------------------------------------------------
+Away primary starter-order method: 11638
+Away fallback method: 0
+Home primary starter-order method: 11638
+Home fallback method: 0
+
+NOTE:
+Primary extraction prefers the earliest player in each batting-order slot so completed-game substitutions do not replace the original starting hitter.

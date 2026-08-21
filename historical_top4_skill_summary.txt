@@ -1,0 +1,66 @@
+SHARPREPORT HISTORICAL TOP-4 OFFENSE SKILL CONTEXT
+======================================================================
+
+Historical games: 11638
+Team Top-4 sides: 23276
+
+All 4 hitters with prior Statcast PA: 23029 (98.94%)
+All 4 hitters with at least 25 prior PA: 21162 (90.92%)
+All 4 hitters with at least 50 prior PA: 19025 (81.74%)
+All 4 core aggregate metrics available: 23002 (98.82%)
+
+CORE PRE-GAME TOP-4 METRICS:
+Top-4 xwOBA
+Top-4 K%
+Top-4 BB%
+Top-4 Barrel%
+Combined prior PA
+Minimum prior PA among the four hitters
+
+NO-LOOKAHEAD CONTROL:
+Every historical Top-4 snapshot is created BEFORE that calendar date's Statcast results are added.
+Same-day games and doubleheaders therefore cannot leak into one another.
+
+AGGREGATION:
+The four starting hitters are averaged equally, matching the live SharpReport Top-4 aggregate approach.
+Aggregate metrics are left missing when any of the four hitters has no legitimate prior-season Statcast sample.
+
+2022
+Team Top-4 sides: 4860
+All 4 hitters with prior PA: 4809 (98.95%)
+All 4 hitters with at least 25 prior PA: 4425 (91.05%)
+All 4 hitters with at least 50 prior PA: 3959 (81.46%)
+All 4 core aggregate metrics available: 4800 (98.77%)
+----------------------------------------------------------------------
+
+2023
+Team Top-4 sides: 4860
+All 4 hitters with prior PA: 4806 (98.89%)
+All 4 hitters with at least 25 prior PA: 4412 (90.78%)
+All 4 hitters with at least 50 prior PA: 3998 (82.26%)
+All 4 core aggregate metrics available: 4802 (98.81%)
+----------------------------------------------------------------------
+
+2024
+Team Top-4 sides: 4858
+All 4 hitters with prior PA: 4815 (99.11%)
+All 4 hitters with at least 25 prior PA: 4447 (91.54%)
+All 4 hitters with at least 50 prior PA: 4034 (83.04%)
+All 4 core aggregate metrics available: 4811 (99.03%)
+----------------------------------------------------------------------
+
+2025
+Team Top-4 sides: 4860
+All 4 hitters with prior PA: 4812 (99.01%)
+All 4 hitters with at least 25 prior PA: 4431 (91.17%)
+All 4 hitters with at least 50 prior PA: 3998 (82.26%)
+All 4 core aggregate metrics available: 4806 (98.89%)
+----------------------------------------------------------------------
+
+2026
+Team Top-4 sides: 3838
+All 4 hitters with prior PA: 3787 (98.67%)
+All 4 hitters with at least 25 prior PA: 3447 (89.81%)
+All 4 hitters with at least 50 prior PA: 3036 (79.10%)
+All 4 core aggregate metrics available: 3783 (98.57%)
+----------------------------------------------------------------------

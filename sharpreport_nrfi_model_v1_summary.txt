@@ -1,0 +1,67 @@
+SHARPREPORT NRFI/YRFI MODEL v1
+==============================================================================
+
+Training games: 11638
+Training half-innings: 23276
+Training dates: 2022-04-07 through 2026-08-20
+
+CHAMPION FEATURE SET:
+Pitcher xwOBA allowed
+Pitcher K%
+Pitcher prior PA / sample controls
+Top-4 xwOBA
+Top-4 K%
+Top-4 BB%
+Top-4 Barrel%
+Top-4 sample controls
+Prior-completed-season 3-year Run Factor
+
+POST-CALIBRATION:
+None. Raw logistic probabilities retained.
+Reason: walk-forward logistic recalibration reduced future Brier and Log Loss performance.
+
+TOP 1ST MODEL
+------------------------------------------------------------------------------
+Rows: 11638
+Historical scoring rate: 26.48%
+Intercept: -1.032179
+
+Standardized coefficients:
+p_xwoba: +0.044131
+p_k_pct: -0.113964
+o_xwoba: -0.051017
+o_k_pct: -0.074145
+o_bb_pct: +0.049161
+o_barrel_pct: +0.115756
+p_log_pa: -0.147961
+p_no_prior_pa: -0.062083
+o_log_combined_pa: +0.117418
+o_log_min_pa: -0.027109
+o_missing_core: +0.021369
+park_runs: +0.074648
+park_missing: +0.034488
+
+==============================================================================
+
+BOTTOM 1ST MODEL
+------------------------------------------------------------------------------
+Rows: 11638
+Historical scoring rate: 30.98%
+Intercept: -0.807231
+
+Standardized coefficients:
+p_xwoba: +0.070585
+p_k_pct: -0.051579
+o_xwoba: -0.000828
+o_k_pct: -0.035148
+o_bb_pct: +0.078711
+o_barrel_pct: +0.042109
+p_log_pa: -0.017321
+p_no_prior_pa: +0.041879
+o_log_combined_pa: -0.045355
+o_log_min_pa: +0.121763
+o_missing_core: +0.020725
+park_runs: +0.054050
+park_missing: +0.033015
+
+==============================================================================

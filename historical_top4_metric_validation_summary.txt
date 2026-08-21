@@ -1,0 +1,50 @@
+SHARPREPORT HISTORICAL TOP-4 HITTER METRIC VALIDATION
+========================================================================
+
+TOP-4 COVERAGE AUDIT
+------------------------------------------------------------------------
+Team Top-4 sides: 23276
+All 4 hitters with prior PA: 23029
+All 4 individual core metrics available: 23002
+All 4 with prior PA but incomplete core metrics: 27
+Those explained by at least one hitter having zero prior BBE: 27
+
+Completed seasons checked: 2022, 2023, 2024, 2025
+Minimum reconstructed PA per hitter: 100
+
+xwOBA validation
+Comparable hitter-seasons: 1847
+Mean absolute difference: 0.0004
+Median absolute difference: 0.0003
+90th percentile difference: 0.0005
+Within tolerance: 1847 of 1847 (100.00%)
+Tolerance: 0.02
+------------------------------------------------------------------------
+K% validation
+Comparable hitter-seasons: 1847
+Mean absolute difference: 0.0413
+Median absolute difference: 0.0000
+90th percentile difference: 0.1300
+Within tolerance: 1847 of 1847 (100.00%)
+Tolerance: 1.5
+------------------------------------------------------------------------
+BB% validation
+Comparable hitter-seasons: 1847
+Mean absolute difference: 0.0138
+Median absolute difference: 0.0000
+90th percentile difference: 0.0400
+Within tolerance: 1847 of 1847 (100.00%)
+Tolerance: 1.5
+------------------------------------------------------------------------
+Barrel% validation
+Comparable hitter-seasons: 1847
+Mean absolute difference: 0.0395
+Median absolute difference: 0.0300
+90th percentile difference: 0.0900
+Within tolerance: 1847 of 1847 (100.00%)
+Tolerance: 1.5
+------------------------------------------------------------------------
+
+INTERPRETATION:
+Small differences are expected because detailed Statcast reconstruction and leaderboard / MLB denominator definitions can differ slightly.
+If large systematic differences appear, do not run the offensive predictive model until corrected.

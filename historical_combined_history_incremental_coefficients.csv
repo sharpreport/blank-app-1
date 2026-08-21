@@ -1,0 +1,385 @@
+holdout_year,half,model,feature,standardized_coefficient
+2023,Top,Combined core,p_xwoba,-0.009384517689319152
+2023,Top,Combined core,p_k_pct,-0.2240630442505791
+2023,Top,Combined core,o_xwoba,0.015292583488562373
+2023,Top,Combined core,o_k_pct,-0.09827814839576896
+2023,Top,Combined core,o_barrel_pct,0.050444745474028406
+2023,Top,Combined core,p_log_pa,-0.05050623427486305
+2023,Top,Combined core,p_no_prior_pa,-0.006471751311486034
+2023,Top,Combined core,o_log_combined_pa,0.11417557285957071
+2023,Top,Combined core,o_log_min_pa,-0.08412667950528545
+2023,Top,Combined core,o_missing_core,0.05116417333388133
+2023,Top,Core + offense BB,p_xwoba,-0.009451872116968333
+2023,Top,Core + offense BB,p_k_pct,-0.2240829372531828
+2023,Top,Core + offense BB,o_xwoba,0.017840582869980828
+2023,Top,Core + offense BB,o_k_pct,-0.09794326319319883
+2023,Top,Core + offense BB,o_bb_pct,-0.0038335984217180625
+2023,Top,Core + offense BB,o_barrel_pct,0.04940278945938205
+2023,Top,Core + offense BB,p_log_pa,-0.050900118473297506
+2023,Top,Core + offense BB,p_no_prior_pa,-0.00680166966241687
+2023,Top,Core + offense BB,o_log_combined_pa,0.11376035900181787
+2023,Top,Core + offense BB,o_log_min_pa,-0.08397620784185461
+2023,Top,Core + offense BB,o_missing_core,0.0510223702352041
+2023,Top,Core + pitcher 1st-inning history,p_xwoba,0.0006018671910483612
+2023,Top,Core + pitcher 1st-inning history,p_k_pct,-0.22629495485364223
+2023,Top,Core + pitcher 1st-inning history,o_xwoba,0.01566656324941618
+2023,Top,Core + pitcher 1st-inning history,o_k_pct,-0.0977889984546038
+2023,Top,Core + pitcher 1st-inning history,o_barrel_pct,0.04935159434343781
+2023,Top,Core + pitcher 1st-inning history,p_log_pa,0.04059864232914369
+2023,Top,Core + pitcher 1st-inning history,p_no_prior_pa,0.023567451078181922
+2023,Top,Core + pitcher 1st-inning history,o_log_combined_pa,0.11142994042175701
+2023,Top,Core + pitcher 1st-inning history,o_log_min_pa,-0.08498952790039391
+2023,Top,Core + pitcher 1st-inning history,o_missing_core,0.05058121178284731
+2023,Top,Core + pitcher 1st-inning history,hist_runs_per_start,-0.025185043808298106
+2023,Top,Core + pitcher 1st-inning history,hist_log_starts,-0.07062502954671486
+2023,Top,Core + pitcher 1st-inning history,hist_no_starts,0.003359300856082733
+2023,Top,Core + offense BB + pitcher history,p_xwoba,0.000531606151822464
+2023,Top,Core + offense BB + pitcher history,p_k_pct,-0.22632950494075518
+2023,Top,Core + offense BB + pitcher history,o_xwoba,0.019072989418197118
+2023,Top,Core + offense BB + pitcher history,o_k_pct,-0.09733640648002637
+2023,Top,Core + offense BB + pitcher history,o_bb_pct,-0.005121235557217699
+2023,Top,Core + offense BB + pitcher history,o_barrel_pct,0.047953662867223225
+2023,Top,Core + offense BB + pitcher history,p_log_pa,0.04076064170494473
+2023,Top,Core + offense BB + pitcher history,p_no_prior_pa,0.023376636242082166
+2023,Top,Core + offense BB + pitcher history,o_log_combined_pa,0.1108540096175691
+2023,Top,Core + offense BB + pitcher history,o_log_min_pa,-0.08479587183197473
+2023,Top,Core + offense BB + pitcher history,o_missing_core,0.050385944634884904
+2023,Top,Core + offense BB + pitcher history,hist_runs_per_start,-0.0252161155901757
+2023,Top,Core + offense BB + pitcher history,hist_log_starts,-0.07115418730618714
+2023,Top,Core + offense BB + pitcher history,hist_no_starts,0.003357198848472194
+2023,Bottom,Combined core,p_xwoba,0.08883562020656185
+2023,Bottom,Combined core,p_k_pct,-0.09791390915584652
+2023,Bottom,Combined core,o_xwoba,0.11064269631349008
+2023,Bottom,Combined core,o_k_pct,0.05102865400513502
+2023,Bottom,Combined core,o_barrel_pct,-0.04232707478637787
+2023,Bottom,Combined core,p_log_pa,-0.0022479762159317504
+2023,Bottom,Combined core,p_no_prior_pa,0.07967455838482478
+2023,Bottom,Combined core,o_log_combined_pa,-0.08071019869058534
+2023,Bottom,Combined core,o_log_min_pa,0.16126073452105447
+2023,Bottom,Combined core,o_missing_core,-0.03678457767840938
+2023,Bottom,Core + offense BB,p_xwoba,0.09119857415296855
+2023,Bottom,Core + offense BB,p_k_pct,-0.09596367009214059
+2023,Bottom,Core + offense BB,o_xwoba,0.022102338271743738
+2023,Bottom,Core + offense BB,o_k_pct,0.03170712860484067
+2023,Bottom,Core + offense BB,o_bb_pct,0.12369635366145777
+2023,Bottom,Core + offense BB,o_barrel_pct,-0.0035269208799515836
+2023,Bottom,Core + offense BB,p_log_pa,0.0027127205346327674
+2023,Bottom,Core + offense BB,p_no_prior_pa,0.0889107595751914
+2023,Bottom,Core + offense BB,o_log_combined_pa,-0.06059118495690268
+2023,Bottom,Core + offense BB,o_log_min_pa,0.1475076821496159
+2023,Bottom,Core + offense BB,o_missing_core,-0.03475820163866395
+2023,Bottom,Core + pitcher 1st-inning history,p_xwoba,0.09707755958892383
+2023,Bottom,Core + pitcher 1st-inning history,p_k_pct,-0.10110740775963929
+2023,Bottom,Core + pitcher 1st-inning history,o_xwoba,0.10982292378895983
+2023,Bottom,Core + pitcher 1st-inning history,o_k_pct,0.05159676842487749
+2023,Bottom,Core + pitcher 1st-inning history,o_barrel_pct,-0.041752421395467
+2023,Bottom,Core + pitcher 1st-inning history,p_log_pa,0.006678670036021938
+2023,Bottom,Core + pitcher 1st-inning history,p_no_prior_pa,0.09569319976092708
+2023,Bottom,Core + pitcher 1st-inning history,o_log_combined_pa,-0.07881336515147239
+2023,Bottom,Core + pitcher 1st-inning history,o_log_min_pa,0.16162283181957343
+2023,Bottom,Core + pitcher 1st-inning history,o_missing_core,-0.036145810325594795
+2023,Bottom,Core + pitcher 1st-inning history,hist_runs_per_start,-0.03586643847464202
+2023,Bottom,Core + pitcher 1st-inning history,hist_log_starts,-0.013244893963457897
+2023,Bottom,Core + pitcher 1st-inning history,hist_no_starts,-0.01908271313706255
+2023,Bottom,Core + offense BB + pitcher history,p_xwoba,0.0995168196252807
+2023,Bottom,Core + offense BB + pitcher history,p_k_pct,-0.09919831089343248
+2023,Bottom,Core + offense BB + pitcher history,o_xwoba,0.021232768646528077
+2023,Bottom,Core + offense BB + pitcher history,o_k_pct,0.032353810645146294
+2023,Bottom,Core + offense BB + pitcher history,o_bb_pct,0.12394106789626787
+2023,Bottom,Core + offense BB + pitcher history,o_barrel_pct,-0.003050182463001404
+2023,Bottom,Core + offense BB + pitcher history,p_log_pa,-0.0009123566339003898
+2023,Bottom,Core + offense BB + pitcher history,p_no_prior_pa,0.09939695053655691
+2023,Bottom,Core + offense BB + pitcher history,o_log_combined_pa,-0.05824210683548009
+2023,Bottom,Core + offense BB + pitcher history,o_log_min_pa,0.14780806260096377
+2023,Bottom,Core + offense BB + pitcher history,o_missing_core,-0.034012055658509927
+2023,Bottom,Core + offense BB + pitcher history,hist_runs_per_start,-0.03653472541292636
+2023,Bottom,Core + offense BB + pitcher history,hist_log_starts,-0.003172444168670493
+2023,Bottom,Core + offense BB + pitcher history,hist_no_starts,-0.017648708365696066
+2024,Top,Combined core,p_xwoba,0.02093463988131049
+2024,Top,Combined core,p_k_pct,-0.15444485391874826
+2024,Top,Combined core,o_xwoba,0.0007727463798110831
+2024,Top,Combined core,o_k_pct,-0.05117269595327801
+2024,Top,Combined core,o_barrel_pct,0.06643078294512925
+2024,Top,Combined core,p_log_pa,-0.044964666746169314
+2024,Top,Combined core,p_no_prior_pa,0.03945503872418836
+2024,Top,Combined core,o_log_combined_pa,0.07198263134687964
+2024,Top,Combined core,o_log_min_pa,-0.03561769702793336
+2024,Top,Combined core,o_missing_core,0.007574126182537934
+2024,Top,Core + offense BB,p_xwoba,0.020897306303092902
+2024,Top,Core + offense BB,p_k_pct,-0.15444007662763873
+2024,Top,Core + offense BB,o_xwoba,-0.03301632124563116
+2024,Top,Core + offense BB,o_k_pct,-0.059993166528114227
+2024,Top,Core + offense BB,o_bb_pct,0.04533649535194865
+2024,Top,Core + offense BB,o_barrel_pct,0.08112463748342501
+2024,Top,Core + offense BB,p_log_pa,-0.04227250706403713
+2024,Top,Core + offense BB,p_no_prior_pa,0.04252659479440624
+2024,Top,Core + offense BB,o_log_combined_pa,0.07513254152082355
+2024,Top,Core + offense BB,o_log_min_pa,-0.03495522832382135
+2024,Top,Core + offense BB,o_missing_core,0.009161899507455535
+2024,Top,Core + pitcher 1st-inning history,p_xwoba,0.015089404151038755
+2024,Top,Core + pitcher 1st-inning history,p_k_pct,-0.15425707063527425
+2024,Top,Core + pitcher 1st-inning history,o_xwoba,0.001062591675809402
+2024,Top,Core + pitcher 1st-inning history,o_k_pct,-0.050997456367988865
+2024,Top,Core + pitcher 1st-inning history,o_barrel_pct,0.06623483125158733
+2024,Top,Core + pitcher 1st-inning history,p_log_pa,-0.062458920961299624
+2024,Top,Core + pitcher 1st-inning history,p_no_prior_pa,0.0386804927758572
+2024,Top,Core + pitcher 1st-inning history,o_log_combined_pa,0.07323115192666653
+2024,Top,Core + pitcher 1st-inning history,o_log_min_pa,-0.03549830567417032
+2024,Top,Core + pitcher 1st-inning history,o_missing_core,0.007637118385950461
+2024,Top,Core + pitcher 1st-inning history,hist_runs_per_start,0.016581048212437336
+2024,Top,Core + pitcher 1st-inning history,hist_log_starts,0.012812743355693771
+2024,Top,Core + pitcher 1st-inning history,hist_no_starts,-0.007039547333180917
+2024,Top,Core + offense BB + pitcher history,p_xwoba,0.014870130072446164
+2024,Top,Core + offense BB + pitcher history,p_k_pct,-0.1542966573521888
+2024,Top,Core + offense BB + pitcher history,o_xwoba,-0.03292562080727104
+2024,Top,Core + offense BB + pitcher history,o_k_pct,-0.059845371556976064
+2024,Top,Core + offense BB + pitcher history,o_bb_pct,0.045707469820301744
+2024,Top,Core + offense BB + pitcher history,o_barrel_pct,0.08101276924919609
+2024,Top,Core + offense BB + pitcher history,p_log_pa,-0.06588980366605188
+2024,Top,Core + offense BB + pitcher history,p_no_prior_pa,0.03824309170737796
+2024,Top,Core + offense BB + pitcher history,o_log_combined_pa,0.07655718659282841
+2024,Top,Core + offense BB + pitcher history,o_log_min_pa,-0.03482551398527024
+2024,Top,Core + offense BB + pitcher history,o_missing_core,0.009285580496133886
+2024,Top,Core + offense BB + pitcher history,hist_runs_per_start,0.016908609329102143
+2024,Top,Core + offense BB + pitcher history,hist_log_starts,0.01781065524957637
+2024,Top,Core + offense BB + pitcher history,hist_no_starts,-0.005385284438257788
+2024,Bottom,Combined core,p_xwoba,0.09301953512437076
+2024,Bottom,Combined core,p_k_pct,-0.07998506297672457
+2024,Bottom,Combined core,o_xwoba,0.07860421309609235
+2024,Bottom,Combined core,o_k_pct,-0.008403041524189995
+2024,Bottom,Combined core,o_barrel_pct,0.0047302594003286345
+2024,Bottom,Combined core,p_log_pa,0.040804106148263006
+2024,Bottom,Combined core,p_no_prior_pa,0.14547363318555542
+2024,Bottom,Combined core,o_log_combined_pa,-0.10620936457879908
+2024,Bottom,Combined core,o_log_min_pa,0.16693577483054486
+2024,Bottom,Combined core,o_missing_core,-0.031016522956368777
+2024,Bottom,Core + offense BB,p_xwoba,0.09421168624895207
+2024,Bottom,Core + offense BB,p_k_pct,-0.07871079520593152
+2024,Bottom,Core + offense BB,o_xwoba,0.003355682348931345
+2024,Bottom,Core + offense BB,o_k_pct,-0.03258266470989706
+2024,Bottom,Core + offense BB,o_bb_pct,0.09485406158100111
+2024,Bottom,Core + offense BB,o_barrel_pct,0.04116878398105688
+2024,Bottom,Core + offense BB,p_log_pa,0.045425811667181716
+2024,Bottom,Core + offense BB,p_no_prior_pa,0.15234604412071562
+2024,Bottom,Core + offense BB,o_log_combined_pa,-0.09681824793468224
+2024,Bottom,Core + offense BB,o_log_min_pa,0.16400480323291866
+2024,Bottom,Core + offense BB,o_missing_core,-0.02860027045017616
+2024,Bottom,Core + pitcher 1st-inning history,p_xwoba,0.09372461742666464
+2024,Bottom,Core + pitcher 1st-inning history,p_k_pct,-0.07998120304041924
+2024,Bottom,Core + pitcher 1st-inning history,o_xwoba,0.07934544489032055
+2024,Bottom,Core + pitcher 1st-inning history,o_k_pct,-0.006503066940682374
+2024,Bottom,Core + pitcher 1st-inning history,o_barrel_pct,0.0034557559621602204
+2024,Bottom,Core + pitcher 1st-inning history,p_log_pa,-0.06323618869410494
+2024,Bottom,Core + pitcher 1st-inning history,p_no_prior_pa,0.13157280394614249
+2024,Bottom,Core + pitcher 1st-inning history,o_log_combined_pa,-0.09580515540914396
+2024,Bottom,Core + pitcher 1st-inning history,o_log_min_pa,0.1678420871207046
+2024,Bottom,Core + pitcher 1st-inning history,o_missing_core,-0.027337339124235683
+2024,Bottom,Core + pitcher 1st-inning history,hist_runs_per_start,-0.009271498748919053
+2024,Bottom,Core + pitcher 1st-inning history,hist_log_starts,0.06734146735226863
+2024,Bottom,Core + pitcher 1st-inning history,hist_no_starts,-0.03667411824228043
+2024,Bottom,Core + offense BB + pitcher history,p_xwoba,0.09507334039382628
+2024,Bottom,Core + offense BB + pitcher history,p_k_pct,-0.07869450218888548
+2024,Bottom,Core + offense BB + pitcher history,o_xwoba,0.003684790689093884
+2024,Bottom,Core + offense BB + pitcher history,o_k_pct,-0.030733835692715112
+2024,Bottom,Core + offense BB + pitcher history,o_bb_pct,0.09539690333771085
+2024,Bottom,Core + offense BB + pitcher history,o_barrel_pct,0.04004898138739651
+2024,Bottom,Core + offense BB + pitcher history,p_log_pa,-0.06291408053774057
+2024,Bottom,Core + offense BB + pitcher history,p_no_prior_pa,0.1367075575832218
+2024,Bottom,Core + offense BB + pitcher history,o_log_combined_pa,-0.08616816688989613
+2024,Bottom,Core + offense BB + pitcher history,o_log_min_pa,0.16495884644458805
+2024,Bottom,Core + offense BB + pitcher history,o_missing_core,-0.024839604989053455
+2024,Bottom,Core + offense BB + pitcher history,hist_runs_per_start,-0.009820973979136354
+2024,Bottom,Core + offense BB + pitcher history,hist_log_starts,0.0706184445047835
+2024,Bottom,Core + offense BB + pitcher history,hist_no_starts,-0.03648922896019309
+2025,Top,Combined core,p_xwoba,0.03326121512748541
+2025,Top,Combined core,p_k_pct,-0.1242790753186467
+2025,Top,Combined core,o_xwoba,-0.00041538415878756207
+2025,Top,Combined core,o_k_pct,-0.04834006401462066
+2025,Top,Combined core,o_barrel_pct,0.08221140951238787
+2025,Top,Combined core,p_log_pa,-0.11344864564211386
+2025,Top,Combined core,p_no_prior_pa,-0.04579886788040619
+2025,Top,Combined core,o_log_combined_pa,0.08357960633503386
+2025,Top,Combined core,o_log_min_pa,-0.0023600791682355433
+2025,Top,Combined core,o_missing_core,0.037831825167320414
+2025,Top,Core + offense BB,p_xwoba,0.03285927292382317
+2025,Top,Core + offense BB,p_k_pct,-0.1240155794517058
+2025,Top,Core + offense BB,o_xwoba,-0.06836234075161615
+2025,Top,Core + offense BB,o_k_pct,-0.07102561049859368
+2025,Top,Core + offense BB,o_bb_pct,0.08568210889652453
+2025,Top,Core + offense BB,o_barrel_pct,0.11157202321028152
+2025,Top,Core + offense BB,p_log_pa,-0.1099903444988682
+2025,Top,Core + offense BB,p_no_prior_pa,-0.04267705628223843
+2025,Top,Core + offense BB,o_log_combined_pa,0.08907313270240713
+2025,Top,Core + offense BB,o_log_min_pa,0.0003454802650521005
+2025,Top,Core + offense BB,o_missing_core,0.04173092913486957
+2025,Top,Core + pitcher 1st-inning history,p_xwoba,0.025241513542898112
+2025,Top,Core + pitcher 1st-inning history,p_k_pct,-0.12474918342072333
+2025,Top,Core + pitcher 1st-inning history,o_xwoba,0.0007066392232884927
+2025,Top,Core + pitcher 1st-inning history,o_k_pct,-0.04753623417139468
+2025,Top,Core + pitcher 1st-inning history,o_barrel_pct,0.08113515794018815
+2025,Top,Core + pitcher 1st-inning history,p_log_pa,-0.16864770328445441
+2025,Top,Core + pitcher 1st-inning history,p_no_prior_pa,-0.06523536723339456
+2025,Top,Core + pitcher 1st-inning history,o_log_combined_pa,0.08600583130944044
+2025,Top,Core + pitcher 1st-inning history,o_log_min_pa,-0.002426136665956848
+2025,Top,Core + pitcher 1st-inning history,o_missing_core,0.03822009738702261
+2025,Top,Core + pitcher 1st-inning history,hist_runs_per_start,0.022370522878091718
+2025,Top,Core + pitcher 1st-inning history,hist_log_starts,0.04311302363800781
+2025,Top,Core + pitcher 1st-inning history,hist_no_starts,-0.0007113287319681647
+2025,Top,Core + offense BB + pitcher history,p_xwoba,0.024519519348311484
+2025,Top,Core + offense BB + pitcher history,p_k_pct,-0.12459539524117709
+2025,Top,Core + offense BB + pitcher history,o_xwoba,-0.06758536738066646
+2025,Top,Core + offense BB + pitcher history,o_k_pct,-0.07034659002524261
+2025,Top,Core + offense BB + pitcher history,o_bb_pct,0.08626474766143231
+2025,Top,Core + offense BB + pitcher history,o_barrel_pct,0.1105996553655287
+2025,Top,Core + offense BB + pitcher history,p_log_pa,-0.17231405128007304
+2025,Top,Core + offense BB + pitcher history,p_no_prior_pa,-0.06653079070276247
+2025,Top,Core + offense BB + pitcher history,o_log_combined_pa,0.09160748712790626
+2025,Top,Core + offense BB + pitcher history,o_log_min_pa,0.00026045604355322705
+2025,Top,Core + offense BB + pitcher history,o_missing_core,0.042146511079500085
+2025,Top,Core + offense BB + pitcher history,hist_runs_per_start,0.023120173236246155
+2025,Top,Core + offense BB + pitcher history,hist_log_starts,0.04910678017110471
+2025,Top,Core + offense BB + pitcher history,hist_no_starts,0.0016520373798470684
+2025,Bottom,Combined core,p_xwoba,0.07064437281170857
+2025,Bottom,Combined core,p_k_pct,-0.059144230093175904
+2025,Bottom,Combined core,o_xwoba,0.06948949986839147
+2025,Bottom,Combined core,o_k_pct,-0.00969609562765758
+2025,Bottom,Combined core,o_barrel_pct,0.009240476127679177
+2025,Bottom,Combined core,p_log_pa,0.03293798564631968
+2025,Bottom,Combined core,p_no_prior_pa,0.11947395584010564
+2025,Bottom,Combined core,o_log_combined_pa,-0.1088226926312756
+2025,Bottom,Combined core,o_log_min_pa,0.1610098230842431
+2025,Bottom,Combined core,o_missing_core,-0.015805074004965235
+2025,Bottom,Core + offense BB,p_xwoba,0.07131925456064368
+2025,Bottom,Core + offense BB,p_k_pct,-0.058731385179021274
+2025,Bottom,Core + offense BB,o_xwoba,-0.0032407202038106835
+2025,Bottom,Core + offense BB,o_k_pct,-0.035013974314932424
+2025,Bottom,Core + offense BB,o_bb_pct,0.09230564684809886
+2025,Bottom,Core + offense BB,o_barrel_pct,0.03815537163546249
+2025,Bottom,Core + offense BB,p_log_pa,0.03753931442633451
+2025,Bottom,Core + offense BB,p_no_prior_pa,0.12547746032656584
+2025,Bottom,Core + offense BB,o_log_combined_pa,-0.10342203637113068
+2025,Bottom,Core + offense BB,o_log_min_pa,0.1613782069572796
+2025,Bottom,Core + offense BB,o_missing_core,-0.013641111269667928
+2025,Bottom,Core + pitcher 1st-inning history,p_xwoba,0.06587683744999642
+2025,Bottom,Core + pitcher 1st-inning history,p_k_pct,-0.05995412169112581
+2025,Bottom,Core + pitcher 1st-inning history,o_xwoba,0.07055182352283909
+2025,Bottom,Core + pitcher 1st-inning history,o_k_pct,-0.00890844222316672
+2025,Bottom,Core + pitcher 1st-inning history,o_barrel_pct,0.008163702837318139
+2025,Bottom,Core + pitcher 1st-inning history,p_log_pa,-0.0656669752929195
+2025,Bottom,Core + pitcher 1st-inning history,p_no_prior_pa,0.0861483210101122
+2025,Bottom,Core + pitcher 1st-inning history,o_log_combined_pa,-0.10297143292284752
+2025,Bottom,Core + pitcher 1st-inning history,o_log_min_pa,0.16101787957530225
+2025,Bottom,Core + pitcher 1st-inning history,o_missing_core,-0.013792116784037052
+2025,Bottom,Core + pitcher 1st-inning history,hist_runs_per_start,0.010022826203392298
+2025,Bottom,Core + pitcher 1st-inning history,hist_log_starts,0.07215441211303525
+2025,Bottom,Core + pitcher 1st-inning history,hist_no_starts,-0.005662018966322125
+2025,Bottom,Core + offense BB + pitcher history,p_xwoba,0.06640421350925922
+2025,Bottom,Core + offense BB + pitcher history,p_k_pct,-0.05958009484027044
+2025,Bottom,Core + offense BB + pitcher history,o_xwoba,-0.002419244109461271
+2025,Bottom,Core + offense BB + pitcher history,o_k_pct,-0.03427979315559532
+2025,Bottom,Core + offense BB + pitcher history,o_bb_pct,0.09270522822282695
+2025,Bottom,Core + offense BB + pitcher history,o_barrel_pct,0.037133639246091144
+2025,Bottom,Core + offense BB + pitcher history,p_log_pa,-0.06687292074753776
+2025,Bottom,Core + offense BB + pitcher history,p_no_prior_pa,0.0889816058459083
+2025,Bottom,Core + offense BB + pitcher history,o_log_combined_pa,-0.09745422113012388
+2025,Bottom,Core + offense BB + pitcher history,o_log_min_pa,0.1614091704903597
+2025,Bottom,Core + offense BB + pitcher history,o_missing_core,-0.011579130089412224
+2025,Bottom,Core + offense BB + pitcher history,hist_runs_per_start,0.010292696348608433
+2025,Bottom,Core + offense BB + pitcher history,hist_log_starts,0.07683638744797221
+2025,Bottom,Core + offense BB + pitcher history,hist_no_starts,-0.004338421781651724
+2026,Top,Combined core,p_xwoba,0.039862879460853616
+2026,Top,Combined core,p_k_pct,-0.11437814718966556
+2026,Top,Combined core,o_xwoba,-0.016562462600460202
+2026,Top,Combined core,o_k_pct,-0.04907129847730329
+2026,Top,Combined core,o_barrel_pct,0.09700086268906499
+2026,Top,Combined core,p_log_pa,-0.1314112615927751
+2026,Top,Combined core,p_no_prior_pa,-0.06718141007061029
+2026,Top,Combined core,o_log_combined_pa,0.0864908330091181
+2026,Top,Combined core,o_log_min_pa,-0.0061262418792535946
+2026,Top,Combined core,o_missing_core,0.02680434665408859
+2026,Top,Core + offense BB,p_xwoba,0.04167214891664294
+2026,Top,Core + offense BB,p_k_pct,-0.11278146011172897
+2026,Top,Core + offense BB,o_xwoba,-0.07004747924096096
+2026,Top,Core + offense BB,o_k_pct,-0.0666235495633503
+2026,Top,Core + offense BB,o_bb_pct,0.07567334310203663
+2026,Top,Core + offense BB,o_barrel_pct,0.11709127218965001
+2026,Top,Core + offense BB,p_log_pa,-0.12973218949078028
+2026,Top,Core + offense BB,p_no_prior_pa,-0.06703661355668103
+2026,Top,Core + offense BB,o_log_combined_pa,0.09508819539472642
+2026,Top,Core + offense BB,o_log_min_pa,-0.006044913086550192
+2026,Top,Core + offense BB,o_missing_core,0.03142659774087713
+2026,Top,Core + pitcher 1st-inning history,p_xwoba,0.03247325220704486
+2026,Top,Core + pitcher 1st-inning history,p_k_pct,-0.11525755522873231
+2026,Top,Core + pitcher 1st-inning history,o_xwoba,-0.016023924935592786
+2026,Top,Core + pitcher 1st-inning history,o_k_pct,-0.04858693704865228
+2026,Top,Core + pitcher 1st-inning history,o_barrel_pct,0.0964776337827703
+2026,Top,Core + pitcher 1st-inning history,p_log_pa,-0.18830592376707672
+2026,Top,Core + pitcher 1st-inning history,p_no_prior_pa,-0.08687253151589719
+2026,Top,Core + pitcher 1st-inning history,o_log_combined_pa,0.08927095200316977
+2026,Top,Core + pitcher 1st-inning history,o_log_min_pa,-0.006430575221842219
+2026,Top,Core + pitcher 1st-inning history,o_missing_core,0.027378400606564487
+2026,Top,Core + pitcher 1st-inning history,hist_runs_per_start,0.01853200696743139
+2026,Top,Core + pitcher 1st-inning history,hist_log_starts,0.04351690457316165
+2026,Top,Core + pitcher 1st-inning history,hist_no_starts,-0.001823977096186963
+2026,Top,Core + offense BB + pitcher history,p_xwoba,0.03392059875892211
+2026,Top,Core + offense BB + pitcher history,p_k_pct,-0.11373491397739949
+2026,Top,Core + offense BB + pitcher history,o_xwoba,-0.0697714050005571
+2026,Top,Core + offense BB + pitcher history,o_k_pct,-0.06623755775321168
+2026,Top,Core + offense BB + pitcher history,o_bb_pct,0.07614429804465843
+2026,Top,Core + offense BB + pitcher history,o_barrel_pct,0.11662738497965935
+2026,Top,Core + offense BB + pitcher history,p_log_pa,-0.19047742953875055
+2026,Top,Core + offense BB + pitcher history,p_no_prior_pa,-0.09016440353256433
+2026,Top,Core + offense BB + pitcher history,o_log_combined_pa,0.09775325629714289
+2026,Top,Core + offense BB + pitcher history,o_log_min_pa,-0.0064026670486533165
+2026,Top,Core + offense BB + pitcher history,o_missing_core,0.03195289007269883
+2026,Top,Core + offense BB + pitcher history,hist_runs_per_start,0.019636755333122115
+2026,Top,Core + offense BB + pitcher history,hist_log_starts,0.047172734489507984
+2026,Top,Core + offense BB + pitcher history,hist_no_starts,0.000887240631753613
+2026,Bottom,Combined core,p_xwoba,0.06518025572897214
+2026,Bottom,Combined core,p_k_pct,-0.05840662840004875
+2026,Bottom,Combined core,o_xwoba,0.048436583964960964
+2026,Bottom,Combined core,o_k_pct,-0.01343501204608507
+2026,Bottom,Combined core,o_barrel_pct,0.028283590720246922
+2026,Bottom,Combined core,p_log_pa,0.0040868812547663865
+2026,Bottom,Combined core,p_no_prior_pa,0.06980235341141852
+2026,Bottom,Combined core,o_log_combined_pa,-0.079304258389119
+2026,Bottom,Combined core,o_log_min_pa,0.13926470430205368
+2026,Bottom,Combined core,o_missing_core,0.00318702120358481
+2026,Bottom,Core + offense BB,p_xwoba,0.06633469274801701
+2026,Bottom,Core + offense BB,p_k_pct,-0.057907032034083955
+2026,Bottom,Core + offense BB,o_xwoba,-2.187985915913777e-05
+2026,Bottom,Core + offense BB,o_k_pct,-0.03047869124247233
+2026,Bottom,Core + offense BB,o_bb_pct,0.06939574832712633
+2026,Bottom,Core + offense BB,o_barrel_pct,0.04528669969753658
+2026,Bottom,Core + offense BB,p_log_pa,0.007612793526270696
+2026,Bottom,Core + offense BB,p_no_prior_pa,0.07375395013354105
+2026,Bottom,Core + offense BB,o_log_combined_pa,-0.0736060286263114
+2026,Bottom,Core + offense BB,o_log_min_pa,0.13766221895101521
+2026,Bottom,Core + offense BB,o_missing_core,0.004917254705668855
+2026,Bottom,Core + pitcher 1st-inning history,p_xwoba,0.055088338153983625
+2026,Bottom,Core + pitcher 1st-inning history,p_k_pct,-0.05947517946524588
+2026,Bottom,Core + pitcher 1st-inning history,o_xwoba,0.050093100365086456
+2026,Bottom,Core + pitcher 1st-inning history,o_k_pct,-0.012474952237557459
+2026,Bottom,Core + pitcher 1st-inning history,o_barrel_pct,0.026956248336400247
+2026,Bottom,Core + pitcher 1st-inning history,p_log_pa,-0.11668218287122792
+2026,Bottom,Core + pitcher 1st-inning history,p_no_prior_pa,0.0416907095944791
+2026,Bottom,Core + pitcher 1st-inning history,o_log_combined_pa,-0.07069398310217254
+2026,Bottom,Core + pitcher 1st-inning history,o_log_min_pa,0.1390331279204117
+2026,Bottom,Core + pitcher 1st-inning history,o_missing_core,0.005803899547762885
+2026,Bottom,Core + pitcher 1st-inning history,hist_runs_per_start,0.023446789433366626
+2026,Bottom,Core + pitcher 1st-inning history,hist_log_starts,0.08537398655153747
+2026,Bottom,Core + pitcher 1st-inning history,hist_no_starts,-0.02387160798245021
+2026,Bottom,Core + offense BB + pitcher history,p_xwoba,0.05615629293812358
+2026,Bottom,Core + offense BB + pitcher history,p_k_pct,-0.05898296854738862
+2026,Bottom,Core + offense BB + pitcher history,o_xwoba,0.0015888578942101054
+2026,Bottom,Core + offense BB + pitcher history,o_k_pct,-0.02953120352808729
+2026,Bottom,Core + offense BB + pitcher history,o_bb_pct,0.06950961366226473
+2026,Bottom,Core + offense BB + pitcher history,o_barrel_pct,0.043953065007809385
+2026,Bottom,Core + offense BB + pitcher history,p_log_pa,-0.11591876110456427
+2026,Bottom,Core + offense BB + pitcher history,p_no_prior_pa,0.043358768854078376
+2026,Bottom,Core + offense BB + pitcher history,o_log_combined_pa,-0.06510898257371302
+2026,Bottom,Core + offense BB + pitcher history,o_log_min_pa,0.13742588103856213
+2026,Bottom,Core + offense BB + pitcher history,o_missing_core,0.007491813123128087
+2026,Bottom,Core + offense BB + pitcher history,hist_runs_per_start,0.023682299122475596
+2026,Bottom,Core + offense BB + pitcher history,hist_log_starts,0.0879095890369785
+2026,Bottom,Core + offense BB + pitcher history,hist_no_starts,-0.02217337500977592

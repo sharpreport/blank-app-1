@@ -1,0 +1,78 @@
+SHARPREPORT COMBINED MODEL — FIRST-INNING HISTORY INCREMENTAL TEST
+======================================================================================
+
+Historical games: 11638
+Half-inning rows: 23276
+
+METHOD:
+Walk-forward out-of-sample testing.
+Top and Bottom 1st modeled separately.
+Pitcher history rebuilt with no same-day leakage.
+Positive improvement = lower (better) Brier score.
+
+Combined core
+--------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 0/4
+Average improvement vs baseline: +0.000836
+Average incremental improvement vs core: +0.000000
+Worst holdout vs baseline: +0.000295
+
+2023: baseline 0.208260 | model 0.207093 | vs baseline +0.001167 | vs core +0.000000
+2024: baseline 0.199418 | model 0.199123 | vs baseline +0.000295 | vs core +0.000000
+2025: baseline 0.208096 | model 0.207588 | vs baseline +0.000508 | vs core +0.000000
+2026: baseline 0.206473 | model 0.205099 | vs baseline +0.001374 | vs core +0.000000
+
+======================================================================================
+
+Core + offense BB
+--------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 1/4
+Average improvement vs baseline: +0.000836
+Average incremental improvement vs core: +0.000000
+Worst holdout vs baseline: +0.000432
+
+2023: baseline 0.208260 | model 0.207093 | vs baseline +0.001166 | vs core -0.000000
+2024: baseline 0.199418 | model 0.198842 | vs baseline +0.000575 | vs core +0.000280
+2025: baseline 0.208096 | model 0.207664 | vs baseline +0.000432 | vs core -0.000076
+2026: baseline 0.206473 | model 0.205302 | vs baseline +0.001171 | vs core -0.000203
+
+======================================================================================
+
+Core + pitcher 1st-inning history
+--------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 1/4
+Average improvement vs baseline: +0.000790
+Average incremental improvement vs core: -0.000046
+Worst holdout vs baseline: +0.000247
+
+2023: baseline 0.208260 | model 0.207238 | vs baseline +0.001022 | vs core -0.000145
+2024: baseline 0.199418 | model 0.199171 | vs baseline +0.000247 | vs core -0.000049
+2025: baseline 0.208096 | model 0.207497 | vs baseline +0.000600 | vs core +0.000092
+2026: baseline 0.206473 | model 0.205181 | vs baseline +0.001292 | vs core -0.000082
+
+======================================================================================
+
+Core + offense BB + pitcher history
+--------------------------------------------------------------------------------------
+Beat baseline: 4/4
+Beat current combined core: 2/4
+Average improvement vs baseline: +0.000789
+Average incremental improvement vs core: -0.000047
+Worst holdout vs baseline: +0.000521
+
+2023: baseline 0.208260 | model 0.207235 | vs baseline +0.001025 | vs core -0.000142
+2024: baseline 0.199418 | model 0.198892 | vs baseline +0.000526 | vs core +0.000231
+2025: baseline 0.208096 | model 0.207576 | vs baseline +0.000521 | vs core +0.000012
+2026: baseline 0.206473 | model 0.205387 | vs baseline +0.001086 | vs core -0.000288
+
+======================================================================================
+
+FINAL RANKING
+--------------------------------------------------------------------------------------
+#1 Core + offense BB | baseline wins 4/4 | core wins 1/4 | avg baseline +0.000836 | avg core +0.000000 | worst +0.000432
+#2 Combined core | baseline wins 4/4 | core wins 0/4 | avg baseline +0.000836 | avg core +0.000000 | worst +0.000295
+#3 Core + pitcher 1st-inning history | baseline wins 4/4 | core wins 1/4 | avg baseline +0.000790 | avg core -0.000046 | worst +0.000247
+#4 Core + offense BB + pitcher history | baseline wins 4/4 | core wins 2/4 | avg baseline +0.000789 | avg core -0.000047 | worst +0.000521
