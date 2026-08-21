@@ -32,6 +32,15 @@ from nrfi_probability_model import (
     predict_nrfi_yrfi,
 )
 
+from nrfi_market_odds import (
+    get_mlb_events,
+    get_first_inning_event_odds,
+    find_odds_event,
+    parse_first_inning_market,
+    summarize_market,
+    american_implied_probability,
+)
+
 
 
 
@@ -1653,6 +1662,345 @@ def format_probability(value):
 
 
 
+
+# =========================================================
+# MARKET ODDS / EDGE HELPERS
+# =========================================================
+
+@st.cache_data(
+    ttl=300,
+    show_spinner=False
+)
+def get_cached_mlb_odds_events(
+    api_key
+):
+
+    return get_mlb_events(
+        api_key
+    )
+
+
+@st.cache_data(
+    ttl=300,
+    show_spinner=False
+)
+def get_cached_first_inning_event_odds(
+    api_key,
+    event_id
+):
+
+    return get_first_inning_event_odds(
+        api_key,
+        event_id
+    )
+
+
+def format_american_odds(
+    value
+):
+
+    if value is None:
+        return "—"
+
+    value = int(
+        round(
+            float(value)
+        )
+    )
+
+    if value > 0:
+        return f"+{value}"
+
+    return str(
+        value
+    )
+
+
+def attach_market_data(
+    games,
+    probability_rows,
+    api_key
+):
+
+    probability_lookup = {
+        row["Game"]:
+            row
+        for row in probability_rows
+    }
+
+    events, event_usage = (
+        get_cached_mlb_odds_events(
+            api_key
+        )
+    )
+
+    output_rows = []
+
+    last_usage = event_usage
+
+
+    for game in games:
+
+        probability_row = dict(
+            probability_lookup[
+                game["Game"]
+            ]
+        )
+
+        probability_row.update({
+
+            "Market No-Vig":
+                None,
+
+            "Market Raw Implied":
+                None,
+
+            "Edge":
+                None,
+
+            "Price Edge":
+                None,
+
+            "Best Price":
+                None,
+
+            "Best Book":
+                None,
+
+            "Books":
+                0,
+
+            "Market Status":
+                "MARKET UNAVAILABLE",
+        })
+
+
+        odds_event = find_odds_event(
+
+            events,
+
+            game["Away Team"],
+
+            game["Home Team"],
+        )
+
+
+        if not odds_event:
+
+            probability_row[
+                "Market Status"
+            ] = "ODDS EVENT NOT FOUND"
+
+            output_rows.append(
+                probability_row
+            )
+
+            continue
+
+
+        try:
+
+            event_odds, usage = (
+                get_cached_first_inning_event_odds(
+
+                    api_key,
+
+                    odds_event["id"],
+                )
+            )
+
+            last_usage = usage
+
+            bookmaker_rows = (
+                parse_first_inning_market(
+                    event_odds
+                )
+            )
+
+            market_summary = (
+                summarize_market(
+                    bookmaker_rows
+                )
+            )
+
+
+            if not market_summary:
+
+                probability_row[
+                    "Market Status"
+                ] = "1ST-INNING MARKET NOT POSTED"
+
+                output_rows.append(
+                    probability_row
+                )
+
+                continue
+
+
+            if (
+                probability_row[
+                    "Model Side"
+                ] == "NRFI"
+            ):
+
+                market_no_vig = (
+                    market_summary[
+                        "consensus_nrfi_no_vig"
+                    ]
+                )
+
+                best_price = (
+                    market_summary[
+                        "best_nrfi_price"
+                    ]
+                )
+
+                best_book = (
+                    market_summary[
+                        "best_nrfi_book"
+                    ]
+                )
+
+                model_probability = (
+                    probability_row[
+                        "NRFI Probability"
+                    ]
+                    / 100.0
+                )
+
+            else:
+
+                market_no_vig = (
+                    market_summary[
+                        "consensus_yrfi_no_vig"
+                    ]
+                )
+
+                best_price = (
+                    market_summary[
+                        "best_yrfi_price"
+                    ]
+                )
+
+                best_book = (
+                    market_summary[
+                        "best_yrfi_book"
+                    ]
+                )
+
+                model_probability = (
+                    probability_row[
+                        "YRFI Probability"
+                    ]
+                    / 100.0
+                )
+
+
+            raw_implied = (
+                american_implied_probability(
+                    best_price
+                )
+            )
+
+            edge = (
+                model_probability
+                - market_no_vig
+            )
+
+
+            price_edge = (
+                model_probability
+                - raw_implied
+                if raw_implied is not None
+                else None
+            )
+
+
+            probability_row.update({
+
+                "Market No-Vig":
+                    market_no_vig
+                    * 100.0,
+
+                "Market Raw Implied":
+                    raw_implied
+                    * 100.0
+                    if raw_implied is not None
+                    else None,
+
+                "Edge":
+                    edge
+                    * 100.0,
+
+                "Price Edge":
+                    price_edge
+                    * 100.0
+                    if price_edge is not None
+                    else None,
+
+                "Best Price":
+                    best_price,
+
+                "Best Book":
+                    best_book,
+
+                "Books":
+                    market_summary[
+                        "book_count"
+                    ],
+
+                "Market Status":
+                    "LIVE",
+            })
+
+
+        except Exception as error:
+
+            probability_row[
+                "Market Status"
+            ] = (
+                f"ERROR: {error}"
+            )
+
+
+        output_rows.append(
+            probability_row
+        )
+
+
+    # Preserve model-probability ranking.
+    output_rows.sort(
+        key=lambda row:
+            row["Model Probability"],
+        reverse=True
+    )
+
+
+    for rank, row in enumerate(
+        output_rows,
+        start=1
+    ):
+
+        row["Rank"] = rank
+
+
+    return (
+        output_rows,
+        last_usage
+    )
+
+
+def format_edge(
+    value
+):
+
+    if value is None:
+        return "—"
+
+    return f"{value:+.1f}%"
+
+
+
 # =========================================================
 # APP
 # =========================================================
@@ -2492,25 +2840,127 @@ if st.button(
 
 
             # ---------------------------------------------
-            # TOP OPPORTUNITIES
+            # LIVE MARKET PRICES / EDGE
+            # ---------------------------------------------
+
+            try:
+
+                odds_api_key = (
+                    st.secrets[
+                        "ODDS_API_KEY"
+                    ]
+                )
+
+            except Exception:
+
+                odds_api_key = None
+
+
+            if odds_api_key:
+
+                with st.spinner(
+                    "Loading live first-inning prices "
+                    "and calculating no-vig market edge..."
+                ):
+
+                    (
+                        market_rows,
+                        odds_usage
+                    ) = attach_market_data(
+                        games,
+                        probability_rows,
+                        odds_api_key,
+                    )
+
+
+                st.caption(
+                    "Market = first-inning total 0.5. "
+                    "Under 0.5 = NRFI; Over 0.5 = YRFI. "
+                    "Consensus no-vig probability is the average "
+                    "of each sportsbook's two-way no-vig market. "
+                    "Odds requests are cached for 5 minutes."
+                )
+
+
+                requests_remaining = (
+                    odds_usage.get(
+                        "requests_remaining"
+                    )
+                    if odds_usage
+                    else None
+                )
+
+                if requests_remaining is not None:
+
+                    st.write(
+                        f"**Odds API Credits Remaining:** "
+                        f"{requests_remaining}"
+                    )
+
+            else:
+
+                market_rows = [
+                    dict(row)
+                    for row in probability_rows
+                ]
+
+                for row in market_rows:
+
+                    row.update({
+
+                        "Market No-Vig":
+                            None,
+
+                        "Market Raw Implied":
+                            None,
+
+                        "Edge":
+                            None,
+
+                        "Price Edge":
+                            None,
+
+                        "Best Price":
+                            None,
+
+                        "Best Book":
+                            None,
+
+                        "Books":
+                            0,
+
+                        "Market Status":
+                            "ODDS API KEY NOT FOUND",
+                    })
+
+
+                st.warning(
+                    "ODDS_API_KEY was not found in "
+                    "Streamlit secrets. Model probabilities "
+                    "are available, but market edge is disabled."
+                )
+
+
+            # ---------------------------------------------
+            # TOP MODEL PROBABILITIES
             # ---------------------------------------------
 
             st.subheader(
-                "Top Opportunities"
+                "Top Model Probabilities"
             )
 
             st.caption(
-                "Top four games ranked by the trained model's "
+                "Top four games ranked only by the trained model's "
                 "stronger NRFI/YRFI side probability. "
-                "Sportsbook price and market edge are not yet included."
+                "This ranking ignores sportsbook price."
             )
 
 
-            top_four_display = []
+            top_model_display = []
 
-            for row in probability_rows[:4]:
+            for row in market_rows[:4]:
 
-                top_four_display.append({
+                top_model_display.append({
 
                     "Rank":
                         row["Rank"],
@@ -2546,7 +2996,7 @@ if st.button(
 
             st.dataframe(
                 pd.DataFrame(
-                    top_four_display
+                    top_model_display
                 ),
                 use_container_width=True,
                 hide_index=True,
@@ -2554,24 +3004,258 @@ if st.button(
 
 
             # ---------------------------------------------
+            # BEST FINAL EDGES
+            # ---------------------------------------------
+
+            st.subheader(
+                "Best Final Edges"
+            )
+
+            st.caption(
+                "Only games with FINAL model status appear here. "
+                "Price Edge compares the model probability directly "
+                "with the break-even probability of the best currently "
+                "available price. Market Edge compares the model with "
+                "the consensus no-vig market."
+            )
+
+
+            final_edge_rows = [
+                row
+                for row in market_rows
+                if (
+                    row["Status"] == "FINAL"
+                    and
+                    row["Price Edge"] is not None
+                    and
+                    row["Price Edge"] > 0
+                )
+            ]
+
+            final_edge_rows.sort(
+                key=lambda row:
+                    row["Price Edge"],
+                reverse=True
+            )
+
+
+            final_edge_display = []
+
+            for rank, row in enumerate(
+                final_edge_rows[:4],
+                start=1
+            ):
+
+                final_edge_display.append({
+
+                    "Edge Rank":
+                        rank,
+
+                    "Game":
+                        row["Game"],
+
+                    "Model Side":
+                        row["Model Side"],
+
+                    "Model":
+                        format_probability(
+                            row["Model Probability"]
+                        ),
+
+                    "Market No-Vig":
+                        format_probability(
+                            row["Market No-Vig"]
+                        ),
+
+                    "Market Edge":
+                        format_edge(
+                            row["Edge"]
+                        ),
+
+                    "Best Price":
+                        format_american_odds(
+                            row["Best Price"]
+                        ),
+
+                    "Break-Even":
+                        (
+                            format_probability(
+                                row["Market Raw Implied"]
+                            )
+                            if row["Market Raw Implied"] is not None
+                            else "—"
+                        ),
+
+                    "Price Edge":
+                        format_edge(
+                            row["Price Edge"]
+                        ),
+
+                    "Sportsbook":
+                        row["Best Book"]
+                        or "—",
+
+                    "Books":
+                        row["Books"],
+                })
+
+
+            if final_edge_display:
+
+                st.dataframe(
+                    pd.DataFrame(
+                        final_edge_display
+                    ),
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+            else:
+
+                st.info(
+                    "No positive FINAL price edges are available yet. "
+                    "Re-run after confirmed lineups and starters are posted."
+                )
+
+
+            # ---------------------------------------------
+            # PROVISIONAL MARKET WATCH
+            # ---------------------------------------------
+
+            st.subheader(
+                "Provisional Market Watch"
+            )
+
+            st.caption(
+                "These games have live market prices but are still "
+                "waiting on confirmed Top-4 lineups. Their probabilities "
+                "and edges can change when the real lineup inputs arrive. "
+                "They are not treated as FINAL model edges."
+            )
+
+
+            provisional_rows = [
+                row
+                for row in market_rows
+                if (
+                    row["Status"]
+                    == "PROVISIONAL — WAITING LINEUPS"
+                    and
+                    row["Price Edge"] is not None
+                    and
+                    row["Price Edge"] > 0
+                )
+            ]
+
+            provisional_rows.sort(
+                key=lambda row:
+                    row["Price Edge"],
+                reverse=True
+            )
+
+
+            provisional_display = []
+
+            for rank, row in enumerate(
+                provisional_rows[:6],
+                start=1
+            ):
+
+                provisional_display.append({
+
+                    "Watch Rank":
+                        rank,
+
+                    "Game":
+                        row["Game"],
+
+                    "Model Side":
+                        row["Model Side"],
+
+                    "Model":
+                        format_probability(
+                            row["Model Probability"]
+                        ),
+
+                    "Market No-Vig":
+                        format_probability(
+                            row["Market No-Vig"]
+                        ),
+
+                    "Market Edge":
+                        format_edge(
+                            row["Edge"]
+                        ),
+
+                    "Best Price":
+                        format_american_odds(
+                            row["Best Price"]
+                        ),
+
+                    "Break-Even":
+                        (
+                            format_probability(
+                                row["Market Raw Implied"]
+                            )
+                            if row["Market Raw Implied"] is not None
+                            else "—"
+                        ),
+
+                    "Price Edge":
+                        format_edge(
+                            row["Price Edge"]
+                        ),
+
+                    "Sportsbook":
+                        row["Best Book"]
+                        or "—",
+
+                    "Input Completeness":
+                        f"{row['Input Completeness']:.0f}%",
+
+                    "Status":
+                        row["Status"],
+                })
+
+
+            if provisional_display:
+
+                st.dataframe(
+                    pd.DataFrame(
+                        provisional_display
+                    ),
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+            else:
+
+                st.info(
+                    "No positive provisional price edges "
+                    "are currently available."
+                )
+
+
+            # ---------------------------------------------
             # ALL GAMES RANKED
             # ---------------------------------------------
 
             st.subheader(
-                "All Games — Trained Model Ranking"
+                "All Games — Model + Market"
             )
 
             st.caption(
+                "Market Edge = model probability minus consensus "
+                "no-vig market probability. Price Edge = model probability "
+                "minus the break-even probability of the best available price. "
                 "Before confirmed lineups are posted, unknown lineup inputs "
-                "are neutralized to the model's training means rather than "
-                "treated as zero-sample hitters. Re-run after lineups are "
-                "confirmed for FINAL status."
+                "are neutralized to the model's training means."
             )
 
 
             all_game_display = []
 
-            for row in probability_rows:
+            for row in market_rows:
 
                 all_game_display.append({
 
@@ -2584,10 +3268,47 @@ if st.button(
                     "Model Side":
                         row["Model Side"],
 
-                    "Model Probability":
+                    "Model":
                         format_probability(
                             row["Model Probability"]
                         ),
+
+                    "Market No-Vig":
+                        (
+                            format_probability(
+                                row["Market No-Vig"]
+                            )
+                            if row["Market No-Vig"] is not None
+                            else "—"
+                        ),
+
+                    "Market Edge":
+                        format_edge(
+                            row["Edge"]
+                        ),
+
+                    "Best Price":
+                        format_american_odds(
+                            row["Best Price"]
+                        ),
+
+                    "Break-Even":
+                        (
+                            format_probability(
+                                row["Market Raw Implied"]
+                            )
+                            if row["Market Raw Implied"] is not None
+                            else "—"
+                        ),
+
+                    "Price Edge":
+                        format_edge(
+                            row["Price Edge"]
+                        ),
+
+                    "Sportsbook":
+                        row["Best Book"]
+                        or "—",
 
                     "NRFI":
                         format_probability(
@@ -2613,7 +3334,7 @@ if st.button(
                             ]
                         ),
 
-                    "Model Run Factor":
+                    "Run Factor":
                         (
                             f"{row['Model Run Factor']:.0f}"
                             if row["Model Run Factor"] is not None
@@ -2625,6 +3346,9 @@ if st.button(
 
                     "Status":
                         row["Status"],
+
+                    "Market":
+                        row["Market Status"],
                 })
 
 
@@ -2647,7 +3371,7 @@ if st.button(
 
                 half_probability_rows = []
 
-                for row in probability_rows:
+                for row in market_rows:
 
                     half_probability_rows.append({
 
