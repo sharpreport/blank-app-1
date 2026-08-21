@@ -17,6 +17,11 @@ from game_weather import (
     weather_usage,
 )
 
+from park_factors import (
+    get_park_factors,
+    classify_run_factor,
+)
+
 
 
 
@@ -1446,6 +1451,124 @@ if st.button(
             st.dataframe(
                 pd.DataFrame(
                     weather_rows
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+
+            # ---------------------------------------------
+            # BALLPARK FACTORS
+            # ---------------------------------------------
+
+            st.subheader(
+                "Ballpark Run Environment"
+            )
+
+            st.caption(
+                "Baseball Savant 3-year rolling park factors. "
+                "100 = MLB average."
+            )
+
+
+            with st.spinner(
+                "Loading ballpark factors..."
+            ):
+
+                park_lookup = (
+                    get_park_factors(
+                        YEAR
+                    )
+                )
+
+                park_rows = []
+
+
+                for game in games:
+
+                    venue_id = game.get(
+                        "Venue ID"
+                    )
+
+                    park = (
+                        park_lookup.get(
+                            int(venue_id)
+                        )
+                        if venue_id
+                        else None
+                    )
+
+
+                    if park:
+
+                        park_rows.append({
+
+                            "Game":
+                                game["Game"],
+
+                            "Venue":
+                                park[
+                                    "venue_name"
+                                ],
+
+                            "Run Factor":
+                                park[
+                                    "run_factor"
+                                ],
+
+                            "Run Environment":
+                                classify_run_factor(
+                                    park[
+                                        "run_factor"
+                                    ]
+                                ),
+
+                            "wOBA Factor":
+                                park[
+                                    "woba_factor"
+                                ],
+
+                            "HR Factor":
+                                park[
+                                    "hr_factor"
+                                ],
+
+                            "Sample":
+                                park[
+                                    "year_range"
+                                ],
+                        })
+
+                    else:
+
+                        park_rows.append({
+
+                            "Game":
+                                game["Game"],
+
+                            "Venue":
+                                game["Venue"],
+
+                            "Run Factor":
+                                "—",
+
+                            "Run Environment":
+                                "MISSING",
+
+                            "wOBA Factor":
+                                "—",
+
+                            "HR Factor":
+                                "—",
+
+                            "Sample":
+                                "—",
+                        })
+
+
+            st.dataframe(
+                pd.DataFrame(
+                    park_rows
                 ),
                 use_container_width=True,
                 hide_index=True,
