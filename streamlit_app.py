@@ -26,9 +26,10 @@ from model_inputs import (
     build_half_inning_model_table,
 )
 
-from risk_engine import (
-    build_half_inning_scores,
-    build_game_scores,
+from nrfi_probability_model import (
+    load_nrfi_model,
+    build_half_features,
+    predict_nrfi_yrfi,
 )
 
 
@@ -47,7 +48,7 @@ st.title("⚾ SharpReport NRFI Scanner")
 
 st.write(
     "Automatic MLB schedule, confirmed lineups, "
-    "starting pitchers, and NRFI model inputs."
+    "starting pitchers, and trained NRFI/YRFI probabilities."
 )
 
 ET = ZoneInfo("America/New_York")
@@ -1135,6 +1136,523 @@ def build_hitter_tables(
     )
 
 
+
+# =========================================================
+# TRAINED NRFI / YRFI PROBABILITY HELPERS
+# =========================================================
+
+def _live_pitcher_model_inputs(
+    pitcher_id,
+    pitcher_xwoba
+):
+
+    if not pitcher_id:
+        return {
+            "xwoba": None,
+            "k_pct": None,
+            "pa": 0,
+        }
+
+    (
+        k_percent,
+        _bb_percent,
+        batters_faced
+    ) = get_mlb_pitcher_rates(
+        pitcher_id,
+        YEAR
+    )
+
+    return {
+        "xwoba":
+            pitcher_xwoba.get(
+                int(pitcher_id)
+            ),
+        "k_pct":
+            k_percent,
+        "pa":
+            batters_faced or 0,
+    }
+
+
+def _live_top4_model_inputs(
+    top4,
+    hitter_xwoba,
+    hitter_barrels
+):
+
+    # The trained final model is a confirmed Top-4 model.
+    # Before a full lineup is available, use legitimate
+    # missing-data handling from the trained inference engine.
+    if len(top4) != 4:
+
+        return {
+            "xwoba": None,
+            "k_pct": None,
+            "bb_pct": None,
+            "barrel_pct": None,
+            "combined_pa": 0,
+            "min_pa": 0,
+            "complete_core": False,
+        }
+
+
+    xwoba_values = []
+    k_values = []
+    bb_values = []
+    barrel_values = []
+    pa_values = []
+
+
+    for player in top4:
+
+        player_id = player["id"]
+
+        (
+            k_percent,
+            bb_percent,
+            plate_appearances
+        ) = get_mlb_hitter_rates(
+            player_id,
+            YEAR
+        )
+
+        xwoba_values.append(
+            hitter_xwoba.get(
+                player_id
+            )
+        )
+
+        k_values.append(
+            k_percent
+        )
+
+        bb_values.append(
+            bb_percent
+        )
+
+        barrel_values.append(
+            hitter_barrels.get(
+                player_id
+            )
+        )
+
+        pa_values.append(
+            plate_appearances
+            if plate_appearances is not None
+            else 0
+        )
+
+
+    team_xwoba = strict_average(
+        xwoba_values
+    )
+
+    team_k = strict_average(
+        k_values
+    )
+
+    team_bb = strict_average(
+        bb_values
+    )
+
+    team_barrel = strict_average(
+        barrel_values
+    )
+
+    complete_core = all(
+        value is not None
+        for value in [
+            team_xwoba,
+            team_k,
+            team_bb,
+            team_barrel,
+        ]
+    )
+
+
+    return {
+        "xwoba":
+            team_xwoba,
+        "k_pct":
+            team_k,
+        "bb_pct":
+            team_bb,
+        "barrel_pct":
+            team_barrel,
+        "combined_pa":
+            sum(pa_values),
+        "min_pa":
+            min(pa_values)
+            if pa_values
+            else 0,
+        "complete_core":
+            complete_core,
+    }
+
+
+def _value_available(value):
+
+    if value is None:
+        return False
+
+    try:
+        return bool(
+            pd.notna(value)
+        )
+
+    except Exception:
+        return False
+
+
+def build_trained_probability_rows(
+    games,
+    pitcher_xwoba,
+    hitter_xwoba,
+    hitter_barrels,
+    model_park_lookup,
+    trained_model
+):
+
+    rows = []
+
+
+    for game in games:
+
+        away_pitcher = (
+            _live_pitcher_model_inputs(
+                game["Away SP ID"],
+                pitcher_xwoba
+            )
+        )
+
+        home_pitcher = (
+            _live_pitcher_model_inputs(
+                game["Home SP ID"],
+                pitcher_xwoba
+            )
+        )
+
+        away_offense = (
+            _live_top4_model_inputs(
+                game["Away Top 4"],
+                hitter_xwoba,
+                hitter_barrels
+            )
+        )
+
+        home_offense = (
+            _live_top4_model_inputs(
+                game["Home Top 4"],
+                hitter_xwoba,
+                hitter_barrels
+            )
+        )
+
+
+        venue_id = game.get(
+            "Venue ID"
+        )
+
+        model_park = (
+            model_park_lookup.get(
+                int(venue_id)
+            )
+            if venue_id
+            else None
+        )
+
+        model_run_factor = (
+            model_park.get(
+                "run_factor"
+            )
+            if model_park
+            else None
+        )
+
+
+        # Top 1st:
+        # Away offense vs Home starting pitcher.
+        top_features = build_half_features(
+            pitcher_xwoba=
+                home_pitcher["xwoba"],
+            pitcher_k_pct=
+                home_pitcher["k_pct"],
+            pitcher_pa=
+                home_pitcher["pa"],
+            offense_xwoba=
+                away_offense["xwoba"],
+            offense_k_pct=
+                away_offense["k_pct"],
+            offense_bb_pct=
+                away_offense["bb_pct"],
+            offense_barrel_pct=
+                away_offense["barrel_pct"],
+            offense_combined_pa=
+                away_offense["combined_pa"],
+            offense_min_pa=
+                away_offense["min_pa"],
+            offense_complete_core=
+                away_offense["complete_core"],
+            park_runs=
+                model_run_factor,
+        )
+
+
+        # If today's away lineup is not posted yet, the lineup is
+        # unknown — it is NOT a four-hitter group with zero PA.
+        # Neutralize all offense sample/missingness features to the
+        # exact training means inside the inference engine.
+        if len(
+            game["Away Top 4"]
+        ) != 4:
+
+            for feature_name in [
+                "o_xwoba",
+                "o_k_pct",
+                "o_bb_pct",
+                "o_barrel_pct",
+                "o_log_combined_pa",
+                "o_log_min_pa",
+                "o_missing_core",
+            ]:
+
+                top_features[
+                    feature_name
+                ] = None
+
+
+        # A TBA home starter is also unknown, not a true zero-PA
+        # pitcher. Neutralize the pitcher sample controls.
+        if not game[
+            "Home SP ID"
+        ]:
+
+            top_features[
+                "p_log_pa"
+            ] = None
+
+            top_features[
+                "p_no_prior_pa"
+            ] = None
+
+
+        # Bottom 1st:
+        # Home offense vs Away starting pitcher.
+        bottom_features = build_half_features(
+            pitcher_xwoba=
+                away_pitcher["xwoba"],
+            pitcher_k_pct=
+                away_pitcher["k_pct"],
+            pitcher_pa=
+                away_pitcher["pa"],
+            offense_xwoba=
+                home_offense["xwoba"],
+            offense_k_pct=
+                home_offense["k_pct"],
+            offense_bb_pct=
+                home_offense["bb_pct"],
+            offense_barrel_pct=
+                home_offense["barrel_pct"],
+            offense_combined_pa=
+                home_offense["combined_pa"],
+            offense_min_pa=
+                home_offense["min_pa"],
+            offense_complete_core=
+                home_offense["complete_core"],
+            park_runs=
+                model_run_factor,
+        )
+
+
+        # Same neutral treatment for an unposted home lineup.
+        if len(
+            game["Home Top 4"]
+        ) != 4:
+
+            for feature_name in [
+                "o_xwoba",
+                "o_k_pct",
+                "o_bb_pct",
+                "o_barrel_pct",
+                "o_log_combined_pa",
+                "o_log_min_pa",
+                "o_missing_core",
+            ]:
+
+                bottom_features[
+                    feature_name
+                ] = None
+
+
+        # Same neutral treatment for a TBA away starter.
+        if not game[
+            "Away SP ID"
+        ]:
+
+            bottom_features[
+                "p_log_pa"
+            ] = None
+
+            bottom_features[
+                "p_no_prior_pa"
+            ] = None
+
+
+        result = predict_nrfi_yrfi(
+            trained_model,
+            top_features=
+                top_features,
+            bottom_features=
+                bottom_features,
+        )
+
+
+        completeness_values = [
+            away_pitcher["xwoba"],
+            away_pitcher["k_pct"],
+            home_pitcher["xwoba"],
+            home_pitcher["k_pct"],
+
+            away_offense["xwoba"],
+            away_offense["k_pct"],
+            away_offense["bb_pct"],
+            away_offense["barrel_pct"],
+
+            home_offense["xwoba"],
+            home_offense["k_pct"],
+            home_offense["bb_pct"],
+            home_offense["barrel_pct"],
+
+            model_run_factor,
+        ]
+
+        available = sum(
+            1
+            for value
+            in completeness_values
+            if _value_available(
+                value
+            )
+        )
+
+        completeness = (
+            available
+            / len(
+                completeness_values
+            )
+            * 100
+        )
+
+
+        pitchers_known = (
+            game["Away SP ID"]
+            and
+            game["Home SP ID"]
+        )
+
+        lineups_confirmed = (
+            len(
+                game["Away Top 4"]
+            ) == 4
+            and
+            len(
+                game["Home Top 4"]
+            ) == 4
+        )
+
+
+        if (
+            pitchers_known
+            and
+            lineups_confirmed
+        ):
+
+            status = "FINAL"
+
+        elif pitchers_known:
+
+            status = (
+                "PROVISIONAL — WAITING LINEUPS"
+            )
+
+        else:
+
+            status = (
+                "LOW DATA — STARTER TBA"
+            )
+
+
+        rows.append({
+
+            "Game":
+                game["Game"],
+
+            "Model Side":
+                result["model_side"],
+
+            "Model Probability":
+                result["model_probability"]
+                * 100,
+
+            "NRFI Probability":
+                result["nrfi_probability"]
+                * 100,
+
+            "YRFI Probability":
+                result["yrfi_probability"]
+                * 100,
+
+            "Top 1st Score Probability":
+                result[
+                    "top_scoring_probability"
+                ] * 100,
+
+            "Bottom 1st Score Probability":
+                result[
+                    "bottom_scoring_probability"
+                ] * 100,
+
+            "Input Completeness":
+                completeness,
+
+            "Status":
+                status,
+
+            "Model Run Factor":
+                model_run_factor,
+
+            "Start Time":
+                game["Start Time"],
+
+            "Venue":
+                game["Venue"],
+        })
+
+
+    rows.sort(
+        key=lambda row:
+            row["Model Probability"],
+        reverse=True
+    )
+
+
+    for rank, row in enumerate(
+        rows,
+        start=1
+    ):
+
+        row["Rank"] = rank
+
+
+    return rows
+
+
+def format_probability(value):
+
+    return f"{value:.1f}%"
+
+
+
 # =========================================================
 # APP
 # =========================================================
@@ -1878,9 +2396,10 @@ if st.button(
             )
 
             st.caption(
-                "One row per half-inning. "
-                "No model weights or probabilities "
-                "are being applied yet."
+                "Diagnostic context table. "
+                "The production v1 probability model uses "
+                "the validated pitcher, Top-4 offense, "
+                "sample-size, and prior-season Run Factor inputs."
             )
 
 
@@ -1910,47 +2429,86 @@ if st.button(
 
 
             # ---------------------------------------------
-            # STAGE 7B — GAME MODEL SCORES
-            # ---------------------------------------------
-
-            half_score_rows = (
-                build_half_inning_scores(
-                    combined_model_rows
-                )
-            )
-
-
-            game_score_rows = (
-                build_game_scores(
-                    half_score_rows
-                )
-            )
-
-
-            # ---------------------------------------------
-            # TOP MODEL SIGNALS
+            # TRAINED v1 NRFI / YRFI PROBABILITIES
             # ---------------------------------------------
 
             st.subheader(
-                "Top Model Signals"
+                "Trained NRFI / YRFI Probabilities"
             )
 
             st.caption(
-                "Top four games ranked by current "
-                "model strength and data completeness. "
-                "These scores are NOT calibrated "
-                "win probabilities yet."
+                "SharpReport NRFI/YRFI Model v1. "
+                "Top and Bottom 1st are modeled separately. "
+                "The production model uses the prior completed "
+                "season's 3-year Run Factor to match historical training."
             )
 
 
-            top_four_rows = (
-                game_score_rows[:4]
+            with st.spinner(
+                "Running trained NRFI/YRFI probability model..."
+            ):
+
+                trained_model = (
+                    load_nrfi_model()
+                )
+
+                # Match the historical training rule:
+                # 2026 games use the 2025 three-year rolling
+                # park-factor table, not the in-progress 2026 table.
+                model_park_lookup = (
+                    get_park_factors(
+                        YEAR - 1
+                    )
+                )
+
+                probability_rows = (
+                    build_trained_probability_rows(
+                        games,
+                        pitcher_xwoba,
+                        hitter_xwoba,
+                        hitter_barrels,
+                        model_park_lookup,
+                        trained_model,
+                    )
+                )
+
+
+            st.write(
+                f"**Model:** "
+                f"{trained_model.get('model_name', 'SharpReport NRFI/YRFI Model v1')}"
+            )
+
+            st.write(
+                f"**Training Through:** "
+                f"{trained_model.get('training_end_date', '—')}"
+            )
+
+            st.caption(
+                "FINAL = both starting pitchers and both Top-4 "
+                "lineups are known. Missing season metrics are "
+                "handled by the same trained missing-data logic "
+                "used in the historical model."
+            )
+
+
+            # ---------------------------------------------
+            # TOP OPPORTUNITIES
+            # ---------------------------------------------
+
+            st.subheader(
+                "Top Opportunities"
+            )
+
+            st.caption(
+                "Top four games ranked by the trained model's "
+                "stronger NRFI/YRFI side probability. "
+                "Sportsbook price and market edge are not yet included."
             )
 
 
             top_four_display = []
 
-            for row in top_four_rows:
+            for row in probability_rows[:4]:
 
                 top_four_display.append({
 
@@ -1963,13 +2521,23 @@ if st.button(
                     "Model Side":
                         row["Model Side"],
 
-                    "Model Score":
-                        row[
-                            "Game Risk Index"
-                        ],
+                    "Model Probability":
+                        format_probability(
+                            row["Model Probability"]
+                        ),
 
-                    "Data Quality":
-                        f"{row['Data Quality']:.0f}%",
+                    "NRFI":
+                        format_probability(
+                            row["NRFI Probability"]
+                        ),
+
+                    "YRFI":
+                        format_probability(
+                            row["YRFI Probability"]
+                        ),
+
+                    "Input Completeness":
+                        f"{row['Input Completeness']:.0f}%",
 
                     "Status":
                         row["Status"],
@@ -1990,20 +2558,20 @@ if st.button(
             # ---------------------------------------------
 
             st.subheader(
-                "All Games — Model Ranking"
+                "All Games — Trained Model Ranking"
             )
 
             st.caption(
-                "Every game receives a provisional "
-                "score. Missing lineups or pitcher "
-                "information are temporarily replaced "
-                "with neutral league-average inputs."
+                "Before confirmed lineups are posted, unknown lineup inputs "
+                "are neutralized to the model's training means rather than "
+                "treated as zero-sample hitters. Re-run after lineups are "
+                "confirmed for FINAL status."
             )
 
 
             all_game_display = []
 
-            for row in game_score_rows:
+            for row in probability_rows:
 
                 all_game_display.append({
 
@@ -2016,23 +2584,44 @@ if st.button(
                     "Model Side":
                         row["Model Side"],
 
-                    "Model Score":
-                        row[
-                            "Game Risk Index"
-                        ],
+                    "Model Probability":
+                        format_probability(
+                            row["Model Probability"]
+                        ),
 
-                    "Top 1st Risk":
-                        row[
-                            "Top 1st Risk"
-                        ],
+                    "NRFI":
+                        format_probability(
+                            row["NRFI Probability"]
+                        ),
 
-                    "Bottom 1st Risk":
-                        row[
-                            "Bottom 1st Risk"
-                        ],
+                    "YRFI":
+                        format_probability(
+                            row["YRFI Probability"]
+                        ),
 
-                    "Data Quality":
-                        f"{row['Data Quality']:.0f}%",
+                    "Top 1st Scores":
+                        format_probability(
+                            row[
+                                "Top 1st Score Probability"
+                            ]
+                        ),
+
+                    "Bottom 1st Scores":
+                        format_probability(
+                            row[
+                                "Bottom 1st Score Probability"
+                            ]
+                        ),
+
+                    "Model Run Factor":
+                        (
+                            f"{row['Model Run Factor']:.0f}"
+                            if row["Model Run Factor"] is not None
+                            else "100 (neutral)"
+                        ),
+
+                    "Input Completeness":
+                        f"{row['Input Completeness']:.0f}%",
 
                     "Status":
                         row["Status"],
@@ -2049,16 +2638,75 @@ if st.button(
 
 
             # ---------------------------------------------
-            # HALF-INNING DETAIL
+            # HALF-INNING PROBABILITY DETAIL
             # ---------------------------------------------
 
             with st.expander(
-                "View Half-Inning Risk Detail"
+                "View Half-Inning Probability Detail"
             ):
+
+                half_probability_rows = []
+
+                for row in probability_rows:
+
+                    half_probability_rows.append({
+
+                        "Game":
+                            row["Game"],
+
+                        "Half":
+                            "Top 1st",
+
+                        "Scores":
+                            format_probability(
+                                row[
+                                    "Top 1st Score Probability"
+                                ]
+                            ),
+
+                        "Scoreless":
+                            format_probability(
+                                100
+                                - row[
+                                    "Top 1st Score Probability"
+                                ]
+                            ),
+
+                        "Status":
+                            row["Status"],
+                    })
+
+                    half_probability_rows.append({
+
+                        "Game":
+                            row["Game"],
+
+                        "Half":
+                            "Bottom 1st",
+
+                        "Scores":
+                            format_probability(
+                                row[
+                                    "Bottom 1st Score Probability"
+                                ]
+                            ),
+
+                        "Scoreless":
+                            format_probability(
+                                100
+                                - row[
+                                    "Bottom 1st Score Probability"
+                                ]
+                            ),
+
+                        "Status":
+                            row["Status"],
+                    })
+
 
                 st.dataframe(
                     pd.DataFrame(
-                        half_score_rows
+                        half_probability_rows
                     ),
                     use_container_width=True,
                     hide_index=True,
