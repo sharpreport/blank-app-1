@@ -1,0 +1,58 @@
+SHARPREPORT HISTORICAL PITCHER SKILL CONTEXT
+================================================================
+
+Historical games: 11638
+Starter sides: 23276
+
+Starter sides with any prior Statcast PA: 22057 (94.76%)
+Starter sides with at least 50 prior PA: 19454 (83.58%)
+Starter sides with all four core skill metrics: 23276 (100.00%)
+
+CORE PRE-GAME METRICS:
+Reconstructed xwOBA allowed
+K%
+BB%
+Barrel%
+
+NO-LOOKAHEAD CONTROL:
+Every starter snapshot is created BEFORE that calendar date's Statcast results are added.
+Therefore same-day games and doubleheaders cannot leak into one another.
+
+NOTE:
+The reconstructed xwOBA measure uses Statcast expected wOBA on tracked batted balls and the recorded wOBA value for non-batted-ball PA outcomes.
+We will validate this reconstruction against Baseball Savant leaderboards before model training.
+
+2022
+Starter sides: 4860
+Any prior Statcast PA: 4618 (95.02%)
+At least 50 prior PA: 4078 (83.91%)
+All four core skill metrics available: 4860 (100.00%)
+----------------------------------------------------------------
+
+2023
+Starter sides: 4860
+Any prior Statcast PA: 4614 (94.94%)
+At least 50 prior PA: 4088 (84.12%)
+All four core skill metrics available: 4860 (100.00%)
+----------------------------------------------------------------
+
+2024
+Starter sides: 4858
+Any prior Statcast PA: 4591 (94.50%)
+At least 50 prior PA: 4054 (83.45%)
+All four core skill metrics available: 4858 (100.00%)
+----------------------------------------------------------------
+
+2025
+Starter sides: 4860
+Any prior Statcast PA: 4618 (95.02%)
+At least 50 prior PA: 4082 (83.99%)
+All four core skill metrics available: 4860 (100.00%)
+----------------------------------------------------------------
+
+2026
+Starter sides: 3838
+Any prior Statcast PA: 3616 (94.22%)
+At least 50 prior PA: 3152 (82.13%)
+All four core skill metrics available: 3838 (100.00%)
+----------------------------------------------------------------

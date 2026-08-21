@@ -1,0 +1,60 @@
+SHARPREPORT HISTORICAL PITCHER SKILL AUDIT
+====================================================================
+
+Historical games: 11638
+Starter sides: 23276
+
+Any prior Statcast PA: 22057 (94.76%)
+At least 50 prior PA: 19454 (83.58%)
+xwOBA available: 22057 (94.76%)
+K% available: 22057 (94.76%)
+BB% available: 22057 (94.76%)
+Barrel% available: 22057 (94.76%)
+All four core metrics available: 22057 (94.76%)
+All four + any prior PA: 22057 (94.76%)
+All four + at least 50 prior PA: 19454 (83.58%)
+
+SANITY CHECKS
+--------------------------------------------------------------------
+Rows with zero prior PA but all four metrics populated: 0
+Rows with impossible numeric ranges: 0
+
+2022
+Starter sides: 4860
+Any prior PA: 4618 (95.02%)
+At least 50 prior PA: 4078 (83.91%)
+All four core metrics: 4618 (95.02%)
+All four + 50 PA: 4078 (83.91%)
+--------------------------------------------------------------------
+
+2023
+Starter sides: 4860
+Any prior PA: 4614 (94.94%)
+At least 50 prior PA: 4088 (84.12%)
+All four core metrics: 4614 (94.94%)
+All four + 50 PA: 4088 (84.12%)
+--------------------------------------------------------------------
+
+2024
+Starter sides: 4858
+Any prior PA: 4591 (94.50%)
+At least 50 prior PA: 4054 (83.45%)
+All four core metrics: 4591 (94.50%)
+All four + 50 PA: 4054 (83.45%)
+--------------------------------------------------------------------
+
+2025
+Starter sides: 4860
+Any prior PA: 4618 (95.02%)
+At least 50 prior PA: 4082 (83.99%)
+All four core metrics: 4618 (95.02%)
+All four + 50 PA: 4082 (83.99%)
+--------------------------------------------------------------------
+
+2026
+Starter sides: 3838
+Any prior PA: 3616 (94.22%)
+At least 50 prior PA: 3152 (82.13%)
+All four core metrics: 3616 (94.22%)
+All four + 50 PA: 3152 (82.13%)
+--------------------------------------------------------------------

@@ -1,0 +1,113 @@
+SHARPREPORT HISTORICAL PITCHER SKILL PREDICTIVE TEST
+============================================================================
+
+Historical games: 11638
+Half-inning rows: 23276
+
+METHOD:
+Walk-forward out-of-sample testing.
+Top 1st and Bottom 1st modeled separately.
+Positive Brier improvement = better probability forecast.
+Every skill model includes prior-PA sample size, and is also compared against a PA-only control.
+
+PA only control
+----------------------------------------------------------------------------
+Beat half-specific baseline: 1/4 holdouts
+Average Brier improvement vs baseline: -0.000012
+Worst holdout improvement vs baseline: -0.000266
+Best holdout improvement vs baseline: +0.000342
+
+2023: baseline 0.208260 | model 0.207918 | improvement +0.000342
+2024: baseline 0.199418 | model 0.199484 | improvement -0.000066
+2025: baseline 0.208096 | model 0.208363 | improvement -0.000266
+2026: baseline 0.206473 | model 0.206531 | improvement -0.000057
+
+============================================================================
+
+xwOBA + PA
+----------------------------------------------------------------------------
+Beat half-specific baseline: 3/4 holdouts
+Beat PA-only control: 4/4 holdouts
+Average Brier improvement vs baseline: +0.000456
+Average Brier improvement vs PA-only: +0.000468
+Worst holdout improvement vs baseline: -0.000033
+Best holdout improvement vs baseline: +0.001011
+
+2023: baseline 0.208260 | model 0.207249 | improvement +0.001011 | vs PA +0.000669
+2024: baseline 0.199418 | model 0.199451 | improvement -0.000033 | vs PA +0.000033
+2025: baseline 0.208096 | model 0.207941 | improvement +0.000156 | vs PA +0.000422
+2026: baseline 0.206473 | model 0.205783 | improvement +0.000690 | vs PA +0.000747
+
+============================================================================
+
+K% + PA
+----------------------------------------------------------------------------
+Beat half-specific baseline: 3/4 holdouts
+Beat PA-only control: 3/4 holdouts
+Average Brier improvement vs baseline: +0.000457
+Average Brier improvement vs PA-only: +0.000469
+Worst holdout improvement vs baseline: -0.000081
+Best holdout improvement vs baseline: +0.000828
+
+2023: baseline 0.208260 | model 0.207462 | improvement +0.000797 | vs PA +0.000456
+2024: baseline 0.199418 | model 0.199499 | improvement -0.000081 | vs PA -0.000015
+2025: baseline 0.208096 | model 0.207812 | improvement +0.000284 | vs PA +0.000551
+2026: baseline 0.206473 | model 0.205645 | improvement +0.000828 | vs PA +0.000885
+
+============================================================================
+
+BB% + PA
+----------------------------------------------------------------------------
+Beat half-specific baseline: 1/4 holdouts
+Beat PA-only control: 1/4 holdouts
+Average Brier improvement vs baseline: -0.000055
+Average Brier improvement vs PA-only: -0.000043
+Worst holdout improvement vs baseline: -0.000269
+Best holdout improvement vs baseline: +0.000290
+
+2023: baseline 0.208260 | model 0.207970 | improvement +0.000290 | vs PA -0.000052
+2024: baseline 0.199418 | model 0.199431 | improvement -0.000013 | vs PA +0.000053
+2025: baseline 0.208096 | model 0.208365 | improvement -0.000269 | vs PA -0.000003
+2026: baseline 0.206473 | model 0.206702 | improvement -0.000229 | vs PA -0.000171
+
+============================================================================
+
+Barrel% + PA
+----------------------------------------------------------------------------
+Beat half-specific baseline: 2/4 holdouts
+Beat PA-only control: 3/4 holdouts
+Average Brier improvement vs baseline: +0.000137
+Average Brier improvement vs PA-only: +0.000149
+Worst holdout improvement vs baseline: -0.000143
+Best holdout improvement vs baseline: +0.000549
+
+2023: baseline 0.208260 | model 0.207710 | improvement +0.000549 | vs PA +0.000208
+2024: baseline 0.199418 | model 0.199525 | improvement -0.000107 | vs PA -0.000041
+2025: baseline 0.208096 | model 0.208240 | improvement -0.000143 | vs PA +0.000123
+2026: baseline 0.206473 | model 0.206224 | improvement +0.000249 | vs PA +0.000306
+
+============================================================================
+
+All 4 pitcher skill + PA
+----------------------------------------------------------------------------
+Beat half-specific baseline: 3/4 holdouts
+Beat PA-only control: 3/4 holdouts
+Average Brier improvement vs baseline: +0.000515
+Average Brier improvement vs PA-only: +0.000527
+Worst holdout improvement vs baseline: -0.000106
+Best holdout improvement vs baseline: +0.000902
+
+2023: baseline 0.208260 | model 0.207387 | improvement +0.000872 | vs PA +0.000531
+2024: baseline 0.199418 | model 0.199524 | improvement -0.000106 | vs PA -0.000040
+2025: baseline 0.208096 | model 0.207705 | improvement +0.000392 | vs PA +0.000658
+2026: baseline 0.206473 | model 0.205571 | improvement +0.000902 | vs PA +0.000960
+
+============================================================================
+
+RANKING BY INCREMENTAL VALUE OVER PA-ONLY CONTROL
+----------------------------------------------------------------------------
+#1 All 4 pitcher skill + PA | wins vs PA 3/4 | avg vs PA +0.000527 | avg vs baseline +0.000515
+#2 K% + PA | wins vs PA 3/4 | avg vs PA +0.000469 | avg vs baseline +0.000457
+#3 xwOBA + PA | wins vs PA 4/4 | avg vs PA +0.000468 | avg vs baseline +0.000456
+#4 Barrel% + PA | wins vs PA 3/4 | avg vs PA +0.000149 | avg vs baseline +0.000137
+#5 BB% + PA | wins vs PA 1/4 | avg vs PA -0.000043 | avg vs baseline -0.000055

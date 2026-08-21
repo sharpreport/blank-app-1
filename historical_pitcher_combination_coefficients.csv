@@ -1,0 +1,393 @@
+holdout_year,half,model,feature,standardized_coefficient
+2023,Top,PA only control,log_pa,-0.05832969401377702
+2023,Top,PA only control,no_prior_pa,-0.022750770764377284
+2023,Top,xwOBA + PA,xwoba,0.11583791737803212
+2023,Top,xwOBA + PA,log_pa,-0.028516783332832488
+2023,Top,xwOBA + PA,no_prior_pa,0.000915697405058353
+2023,Top,xwOBA + K + PA,xwoba,-0.01721868011088161
+2023,Top,xwOBA + K + PA,k_pct,-0.22658872475146558
+2023,Top,xwOBA + K + PA,log_pa,-0.02356369607217491
+2023,Top,xwOBA + K + PA,no_prior_pa,0.006595080625929961
+2023,Top,xwOBA + K + Barrel + PA,xwoba,-0.11695023298093958
+2023,Top,xwOBA + K + Barrel + PA,k_pct,-0.2820279902850874
+2023,Top,xwOBA + K + Barrel + PA,barrel_pct,0.11192897054326155
+2023,Top,xwOBA + K + Barrel + PA,log_pa,-0.022462605928343597
+2023,Top,xwOBA + K + Barrel + PA,no_prior_pa,0.007841825997962171
+2023,Top,All 4 skill + PA,xwoba,-0.1395824572991368
+2023,Top,All 4 skill + PA,k_pct,-0.29090894096259184
+2023,Top,All 4 skill + PA,bb_pct,0.03862803479003105
+2023,Top,All 4 skill + PA,barrel_pct,0.1212762672570515
+2023,Top,All 4 skill + PA,log_pa,-0.009643350983209358
+2023,Top,All 4 skill + PA,no_prior_pa,0.017766907951118672
+2023,Top,History + PA,hist_runs_per_start,0.028245305626720663
+2023,Top,History + PA,log_hist_starts,-0.09043876911527511
+2023,Top,History + PA,no_hist_starts,-0.016418459160574803
+2023,Top,History + PA,log_pa,0.05697094075503022
+2023,Top,History + PA,no_prior_pa,0.033558193617258786
+2023,Top,xwOBA + K + History + PA,xwoba,-0.0070902980352704325
+2023,Top,xwOBA + K + History + PA,k_pct,-0.2286047809479984
+2023,Top,xwOBA + K + History + PA,hist_runs_per_start,-0.024280420986985022
+2023,Top,xwOBA + K + History + PA,log_hist_starts,-0.08578623420327713
+2023,Top,xwOBA + K + History + PA,no_hist_starts,0.0013909407777165997
+2023,Top,xwOBA + K + History + PA,log_pa,0.0837151018211253
+2023,Top,xwOBA + K + History + PA,no_prior_pa,0.0446472597745973
+2023,Top,xwOBA + K + Barrel + History + PA,xwoba,-0.10605770560269825
+2023,Top,xwOBA + K + Barrel + History + PA,k_pct,-0.282440226738703
+2023,Top,xwOBA + K + Barrel + History + PA,barrel_pct,0.10963223989848074
+2023,Top,xwOBA + K + Barrel + History + PA,hist_runs_per_start,-0.01978996029835097
+2023,Top,xwOBA + K + Barrel + History + PA,log_hist_starts,-0.07328449279105288
+2023,Top,xwOBA + K + Barrel + History + PA,no_hist_starts,0.007534788645881665
+2023,Top,xwOBA + K + Barrel + History + PA,log_pa,0.07063968567032175
+2023,Top,xwOBA + K + Barrel + History + PA,no_prior_pa,0.03630516974675341
+2023,Top,All 4 skill + History + PA,xwoba,-0.12891992968449162
+2023,Top,All 4 skill + History + PA,k_pct,-0.29180560661971605
+2023,Top,All 4 skill + History + PA,bb_pct,0.0405078100328851
+2023,Top,All 4 skill + History + PA,barrel_pct,0.11915052736277983
+2023,Top,All 4 skill + History + PA,hist_runs_per_start,-0.021608734596606175
+2023,Top,All 4 skill + History + PA,log_hist_starts,-0.07829706797537592
+2023,Top,All 4 skill + History + PA,no_hist_starts,0.005467537251971156
+2023,Top,All 4 skill + History + PA,log_pa,0.08987253527111859
+2023,Top,All 4 skill + History + PA,no_prior_pa,0.05031372860403552
+2023,Bottom,PA only control,log_pa,-6.420591085584013e-05
+2023,Bottom,PA only control,no_prior_pa,0.05463190530142714
+2023,Bottom,xwOBA + PA,xwoba,0.143616365597672
+2023,Bottom,xwOBA + PA,log_pa,0.0296187853262617
+2023,Bottom,xwOBA + PA,no_prior_pa,0.07842159580046099
+2023,Bottom,xwOBA + K + PA,xwoba,0.09007431269122898
+2023,Bottom,xwOBA + K + PA,k_pct,-0.09834833449475161
+2023,Bottom,xwOBA + K + PA,log_pa,0.027889237441536485
+2023,Bottom,xwOBA + K + PA,no_prior_pa,0.07744576588403063
+2023,Bottom,xwOBA + K + Barrel + PA,xwoba,0.10987565239101249
+2023,Bottom,xwOBA + K + Barrel + PA,k_pct,-0.08716320369351235
+2023,Bottom,xwOBA + K + Barrel + PA,barrel_pct,-0.023272939792572438
+2023,Bottom,xwOBA + K + Barrel + PA,log_pa,0.027336159472074927
+2023,Bottom,xwOBA + K + Barrel + PA,no_prior_pa,0.07703335747427596
+2023,Bottom,All 4 skill + PA,xwoba,0.08121044185842348
+2023,Bottom,All 4 skill + PA,k_pct,-0.09789909909624511
+2023,Bottom,All 4 skill + PA,bb_pct,0.042633055395186685
+2023,Bottom,All 4 skill + PA,barrel_pct,-0.009828924458773775
+2023,Bottom,All 4 skill + PA,log_pa,0.04059362878860813
+2023,Bottom,All 4 skill + PA,no_prior_pa,0.08731507524546987
+2023,Bottom,History + PA,hist_runs_per_start,0.015451937191373184
+2023,Bottom,History + PA,log_hist_starts,-0.009040162099684413
+2023,Bottom,History + PA,no_hist_starts,-0.033241833869846936
+2023,Bottom,History + PA,log_pa,0.004121511371766392
+2023,Bottom,History + PA,no_prior_pa,0.07933063952345726
+2023,Bottom,xwOBA + K + History + PA,xwoba,0.09940325159990547
+2023,Bottom,xwOBA + K + History + PA,k_pct,-0.10187346951502108
+2023,Bottom,xwOBA + K + History + PA,hist_runs_per_start,-0.037023929951151155
+2023,Bottom,xwOBA + K + History + PA,log_hist_starts,-0.02088215191230258
+2023,Bottom,xwOBA + K + History + PA,no_hist_starts,-0.009884468554358351
+2023,Bottom,xwOBA + K + History + PA,log_pa,0.050866430229073875
+2023,Bottom,xwOBA + K + History + PA,no_prior_pa,0.09228376243111772
+2023,Bottom,xwOBA + K + Barrel + History + PA,xwoba,0.1209500947987361
+2023,Bottom,xwOBA + K + Barrel + History + PA,k_pct,-0.08992435005500583
+2023,Bottom,xwOBA + K + Barrel + History + PA,barrel_pct,-0.025022247302811558
+2023,Bottom,xwOBA + K + Barrel + History + PA,hist_runs_per_start,-0.03765510906913826
+2023,Bottom,xwOBA + K + Barrel + History + PA,log_hist_starts,-0.021438916550359642
+2023,Bottom,xwOBA + K + Barrel + History + PA,no_hist_starts,-0.008516416617158327
+2023,Bottom,xwOBA + K + Barrel + History + PA,log_pa,0.05132565479635938
+2023,Bottom,xwOBA + K + Barrel + History + PA,no_prior_pa,0.09130015085542986
+2023,Bottom,All 4 skill + History + PA,xwoba,0.09212059346360975
+2023,Bottom,All 4 skill + History + PA,k_pct,-0.10092060873567711
+2023,Bottom,All 4 skill + History + PA,bb_pct,0.0435325223763292
+2023,Bottom,All 4 skill + History + PA,barrel_pct,-0.01146868744022331
+2023,Bottom,All 4 skill + History + PA,hist_runs_per_start,-0.03863125860589049
+2023,Bottom,All 4 skill + History + PA,log_hist_starts,-0.01900229355951738
+2023,Bottom,All 4 skill + History + PA,no_hist_starts,-0.006499305967657383
+2023,Bottom,All 4 skill + History + PA,log_pa,0.06233546040011982
+2023,Bottom,All 4 skill + History + PA,no_prior_pa,0.09950898081967019
+2024,Top,PA only control,log_pa,-0.04177866529473092
+2024,Top,PA only control,no_prior_pa,0.016955810543245457
+2024,Top,xwOBA + PA,xwoba,0.10730819723854769
+2024,Top,xwOBA + PA,log_pa,-0.021816064971002653
+2024,Top,xwOBA + PA,no_prior_pa,0.03313413765246642
+2024,Top,xwOBA + K + PA,xwoba,0.01855828198284381
+2024,Top,xwOBA + K + PA,k_pct,-0.15578125418721323
+2024,Top,xwOBA + K + PA,log_pa,-0.0161505043308501
+2024,Top,xwOBA + K + PA,no_prior_pa,0.03847526497821994
+2024,Top,xwOBA + K + Barrel + PA,xwoba,-0.04253115128490961
+2024,Top,xwOBA + K + Barrel + PA,k_pct,-0.18961518419849083
+2024,Top,xwOBA + K + Barrel + PA,barrel_pct,0.07266006926382933
+2024,Top,xwOBA + K + Barrel + PA,log_pa,-0.015549231909472737
+2024,Top,xwOBA + K + Barrel + PA,no_prior_pa,0.039120611689936816
+2024,Top,All 4 skill + PA,xwoba,-0.07169974133516195
+2024,Top,All 4 skill + PA,k_pct,-0.20244755537799553
+2024,Top,All 4 skill + PA,bb_pct,0.04289583991377478
+2024,Top,All 4 skill + PA,barrel_pct,0.08584413496216924
+2024,Top,All 4 skill + PA,log_pa,-0.0026155282341412335
+2024,Top,All 4 skill + PA,no_prior_pa,0.04928041165369389
+2024,Top,History + PA,hist_runs_per_start,0.05015480402407825
+2024,Top,History + PA,log_hist_starts,-0.020711774890219786
+2024,Top,History + PA,no_hist_starts,-0.021890569215904297
+2024,Top,History + PA,log_pa,-0.012250698817752457
+2024,Top,History + PA,no_prior_pa,0.04730727610581162
+2024,Top,xwOBA + K + History + PA,xwoba,0.012898645087334735
+2024,Top,xwOBA + K + History + PA,k_pct,-0.15549927631266236
+2024,Top,xwOBA + K + History + PA,hist_runs_per_start,0.01734882242729428
+2024,Top,xwOBA + K + History + PA,log_hist_starts,-0.0005387024269309964
+2024,Top,xwOBA + K + History + PA,no_hist_starts,-0.004389042592229842
+2024,Top,xwOBA + K + History + PA,log_pa,-0.014815620743044194
+2024,Top,xwOBA + K + History + PA,no_prior_pa,0.042802297589017775
+2024,Top,xwOBA + K + Barrel + History + PA,xwoba,-0.04811481552509154
+2024,Top,xwOBA + K + Barrel + History + PA,k_pct,-0.1893173904149663
+2024,Top,xwOBA + K + Barrel + History + PA,barrel_pct,0.07266963967859286
+2024,Top,xwOBA + K + Barrel + History + PA,hist_runs_per_start,0.01745031926422189
+2024,Top,xwOBA + K + Barrel + History + PA,log_hist_starts,-0.003319459652407801
+2024,Top,xwOBA + K + Barrel + History + PA,no_hist_starts,-0.003633422826330886
+2024,Top,xwOBA + K + Barrel + History + PA,log_pa,-0.010492565554574354
+2024,Top,xwOBA + K + Barrel + History + PA,no_prior_pa,0.04432785102190926
+2024,Top,All 4 skill + History + PA,xwoba,-0.07664553749295454
+2024,Top,All 4 skill + History + PA,k_pct,-0.20198142245068393
+2024,Top,All 4 skill + History + PA,bb_pct,0.04246766439036476
+2024,Top,All 4 skill + History + PA,barrel_pct,0.08571823587681751
+2024,Top,All 4 skill + History + PA,hist_runs_per_start,0.01621617217210207
+2024,Top,All 4 skill + History + PA,log_hist_starts,-0.00593398312742787
+2024,Top,All 4 skill + History + PA,no_hist_starts,-0.006784342795740652
+2024,Top,All 4 skill + History + PA,log_pa,0.004846848442960165
+2024,Top,All 4 skill + History + PA,no_prior_pa,0.057583277607761045
+2024,Bottom,PA only control,log_pa,0.030314370607824652
+2024,Bottom,PA only control,no_prior_pa,0.11512892909940035
+2024,Bottom,xwOBA + PA,xwoba,0.13845512712833494
+2024,Bottom,xwOBA + PA,log_pa,0.059296879244676776
+2024,Bottom,xwOBA + PA,no_prior_pa,0.13843138959977527
+2024,Bottom,xwOBA + K + PA,xwoba,0.09479122015855568
+2024,Bottom,xwOBA + K + PA,k_pct,-0.07981696803767248
+2024,Bottom,xwOBA + K + PA,log_pa,0.058248035535430565
+2024,Bottom,xwOBA + K + PA,no_prior_pa,0.1378355693575342
+2024,Bottom,xwOBA + K + Barrel + PA,xwoba,0.07744347703855546
+2024,Bottom,xwOBA + K + Barrel + PA,k_pct,-0.08939938327748709
+2024,Bottom,xwOBA + K + Barrel + PA,barrel_pct,0.020389489157583474
+2024,Bottom,xwOBA + K + Barrel + PA,log_pa,0.05883138827696812
+2024,Bottom,xwOBA + K + Barrel + PA,no_prior_pa,0.1382969986111872
+2024,Bottom,All 4 skill + PA,xwoba,0.06482617536820046
+2024,Bottom,All 4 skill + PA,k_pct,-0.0949460110701105
+2024,Bottom,All 4 skill + PA,bb_pct,0.01873181424695731
+2024,Bottom,All 4 skill + PA,barrel_pct,0.026905615559769235
+2024,Bottom,All 4 skill + PA,log_pa,0.06335857766118472
+2024,Bottom,All 4 skill + PA,no_prior_pa,0.14182361427317028
+2024,Bottom,History + PA,hist_runs_per_start,0.034315207199485415
+2024,Bottom,History + PA,log_hist_starts,0.057640834547796435
+2024,Bottom,History + PA,no_hist_starts,-0.042447630467125665
+2024,Bottom,History + PA,log_pa,-0.04996192798204404
+2024,Bottom,History + PA,no_prior_pa,0.1148097359189668
+2024,Bottom,xwOBA + K + History + PA,xwoba,0.09605643948613772
+2024,Bottom,xwOBA + K + History + PA,k_pct,-0.0803861692442659
+2024,Bottom,xwOBA + K + History + PA,hist_runs_per_start,-0.010332188015167287
+2024,Bottom,xwOBA + K + History + PA,log_hist_starts,0.06398139234232895
+2024,Bottom,xwOBA + K + History + PA,no_hist_starts,-0.02944128832118131
+2024,Bottom,xwOBA + K + History + PA,log_pa,-0.03072610649707694
+2024,Bottom,xwOBA + K + History + PA,no_prior_pa,0.12369933474183813
+2024,Bottom,xwOBA + K + Barrel + History + PA,xwoba,0.0786516673306682
+2024,Bottom,xwOBA + K + Barrel + History + PA,k_pct,-0.0900374576067983
+2024,Bottom,xwOBA + K + Barrel + History + PA,barrel_pct,0.02059782105056066
+2024,Bottom,xwOBA + K + Barrel + History + PA,hist_runs_per_start,-0.010663792697112472
+2024,Bottom,xwOBA + K + Barrel + History + PA,log_hist_starts,0.061968802271354775
+2024,Bottom,xwOBA + K + Barrel + History + PA,no_hist_starts,-0.030504993641346956
+2024,Bottom,xwOBA + K + Barrel + History + PA,log_pa,-0.027842432056174534
+2024,Bottom,xwOBA + K + Barrel + History + PA,no_prior_pa,0.12576775958026276
+2024,Bottom,All 4 skill + History + PA,xwoba,0.06634543519689075
+2024,Bottom,All 4 skill + History + PA,k_pct,-0.09541100025798449
+2024,Bottom,All 4 skill + History + PA,bb_pct,0.01819574665703787
+2024,Bottom,All 4 skill + History + PA,barrel_pct,0.02692858298610679
+2024,Bottom,All 4 skill + History + PA,hist_runs_per_start,-0.01047080304563117
+2024,Bottom,All 4 skill + History + PA,log_hist_starts,0.062397387235543875
+2024,Bottom,All 4 skill + History + PA,no_hist_starts,-0.02989190139887894
+2024,Bottom,All 4 skill + History + PA,log_pa,-0.023830215757596952
+2024,Bottom,All 4 skill + History + PA,no_prior_pa,0.12863029883271404
+2025,Top,PA only control,log_pa,-0.07312554830403481
+2025,Top,PA only control,no_prior_pa,-0.04722013438149235
+2025,Top,xwOBA + PA,xwoba,0.10334086575746002
+2025,Top,xwOBA + PA,log_pa,-0.05583753651645418
+2025,Top,xwOBA + PA,no_prior_pa,-0.03313117025941415
+2025,Top,xwOBA + K + PA,xwoba,0.03003117209471097
+2025,Top,xwOBA + K + PA,k_pct,-0.12587800931243387
+2025,Top,xwOBA + K + PA,log_pa,-0.05335426302257124
+2025,Top,xwOBA + K + PA,no_prior_pa,-0.030588119981254058
+2025,Top,xwOBA + K + Barrel + PA,xwoba,-0.0023762283221948222
+2025,Top,xwOBA + K + Barrel + PA,k_pct,-0.14435470229166367
+2025,Top,xwOBA + K + Barrel + PA,barrel_pct,0.039363685632004555
+2025,Top,xwOBA + K + Barrel + PA,log_pa,-0.053781373209606034
+2025,Top,xwOBA + K + Barrel + PA,no_prior_pa,-0.030869098487913266
+2025,Top,All 4 skill + PA,xwoba,-0.04203113832880827
+2025,Top,All 4 skill + PA,k_pct,-0.16115303302941758
+2025,Top,All 4 skill + PA,bb_pct,0.058167306334363546
+2025,Top,All 4 skill + PA,barrel_pct,0.0578299001643328
+2025,Top,All 4 skill + PA,log_pa,-0.03719665480611694
+2025,Top,All 4 skill + PA,no_prior_pa,-0.017756077586661687
+2025,Top,History + PA,hist_runs_per_start,0.05345795139760091
+2025,Top,History + PA,log_hist_starts,-0.001046675606698466
+2025,Top,History + PA,no_hist_starts,-0.014207442041024134
+2025,Top,History + PA,log_pa,-0.06676713679727722
+2025,Top,History + PA,no_prior_pa,-0.03101438759388029
+2025,Top,xwOBA + K + History + PA,xwoba,0.021985443391033588
+2025,Top,xwOBA + K + History + PA,k_pct,-0.12631979434501794
+2025,Top,xwOBA + K + History + PA,hist_runs_per_start,0.024787228281004055
+2025,Top,xwOBA + K + History + PA,log_hist_starts,0.026747228261507997
+2025,Top,xwOBA + K + History + PA,no_hist_starts,0.009778371619434852
+2025,Top,xwOBA + K + History + PA,log_pa,-0.08317860892594468
+2025,Top,xwOBA + K + History + PA,no_prior_pa,-0.048160926737229326
+2025,Top,xwOBA + K + Barrel + History + PA,xwoba,-0.010521181227276664
+2025,Top,xwOBA + K + Barrel + History + PA,k_pct,-0.1448601505358826
+2025,Top,xwOBA + K + Barrel + History + PA,barrel_pct,0.03951216445141135
+2025,Top,xwOBA + K + Barrel + History + PA,hist_runs_per_start,0.02497466606332864
+2025,Top,xwOBA + K + Barrel + History + PA,log_hist_starts,0.026101405500222507
+2025,Top,xwOBA + K + Barrel + History + PA,no_hist_starts,0.010897875241621568
+2025,Top,xwOBA + K + Barrel + History + PA,log_pa,-0.08253709145500096
+2025,Top,xwOBA + K + Barrel + History + PA,no_prior_pa,-0.04885203434285047
+2025,Top,All 4 skill + History + PA,xwoba,-0.05010683578700139
+2025,Top,All 4 skill + History + PA,k_pct,-0.16143832526645696
+2025,Top,All 4 skill + History + PA,bb_pct,0.058034466273539066
+2025,Top,All 4 skill + History + PA,barrel_pct,0.057878264790359894
+2025,Top,All 4 skill + History + PA,hist_runs_per_start,0.024894040921949395
+2025,Top,All 4 skill + History + PA,log_hist_starts,0.022637465171277935
+2025,Top,All 4 skill + History + PA,no_hist_starts,0.005856088835287956
+2025,Top,All 4 skill + History + PA,log_pa,-0.06270932782200896
+2025,Top,All 4 skill + History + PA,no_prior_pa,-0.030860312206254504
+2025,Bottom,PA only control,log_pa,0.021690566868990728
+2025,Bottom,PA only control,no_prior_pa,0.09985514299285926
+2025,Bottom,xwOBA + PA,xwoba,0.10542813925362668
+2025,Bottom,xwOBA + PA,log_pa,0.04373805611451195
+2025,Bottom,xwOBA + PA,no_prior_pa,0.11759347125691824
+2025,Bottom,xwOBA + K + PA,xwoba,0.07312212194494071
+2025,Bottom,xwOBA + K + PA,k_pct,-0.058514684592440906
+2025,Bottom,xwOBA + K + PA,log_pa,0.04328952724755004
+2025,Bottom,xwOBA + K + PA,no_prior_pa,0.11736260349979692
+2025,Bottom,xwOBA + K + Barrel + PA,xwoba,0.05317061063603187
+2025,Bottom,xwOBA + K + Barrel + PA,k_pct,-0.06998185411787898
+2025,Bottom,xwOBA + K + Barrel + PA,barrel_pct,0.024342985761958126
+2025,Bottom,xwOBA + K + Barrel + PA,log_pa,0.04361670971103551
+2025,Bottom,xwOBA + K + Barrel + PA,no_prior_pa,0.11763369102337597
+2025,Bottom,All 4 skill + PA,xwoba,0.05275530801440084
+2025,Bottom,All 4 skill + PA,k_pct,-0.07015606050664248
+2025,Bottom,All 4 skill + PA,bb_pct,0.0006456332329241104
+2025,Bottom,All 4 skill + PA,barrel_pct,0.024556516973774756
+2025,Bottom,All 4 skill + PA,log_pa,0.043749033946083975
+2025,Bottom,All 4 skill + PA,no_prior_pa,0.11773717671647448
+2025,Bottom,History + PA,hist_runs_per_start,0.03919040524892299
+2025,Bottom,History + PA,log_hist_starts,0.06535981936171234
+2025,Bottom,History + PA,no_hist_starts,-0.005876950741343232
+2025,Bottom,History + PA,log_pa,-0.05984793869509003
+2025,Bottom,History + PA,no_prior_pa,0.07423970914557529
+2025,Bottom,xwOBA + K + History + PA,xwoba,0.06898242087754282
+2025,Bottom,xwOBA + K + History + PA,k_pct,-0.05957596380255976
+2025,Bottom,xwOBA + K + History + PA,hist_runs_per_start,0.008522867956218596
+2025,Bottom,xwOBA + K + History + PA,log_hist_starts,0.0704729085523431
+2025,Bottom,xwOBA + K + History + PA,no_hist_starts,-0.0001351611033005072
+2025,Bottom,xwOBA + K + History + PA,log_pa,-0.04734871504864508
+2025,Bottom,xwOBA + K + History + PA,no_prior_pa,0.08254375732974097
+2025,Bottom,xwOBA + K + Barrel + History + PA,xwoba,0.049217244227419396
+2025,Bottom,xwOBA + K + Barrel + History + PA,k_pct,-0.07097388327102974
+2025,Bottom,xwOBA + K + Barrel + History + PA,barrel_pct,0.024215661889812213
+2025,Bottom,xwOBA + K + Barrel + History + PA,hist_runs_per_start,0.008262670520970902
+2025,Bottom,xwOBA + K + Barrel + History + PA,log_hist_starts,0.06962436612131775
+2025,Bottom,xwOBA + K + Barrel + History + PA,no_hist_starts,-0.0009939809123722112
+2025,Bottom,xwOBA + K + Barrel + History + PA,log_pa,-0.04614976191658183
+2025,Bottom,xwOBA + K + Barrel + History + PA,no_prior_pa,0.083751681391483
+2025,Bottom,All 4 skill + History + PA,xwoba,0.04832350534484976
+2025,Bottom,All 4 skill + History + PA,k_pct,-0.07134244009002406
+2025,Bottom,All 4 skill + History + PA,bb_pct,0.0013706763709227304
+2025,Bottom,All 4 skill + History + PA,barrel_pct,0.024668658536239844
+2025,Bottom,All 4 skill + History + PA,hist_runs_per_start,0.008300528559222834
+2025,Bottom,All 4 skill + History + PA,log_hist_starts,0.06968472862086074
+2025,Bottom,All 4 skill + History + PA,no_hist_starts,-0.001002694717646438
+2025,Bottom,All 4 skill + History + PA,log_pa,-0.0459478422064876
+2025,Bottom,All 4 skill + History + PA,no_prior_pa,0.08394736459957663
+2026,Top,PA only control,log_pa,-0.08486312494175366
+2026,Top,PA only control,no_prior_pa,-0.06739835288297734
+2026,Top,xwOBA + PA,xwoba,0.1052892547822745
+2026,Top,xwOBA + PA,log_pa,-0.06753730009730342
+2026,Top,xwOBA + PA,no_prior_pa,-0.053269386403877045
+2026,Top,xwOBA + K + PA,xwoba,0.03625778655790235
+2026,Top,xwOBA + K + PA,k_pct,-0.11666808894130533
+2026,Top,xwOBA + K + PA,log_pa,-0.06909860260036225
+2026,Top,xwOBA + K + PA,no_prior_pa,-0.05399079774072858
+2026,Top,xwOBA + K + Barrel + PA,xwoba,0.005887164071077376
+2026,Top,xwOBA + K + Barrel + PA,k_pct,-0.13375898736219743
+2026,Top,xwOBA + K + Barrel + PA,barrel_pct,0.03758446805597474
+2026,Top,xwOBA + K + Barrel + PA,log_pa,-0.0705542583727508
+2026,Top,xwOBA + K + Barrel + PA,no_prior_pa,-0.05508198655222934
+2026,Top,All 4 skill + PA,xwoba,-0.027450979520038023
+2026,Top,All 4 skill + PA,k_pct,-0.14822569625233928
+2026,Top,All 4 skill + PA,bb_pct,0.050832716030449705
+2026,Top,All 4 skill + PA,barrel_pct,0.052471348256634145
+2026,Top,All 4 skill + PA,log_pa,-0.05674029989870988
+2026,Top,All 4 skill + PA,no_prior_pa,-0.04416181764881012
+2026,Top,History + PA,hist_runs_per_start,0.05135895221829639
+2026,Top,History + PA,log_hist_starts,0.0030798427468526203
+2026,Top,History + PA,no_hist_starts,-0.010237460126770051
+2026,Top,History + PA,log_pa,-0.08412160000114507
+2026,Top,History + PA,no_prior_pa,-0.05678058011899535
+2026,Top,xwOBA + K + History + PA,xwoba,0.02880288988094832
+2026,Top,xwOBA + K + History + PA,k_pct,-0.11738444172655758
+2026,Top,xwOBA + K + History + PA,hist_runs_per_start,0.021170037806621963
+2026,Top,xwOBA + K + History + PA,log_hist_starts,0.02936788373980213
+2026,Top,xwOBA + K + History + PA,no_hist_starts,0.009775945617473253
+2026,Top,xwOBA + K + History + PA,log_pa,-0.10307386853521797
+2026,Top,xwOBA + K + History + PA,no_prior_pa,-0.07347107276015459
+2026,Top,xwOBA + K + Barrel + History + PA,xwoba,-0.0014060372052824071
+2026,Top,xwOBA + K + Barrel + History + PA,k_pct,-0.13440182255095293
+2026,Top,xwOBA + K + Barrel + History + PA,barrel_pct,0.03748127595240662
+2026,Top,xwOBA + K + Barrel + History + PA,hist_runs_per_start,0.021134261361005758
+2026,Top,xwOBA + K + Barrel + History + PA,log_hist_starts,0.02867319031483861
+2026,Top,xwOBA + K + Barrel + History + PA,no_hist_starts,0.010472911174406317
+2026,Top,xwOBA + K + Barrel + History + PA,log_pa,-0.1034951297803204
+2026,Top,xwOBA + K + Barrel + History + PA,no_prior_pa,-0.0746752834911527
+2026,Top,All 4 skill + History + PA,xwoba,-0.03452763842177289
+2026,Top,All 4 skill + History + PA,k_pct,-0.14872155706909146
+2026,Top,All 4 skill + History + PA,bb_pct,0.050581318400786404
+2026,Top,All 4 skill + History + PA,barrel_pct,0.05228475163453256
+2026,Top,All 4 skill + History + PA,hist_runs_per_start,0.02079757127253494
+2026,Top,All 4 skill + History + PA,log_hist_starts,0.026278949173641545
+2026,Top,All 4 skill + History + PA,no_hist_starts,0.0072376583905525375
+2026,Top,All 4 skill + History + PA,log_pa,-0.08743438652594206
+2026,Top,All 4 skill + History + PA,no_prior_pa,-0.060594680302197036
+2026,Bottom,PA only control,log_pa,0.011381856818605153
+2026,Bottom,PA only control,no_prior_pa,0.06217171234494034
+2026,Bottom,xwOBA + PA,xwoba,0.10004465304488008
+2026,Bottom,xwOBA + PA,log_pa,0.028756811343776494
+2026,Bottom,xwOBA + PA,no_prior_pa,0.07615460295877678
+2026,Bottom,xwOBA + K + PA,xwoba,0.06657852692249287
+2026,Bottom,xwOBA + K + PA,k_pct,-0.058806025145279925
+2026,Bottom,xwOBA + K + PA,log_pa,0.027430525663581694
+2026,Bottom,xwOBA + K + PA,no_prior_pa,0.07523730894268585
+2026,Bottom,xwOBA + K + Barrel + PA,xwoba,0.04595308586587015
+2026,Bottom,xwOBA + K + Barrel + PA,k_pct,-0.07039258531236918
+2026,Bottom,xwOBA + K + Barrel + PA,barrel_pct,0.02561380676171843
+2026,Bottom,xwOBA + K + Barrel + PA,log_pa,0.02727796542672627
+2026,Bottom,xwOBA + K + Barrel + PA,no_prior_pa,0.07513622022873946
+2026,Bottom,All 4 skill + PA,xwoba,0.05427842040239248
+2026,Bottom,All 4 skill + PA,k_pct,-0.06686633411317383
+2026,Bottom,All 4 skill + PA,bb_pct,-0.013682172328895745
+2026,Bottom,All 4 skill + PA,barrel_pct,0.021417666425472798
+2026,Bottom,All 4 skill + PA,log_pa,0.02453680256747918
+2026,Bottom,All 4 skill + PA,no_prior_pa,0.07300591593337037
+2026,Bottom,History + PA,hist_runs_per_start,0.051011623356188036
+2026,Bottom,History + PA,log_hist_starts,0.08048613012369721
+2026,Bottom,History + PA,no_hist_starts,-0.0200083736751865
+2026,Bottom,History + PA,log_pa,-0.0914176013468621
+2026,Bottom,History + PA,no_prior_pa,0.03906039717513121
+2026,Bottom,xwOBA + K + History + PA,xwoba,0.05744110437583112
+2026,Bottom,xwOBA + K + History + PA,k_pct,-0.06008934818116161
+2026,Bottom,xwOBA + K + History + PA,hist_runs_per_start,0.021190401584889045
+2026,Bottom,xwOBA + K + History + PA,log_hist_starts,0.08737819916960207
+2026,Bottom,xwOBA + K + History + PA,no_hist_starts,-0.015167306355205417
+2026,Bottom,xwOBA + K + History + PA,log_pa,-0.08755196946066136
+2026,Bottom,xwOBA + K + History + PA,no_prior_pa,0.04212373316409051
+2026,Bottom,xwOBA + K + Barrel + History + PA,xwoba,0.03694838085496996
+2026,Bottom,xwOBA + K + Barrel + History + PA,k_pct,-0.07160865071266884
+2026,Bottom,xwOBA + K + Barrel + History + PA,barrel_pct,0.02551313555399936
+2026,Bottom,xwOBA + K + Barrel + History + PA,hist_runs_per_start,0.021083653123851766
+2026,Bottom,xwOBA + K + Barrel + History + PA,log_hist_starts,0.08644483905652393
+2026,Bottom,xwOBA + K + Barrel + History + PA,no_hist_starts,-0.0159113116596981
+2026,Bottom,xwOBA + K + Barrel + History + PA,log_pa,-0.08669581830802076
+2026,Bottom,xwOBA + K + Barrel + History + PA,no_prior_pa,0.04293151842668337
+2026,Bottom,All 4 skill + History + PA,xwoba,0.04466030923629625
+2026,Bottom,All 4 skill + History + PA,k_pct,-0.06839762777544289
+2026,Bottom,All 4 skill + History + PA,bb_pct,-0.012506044477291894
+2026,Bottom,All 4 skill + History + PA,barrel_pct,0.021675081868435767
+2026,Bottom,All 4 skill + History + PA,hist_runs_per_start,0.020806831130557483
+2026,Bottom,All 4 skill + History + PA,log_hist_starts,0.08573766733985977
+2026,Bottom,All 4 skill + History + PA,no_hist_starts,-0.015970208304541694
+2026,Bottom,All 4 skill + History + PA,log_pa,-0.08831044747316506
+2026,Bottom,All 4 skill + History + PA,no_prior_pa,0.041367292994172376

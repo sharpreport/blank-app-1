@@ -1,0 +1,166 @@
+SHARPREPORT HISTORICAL PITCHER COMBINATION TEST
+==================================================================================
+
+Historical games: 11638
+Half-inning rows: 23276
+
+METHOD:
+Walk-forward out-of-sample testing.
+Top and Bottom 1st modeled separately.
+First-inning pitcher history rebuilt with no same-day leakage.
+Positive Brier improvement = better probability forecast.
+
+PA only control
+----------------------------------------------------------------------------------
+Beat baseline: 1/4
+Beat PA-only control: 0/4
+Average improvement vs baseline: -0.000012
+Average improvement vs PA-only: +0.000000
+Worst holdout vs baseline: -0.000266
+Best holdout vs baseline: +0.000342
+
+2023: baseline 0.208260 | model 0.207918 | vs baseline +0.000342 | vs PA +0.000000
+2024: baseline 0.199418 | model 0.199484 | vs baseline -0.000066 | vs PA +0.000000
+2025: baseline 0.208096 | model 0.208363 | vs baseline -0.000266 | vs PA +0.000000
+2026: baseline 0.206473 | model 0.206531 | vs baseline -0.000057 | vs PA +0.000000
+
+==================================================================================
+
+xwOBA + PA
+----------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat PA-only control: 4/4
+Average improvement vs baseline: +0.000456
+Average improvement vs PA-only: +0.000468
+Worst holdout vs baseline: -0.000033
+Best holdout vs baseline: +0.001011
+
+2023: baseline 0.208260 | model 0.207249 | vs baseline +0.001011 | vs PA +0.000669
+2024: baseline 0.199418 | model 0.199451 | vs baseline -0.000033 | vs PA +0.000033
+2025: baseline 0.208096 | model 0.207941 | vs baseline +0.000156 | vs PA +0.000422
+2026: baseline 0.206473 | model 0.205783 | vs baseline +0.000690 | vs PA +0.000747
+
+==================================================================================
+
+xwOBA + K + PA
+----------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat PA-only control: 3/4
+Average improvement vs baseline: +0.000554
+Average improvement vs PA-only: +0.000567
+Worst holdout vs baseline: -0.000098
+Best holdout vs baseline: +0.001017
+
+2023: baseline 0.208260 | model 0.207292 | vs baseline +0.000968 | vs PA +0.000626
+2024: baseline 0.199418 | model 0.199516 | vs baseline -0.000098 | vs PA -0.000032
+2025: baseline 0.208096 | model 0.207765 | vs baseline +0.000332 | vs PA +0.000598
+2026: baseline 0.206473 | model 0.205457 | vs baseline +0.001017 | vs PA +0.001074
+
+==================================================================================
+
+xwOBA + K + Barrel + PA
+----------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat PA-only control: 3/4
+Average improvement vs baseline: +0.000553
+Average improvement vs PA-only: +0.000566
+Worst holdout vs baseline: -0.000175
+Best holdout vs baseline: +0.001123
+
+2023: baseline 0.208260 | model 0.207383 | vs baseline +0.000877 | vs PA +0.000535
+2024: baseline 0.199418 | model 0.199593 | vs baseline -0.000175 | vs PA -0.000109
+2025: baseline 0.208096 | model 0.207708 | vs baseline +0.000388 | vs PA +0.000655
+2026: baseline 0.206473 | model 0.205350 | vs baseline +0.001123 | vs PA +0.001181
+
+==================================================================================
+
+All 4 skill + PA
+----------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat PA-only control: 3/4
+Average improvement vs baseline: +0.000515
+Average improvement vs PA-only: +0.000527
+Worst holdout vs baseline: -0.000106
+Best holdout vs baseline: +0.000902
+
+2023: baseline 0.208260 | model 0.207387 | vs baseline +0.000872 | vs PA +0.000531
+2024: baseline 0.199418 | model 0.199524 | vs baseline -0.000106 | vs PA -0.000040
+2025: baseline 0.208096 | model 0.207705 | vs baseline +0.000392 | vs PA +0.000658
+2026: baseline 0.206473 | model 0.205571 | vs baseline +0.000902 | vs PA +0.000960
+
+==================================================================================
+
+History + PA
+----------------------------------------------------------------------------------
+Beat baseline: 1/4
+Beat PA-only control: 4/4
+Average improvement vs baseline: +0.000095
+Average improvement vs PA-only: +0.000107
+Worst holdout vs baseline: -0.000045
+Best holdout vs baseline: +0.000454
+
+2023: baseline 0.208260 | model 0.207806 | vs baseline +0.000454 | vs PA +0.000112
+2024: baseline 0.199418 | model 0.199422 | vs baseline -0.000004 | vs PA +0.000062
+2025: baseline 0.208096 | model 0.208141 | vs baseline -0.000045 | vs PA +0.000221
+2026: baseline 0.206473 | model 0.206497 | vs baseline -0.000023 | vs PA +0.000034
+
+==================================================================================
+
+xwOBA + K + History + PA
+----------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat PA-only control: 3/4
+Average improvement vs baseline: +0.000499
+Average improvement vs PA-only: +0.000511
+Worst holdout vs baseline: -0.000142
+Best holdout vs baseline: +0.000939
+
+2023: baseline 0.208260 | model 0.207463 | vs baseline +0.000797 | vs PA +0.000456
+2024: baseline 0.199418 | model 0.199560 | vs baseline -0.000142 | vs PA -0.000076
+2025: baseline 0.208096 | model 0.207696 | vs baseline +0.000400 | vs PA +0.000667
+2026: baseline 0.206473 | model 0.205534 | vs baseline +0.000939 | vs PA +0.000996
+
+==================================================================================
+
+xwOBA + K + Barrel + History + PA
+----------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat PA-only control: 3/4
+Average improvement vs baseline: +0.000502
+Average improvement vs PA-only: +0.000514
+Worst holdout vs baseline: -0.000218
+Best holdout vs baseline: +0.001048
+
+2023: baseline 0.208260 | model 0.207535 | vs baseline +0.000725 | vs PA +0.000383
+2024: baseline 0.199418 | model 0.199636 | vs baseline -0.000218 | vs PA -0.000152
+2025: baseline 0.208096 | model 0.207642 | vs baseline +0.000455 | vs PA +0.000721
+2026: baseline 0.206473 | model 0.205426 | vs baseline +0.001048 | vs PA +0.001105
+
+==================================================================================
+
+All 4 skill + History + PA
+----------------------------------------------------------------------------------
+Beat baseline: 3/4
+Beat PA-only control: 3/4
+Average improvement vs baseline: +0.000462
+Average improvement vs PA-only: +0.000474
+Worst holdout vs baseline: -0.000146
+Best holdout vs baseline: +0.000830
+
+2023: baseline 0.208260 | model 0.207555 | vs baseline +0.000705 | vs PA +0.000363
+2024: baseline 0.199418 | model 0.199564 | vs baseline -0.000146 | vs PA -0.000080
+2025: baseline 0.208096 | model 0.207638 | vs baseline +0.000459 | vs PA +0.000725
+2026: baseline 0.206473 | model 0.205643 | vs baseline +0.000830 | vs PA +0.000888
+
+==================================================================================
+
+FINAL RANKING
+----------------------------------------------------------------------------------
+#1 xwOBA + K + PA | baseline wins 3/4 | PA wins 3/4 | avg baseline +0.000554 | avg PA +0.000567 | worst -0.000098
+#2 xwOBA + K + Barrel + PA | baseline wins 3/4 | PA wins 3/4 | avg baseline +0.000553 | avg PA +0.000566 | worst -0.000175
+#3 All 4 skill + PA | baseline wins 3/4 | PA wins 3/4 | avg baseline +0.000515 | avg PA +0.000527 | worst -0.000106
+#4 xwOBA + K + Barrel + History + PA | baseline wins 3/4 | PA wins 3/4 | avg baseline +0.000502 | avg PA +0.000514 | worst -0.000218
+#5 xwOBA + K + History + PA | baseline wins 3/4 | PA wins 3/4 | avg baseline +0.000499 | avg PA +0.000511 | worst -0.000142
+#6 All 4 skill + History + PA | baseline wins 3/4 | PA wins 3/4 | avg baseline +0.000462 | avg PA +0.000474 | worst -0.000146
+#7 xwOBA + PA | baseline wins 3/4 | PA wins 4/4 | avg baseline +0.000456 | avg PA +0.000468 | worst -0.000033
+#8 History + PA | baseline wins 1/4 | PA wins 4/4 | avg baseline +0.000095 | avg PA +0.000107 | worst -0.000045

@@ -1,0 +1,161 @@
+holdout_year,half,model,feature,standardized_coefficient
+2023,Top,PA only control,log_pa,-0.05832969401377702
+2023,Top,PA only control,no_prior_pa,-0.022750770764377284
+2023,Top,xwOBA + PA,xwoba,0.11583791737803212
+2023,Top,xwOBA + PA,log_pa,-0.028516783332832488
+2023,Top,xwOBA + PA,no_prior_pa,0.000915697405058353
+2023,Top,K% + PA,k_pct,-0.21608068470969088
+2023,Top,K% + PA,log_pa,-0.02099016927894481
+2023,Top,K% + PA,no_prior_pa,0.008570753760201645
+2023,Top,BB% + PA,bb_pct,0.04024688109143495
+2023,Top,BB% + PA,log_pa,-0.042818381088544244
+2023,Top,BB% + PA,no_prior_pa,-0.010726815828672475
+2023,Top,Barrel% + PA,barrel_pct,0.060032021352878134
+2023,Top,Barrel% + PA,log_pa,-0.049869501038190114
+2023,Top,Barrel% + PA,no_prior_pa,-0.01604322977175823
+2023,Top,All 4 pitcher skill + PA,xwoba,-0.1395824572991368
+2023,Top,All 4 pitcher skill + PA,k_pct,-0.29090894096259184
+2023,Top,All 4 pitcher skill + PA,bb_pct,0.03862803479003105
+2023,Top,All 4 pitcher skill + PA,barrel_pct,0.1212762672570515
+2023,Top,All 4 pitcher skill + PA,log_pa,-0.009643350983209358
+2023,Top,All 4 pitcher skill + PA,no_prior_pa,0.017766907951118672
+2023,Bottom,PA only control,log_pa,-6.420591085584013e-05
+2023,Bottom,PA only control,no_prior_pa,0.05463190530142714
+2023,Bottom,xwOBA + PA,xwoba,0.143616365597672
+2023,Bottom,xwOBA + PA,log_pa,0.0296187853262617
+2023,Bottom,xwOBA + PA,no_prior_pa,0.07842159580046099
+2023,Bottom,K% + PA,k_pct,-0.1482214299614379
+2023,Bottom,K% + PA,log_pa,0.014890523047780746
+2023,Bottom,K% + PA,no_prior_pa,0.06717160462556944
+2023,Bottom,BB% + PA,bb_pct,0.08341441836377729
+2023,Bottom,BB% + PA,log_pa,0.03053783577610572
+2023,Bottom,BB% + PA,no_prior_pa,0.07852191592903185
+2023,Bottom,Barrel% + PA,barrel_pct,0.039072592321758914
+2023,Bottom,Barrel% + PA,log_pa,0.005696738866493854
+2023,Bottom,Barrel% + PA,no_prior_pa,0.05914165386447435
+2023,Bottom,All 4 pitcher skill + PA,xwoba,0.08121044185842348
+2023,Bottom,All 4 pitcher skill + PA,k_pct,-0.09789909909624511
+2023,Bottom,All 4 pitcher skill + PA,bb_pct,0.042633055395186685
+2023,Bottom,All 4 pitcher skill + PA,barrel_pct,-0.009828924458773775
+2023,Bottom,All 4 pitcher skill + PA,log_pa,0.04059362878860813
+2023,Bottom,All 4 pitcher skill + PA,no_prior_pa,0.08731507524546987
+2024,Top,PA only control,log_pa,-0.04177866529473092
+2024,Top,PA only control,no_prior_pa,0.016955810543245457
+2024,Top,xwOBA + PA,xwoba,0.10730819723854769
+2024,Top,xwOBA + PA,log_pa,-0.021816064971002653
+2024,Top,xwOBA + PA,no_prior_pa,0.03313413765246642
+2024,Top,K% + PA,k_pct,-0.16673266410918622
+2024,Top,K% + PA,log_pa,-0.01802184881966724
+2024,Top,K% + PA,no_prior_pa,0.037003281283290806
+2024,Top,BB% + PA,bb_pct,0.04372360781565967
+2024,Top,BB% + PA,log_pa,-0.027036949439287864
+2024,Top,BB% + PA,no_prior_pa,0.028544575220943957
+2024,Top,Barrel% + PA,barrel_pct,0.05515177465991716
+2024,Top,Barrel% + PA,log_pa,-0.036931539495274335
+2024,Top,Barrel% + PA,no_prior_pa,0.02089782578319462
+2024,Top,All 4 pitcher skill + PA,xwoba,-0.07169974133516195
+2024,Top,All 4 pitcher skill + PA,k_pct,-0.20244755537799553
+2024,Top,All 4 pitcher skill + PA,bb_pct,0.04289583991377478
+2024,Top,All 4 pitcher skill + PA,barrel_pct,0.08584413496216924
+2024,Top,All 4 pitcher skill + PA,log_pa,-0.0026155282341412335
+2024,Top,All 4 pitcher skill + PA,no_prior_pa,0.04928041165369389
+2024,Bottom,PA only control,log_pa,0.030314370607824652
+2024,Bottom,PA only control,no_prior_pa,0.11512892909940035
+2024,Bottom,xwOBA + PA,xwoba,0.13845512712833494
+2024,Bottom,xwOBA + PA,log_pa,0.059296879244676776
+2024,Bottom,xwOBA + PA,no_prior_pa,0.13843138959977527
+2024,Bottom,K% + PA,k_pct,-0.13212587245654245
+2024,Bottom,K% + PA,log_pa,0.04443675811326172
+2024,Bottom,K% + PA,no_prior_pa,0.12685577158368408
+2024,Bottom,BB% + PA,bb_pct,0.04734410114744983
+2024,Bottom,BB% + PA,log_pa,0.044015841680522215
+2024,Bottom,BB% + PA,no_prior_pa,0.12585229896468553
+2024,Bottom,Barrel% + PA,barrel_pct,0.06507698171249214
+2024,Bottom,Barrel% + PA,log_pa,0.0401076164812199
+2024,Bottom,Barrel% + PA,no_prior_pa,0.12290823523910378
+2024,Bottom,All 4 pitcher skill + PA,xwoba,0.06482617536820046
+2024,Bottom,All 4 pitcher skill + PA,k_pct,-0.0949460110701105
+2024,Bottom,All 4 pitcher skill + PA,bb_pct,0.01873181424695731
+2024,Bottom,All 4 pitcher skill + PA,barrel_pct,0.026905615559769235
+2024,Bottom,All 4 pitcher skill + PA,log_pa,0.06335857766118472
+2024,Bottom,All 4 pitcher skill + PA,no_prior_pa,0.14182361427317028
+2025,Top,PA only control,log_pa,-0.07312554830403481
+2025,Top,PA only control,no_prior_pa,-0.04722013438149235
+2025,Top,xwOBA + PA,xwoba,0.10334086575746002
+2025,Top,xwOBA + PA,log_pa,-0.05583753651645418
+2025,Top,xwOBA + PA,no_prior_pa,-0.03313117025941415
+2025,Top,K% + PA,k_pct,-0.14401093000207638
+2025,Top,K% + PA,log_pa,-0.05624608896780526
+2025,Top,K% + PA,no_prior_pa,-0.032879431330544745
+2025,Top,BB% + PA,bb_pct,0.06459463793747415
+2025,Top,BB% + PA,log_pa,-0.05190137385438733
+2025,Top,BB% + PA,no_prior_pa,-0.03040523729635281
+2025,Top,Barrel% + PA,barrel_pct,0.04218695707958003
+2025,Top,Barrel% + PA,log_pa,-0.07036295620629902
+2025,Top,Barrel% + PA,no_prior_pa,-0.04496450631349157
+2025,Top,All 4 pitcher skill + PA,xwoba,-0.04203113832880827
+2025,Top,All 4 pitcher skill + PA,k_pct,-0.16115303302941758
+2025,Top,All 4 pitcher skill + PA,bb_pct,0.058167306334363546
+2025,Top,All 4 pitcher skill + PA,barrel_pct,0.0578299001643328
+2025,Top,All 4 pitcher skill + PA,log_pa,-0.03719665480611694
+2025,Top,All 4 pitcher skill + PA,no_prior_pa,-0.017756077586661687
+2025,Bottom,PA only control,log_pa,0.021690566868990728
+2025,Bottom,PA only control,no_prior_pa,0.09985514299285926
+2025,Bottom,xwOBA + PA,xwoba,0.10542813925362668
+2025,Bottom,xwOBA + PA,log_pa,0.04373805611451195
+2025,Bottom,xwOBA + PA,no_prior_pa,0.11759347125691824
+2025,Bottom,K% + PA,k_pct,-0.0991365716640604
+2025,Bottom,K% + PA,log_pa,0.03288537387438747
+2025,Bottom,K% + PA,no_prior_pa,0.10906417815047366
+2025,Bottom,BB% + PA,bb_pct,0.024442061282772192
+2025,Bottom,BB% + PA,log_pa,0.028063818965301596
+2025,Bottom,BB% + PA,no_prior_pa,0.10486277746727399
+2025,Bottom,Barrel% + PA,barrel_pct,0.052301001929368277
+2025,Bottom,Barrel% + PA,log_pa,0.028378016837159927
+2025,Bottom,Barrel% + PA,no_prior_pa,0.10520723506409616
+2025,Bottom,All 4 pitcher skill + PA,xwoba,0.05275530801440084
+2025,Bottom,All 4 pitcher skill + PA,k_pct,-0.07015606050664248
+2025,Bottom,All 4 pitcher skill + PA,bb_pct,0.0006456332329241104
+2025,Bottom,All 4 pitcher skill + PA,barrel_pct,0.024556516973774756
+2025,Bottom,All 4 pitcher skill + PA,log_pa,0.043749033946083975
+2025,Bottom,All 4 pitcher skill + PA,no_prior_pa,0.11773717671647448
+2026,Top,PA only control,log_pa,-0.08486312494175366
+2026,Top,PA only control,no_prior_pa,-0.06739835288297734
+2026,Top,xwOBA + PA,xwoba,0.1052892547822745
+2026,Top,xwOBA + PA,log_pa,-0.06753730009730342
+2026,Top,xwOBA + PA,no_prior_pa,-0.053269386403877045
+2026,Top,K% + PA,k_pct,-0.1388421758039867
+2026,Top,K% + PA,log_pa,-0.07313907899943223
+2026,Top,K% + PA,no_prior_pa,-0.057193099898253975
+2026,Top,BB% + PA,bb_pct,0.05969163239862079
+2026,Top,BB% + PA,log_pa,-0.06525202984134876
+2026,Top,BB% + PA,no_prior_pa,-0.05187292106800544
+2026,Top,Barrel% + PA,barrel_pct,0.04575645017660454
+2026,Top,Barrel% + PA,log_pa,-0.08245871177901778
+2026,Top,Barrel% + PA,no_prior_pa,-0.06540904077774078
+2026,Top,All 4 pitcher skill + PA,xwoba,-0.027450979520038023
+2026,Top,All 4 pitcher skill + PA,k_pct,-0.14822569625233928
+2026,Top,All 4 pitcher skill + PA,bb_pct,0.050832716030449705
+2026,Top,All 4 pitcher skill + PA,barrel_pct,0.052471348256634145
+2026,Top,All 4 pitcher skill + PA,log_pa,-0.05674029989870988
+2026,Top,All 4 pitcher skill + PA,no_prior_pa,-0.04416181764881012
+2026,Bottom,PA only control,log_pa,0.011381856818605153
+2026,Bottom,PA only control,no_prior_pa,0.06217171234494034
+2026,Bottom,xwOBA + PA,xwoba,0.10004465304488008
+2026,Bottom,xwOBA + PA,log_pa,0.028756811343776494
+2026,Bottom,xwOBA + PA,no_prior_pa,0.07615460295877678
+2026,Bottom,K% + PA,k_pct,-0.09711391704524491
+2026,Bottom,K% + PA,log_pa,0.019179738756324057
+2026,Bottom,K% + PA,no_prior_pa,0.06867911952571303
+2026,Bottom,BB% + PA,bb_pct,0.009253072099864909
+2026,Bottom,BB% + PA,log_pa,0.013703104643784547
+2026,Bottom,BB% + PA,no_prior_pa,0.06398373412188538
+2026,Bottom,Barrel% + PA,barrel_pct,0.051051730079095824
+2026,Bottom,Barrel% + PA,log_pa,0.01621781502070814
+2026,Bottom,Barrel% + PA,no_prior_pa,0.06605603581922075
+2026,Bottom,All 4 pitcher skill + PA,xwoba,0.05427842040239248
+2026,Bottom,All 4 pitcher skill + PA,k_pct,-0.06686633411317383
+2026,Bottom,All 4 pitcher skill + PA,bb_pct,-0.013682172328895745
+2026,Bottom,All 4 pitcher skill + PA,barrel_pct,0.021417666425472798
+2026,Bottom,All 4 pitcher skill + PA,log_pa,0.02453680256747918
+2026,Bottom,All 4 pitcher skill + PA,no_prior_pa,0.07300591593337037

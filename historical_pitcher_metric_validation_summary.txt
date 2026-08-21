@@ -1,0 +1,42 @@
+SHARPREPORT HISTORICAL PITCHER METRIC VALIDATION
+========================================================================
+
+Completed seasons checked: 2022, 2023, 2024, 2025
+Minimum reconstructed PA: 100
+
+xwOBA validation
+Comparable pitcher-seasons: 2091
+Mean absolute difference: 0.0004
+Median absolute difference: 0.0003
+90th percentile difference: 0.0006
+Within tolerance: 2091 of 2091 (100.00%)
+Tolerance: 0.02
+------------------------------------------------------------------------
+K% validation
+Comparable pitcher-seasons: 2091
+Mean absolute difference: 0.0409
+Median absolute difference: 0.0000
+90th percentile difference: 0.1300
+Within tolerance: 2091 of 2091 (100.00%)
+Tolerance: 1.5
+------------------------------------------------------------------------
+BB% validation
+Comparable pitcher-seasons: 2091
+Mean absolute difference: 0.0266
+Median absolute difference: 0.0000
+90th percentile difference: 0.0600
+Within tolerance: 2091 of 2091 (100.00%)
+Tolerance: 1.5
+------------------------------------------------------------------------
+Barrel% validation
+Comparable pitcher-seasons: 2091
+Mean absolute difference: 0.0411
+Median absolute difference: 0.0300
+90th percentile difference: 0.0900
+Within tolerance: 2091 of 2091 (100.00%)
+Tolerance: 1.5
+------------------------------------------------------------------------
+
+INTERPRETATION:
+Small differences are expected because detailed Statcast plate-appearance reconstruction and leaderboard definitions can differ slightly in denominator handling.
+If large systematic differences appear, do not train the prediction model until the reconstruction is corrected.
