@@ -37,6 +37,10 @@ from nrfi_result_grader import (
     grade_recent_results,
 )
 
+from nrfi_model_governance import (
+    update_model_governance,
+)
+
 from park_factors import (
     get_park_factors,
 )
@@ -2921,6 +2925,36 @@ def main():
         f"{grading.get('graded_games', 0)} "
         "matched FINAL games in the recent window."
     )
+
+    try:
+
+        governance = update_model_governance(
+            token=
+                config[
+                    "github_data_token"
+                ],
+
+            repo=
+                config[
+                    "github_data_repo"
+                ],
+        )
+
+        print(
+            "Model governance: "
+            f"{governance.get('eligible_forward_games', 0)}/"
+            f"{governance.get('minimum_games_for_challenger_test', 300)} "
+            "eligible forward games; "
+            f"status={governance.get('recommendation', 'COLLECTING')}."
+        )
+
+    except Exception as error:
+
+        print(
+            "Model governance update warning: "
+            f"{error}"
+        )
+
 
     print(
         "Scheduled collection run complete."

@@ -1262,6 +1262,47 @@ def _build_game_grade(
         })
 
 
+    # -------------------------------------------------
+    # Preserve the exact production-model inputs from the
+    # selected FINAL pregame snapshot. These fields make safe,
+    # chronological challenger retraining possible later.
+    # -------------------------------------------------
+
+    production_input_keys = [
+        "Away Pitcher xwOBA",
+        "Away Pitcher K%",
+        "Away Pitcher PA",
+        "Home Pitcher xwOBA",
+        "Home Pitcher K%",
+        "Home Pitcher PA",
+        "Away Top4 xwOBA",
+        "Away Top4 K%",
+        "Away Top4 BB%",
+        "Away Top4 Barrel%",
+        "Away Top4 Combined PA",
+        "Away Top4 Min PA",
+        "Away Top4 Complete Core",
+        "Home Top4 xwOBA",
+        "Home Top4 K%",
+        "Home Top4 BB%",
+        "Home Top4 Barrel%",
+        "Home Top4 Combined PA",
+        "Home Top4 Min PA",
+        "Home Top4 Complete Core",
+        "Model Run Factor",
+        "Input Completeness",
+        "Top 1st Score Probability",
+        "Bottom 1st Score Probability",
+    ]
+
+    for key in production_input_keys:
+        base[
+            key
+        ] = row.get(
+            key
+        )
+
+
     # Preserve research-only rolling pitcher first-inning
     # fields from the exact selected FINAL pregame snapshot.
     # These values are not used to change Model v1.

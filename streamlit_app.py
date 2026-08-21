@@ -62,6 +62,11 @@ from nrfi_clv_dashboard import (
     render_clv_dashboard,
 )
 
+from nrfi_model_governance import (
+    update_model_governance,
+    render_model_governance_dashboard,
+)
+
 
 
 
@@ -3610,6 +3615,35 @@ if st.button(
 
 
             # ---------------------------------------------
+            # MODEL GOVERNANCE / SAFE RETRAINING STATUS
+            # ---------------------------------------------
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    update_model_governance(
+                        token=
+                            github_data_token,
+
+                        repo=
+                            github_data_repo,
+                    )
+
+                except Exception as error:
+
+                    st.warning(
+                        "The scanner completed, but model governance "
+                        "could not be refreshed: "
+                        f"{error}"
+                    )
+
+
+            # ---------------------------------------------
             # LIVE EDGE PERFORMANCE DASHBOARD
             # ---------------------------------------------
 
@@ -3663,6 +3697,35 @@ if st.button(
                     st.warning(
                         "The live scanner is working, but the "
                         "near-close / CLV dashboard could not load: "
+                        f"{error}"
+                    )
+
+
+            # ---------------------------------------------
+            # MODEL GOVERNANCE DASHBOARD
+            # ---------------------------------------------
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    render_model_governance_dashboard(
+                        token=
+                            github_data_token,
+
+                        repo=
+                            github_data_repo,
+                    )
+
+                except Exception as error:
+
+                    st.warning(
+                        "The live scanner is working, but the model "
+                        "governance dashboard could not load: "
                         f"{error}"
                     )
 
@@ -3857,10 +3920,29 @@ if st.button(
 
             if final_edge_display:
 
+                final_edge_df = pd.DataFrame(
+                    final_edge_display
+                )
+
+                # Yellow = actionable FINAL top plays.
+                # Provisional/watch-list games remain unhighlighted.
+                final_edge_styled = (
+                    final_edge_df.style
+                    .set_properties(
+                        **{
+                            "background-color": "#FFF3A6",
+                            "color": "#111111",
+                            "font-weight": "700",
+                        }
+                    )
+                )
+
+                st.caption(
+                    "🟨 Yellow rows = current FINAL top plays."
+                )
+
                 st.dataframe(
-                    pd.DataFrame(
-                        final_edge_display
-                    ),
+                    final_edge_styled,
                     use_container_width=True,
                     hide_index=True,
                 )
