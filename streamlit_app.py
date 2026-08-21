@@ -26,6 +26,11 @@ from model_inputs import (
     build_half_inning_model_table,
 )
 
+from risk_engine import (
+    build_half_inning_scores,
+    build_game_scores,
+)
+
 
 
 
@@ -1902,6 +1907,162 @@ if st.button(
                 use_container_width=True,
                 hide_index=True,
             )
+
+
+            # ---------------------------------------------
+            # STAGE 7B — GAME MODEL SCORES
+            # ---------------------------------------------
+
+            half_score_rows = (
+                build_half_inning_scores(
+                    combined_model_rows
+                )
+            )
+
+
+            game_score_rows = (
+                build_game_scores(
+                    half_score_rows
+                )
+            )
+
+
+            # ---------------------------------------------
+            # TOP MODEL SIGNALS
+            # ---------------------------------------------
+
+            st.subheader(
+                "Top Model Signals"
+            )
+
+            st.caption(
+                "Top four games ranked by current "
+                "model strength and data completeness. "
+                "These scores are NOT calibrated "
+                "win probabilities yet."
+            )
+
+
+            top_four_rows = (
+                game_score_rows[:4]
+            )
+
+
+            top_four_display = []
+
+            for row in top_four_rows:
+
+                top_four_display.append({
+
+                    "Rank":
+                        row["Rank"],
+
+                    "Game":
+                        row["Game"],
+
+                    "Model Side":
+                        row["Model Side"],
+
+                    "Model Score":
+                        row[
+                            "Game Risk Index"
+                        ],
+
+                    "Data Quality":
+                        f"{row['Data Quality']:.0f}%",
+
+                    "Status":
+                        row["Status"],
+                })
+
+
+            st.dataframe(
+                pd.DataFrame(
+                    top_four_display
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+
+            # ---------------------------------------------
+            # ALL GAMES RANKED
+            # ---------------------------------------------
+
+            st.subheader(
+                "All Games — Model Ranking"
+            )
+
+            st.caption(
+                "Every game receives a provisional "
+                "score. Missing lineups or pitcher "
+                "information are temporarily replaced "
+                "with neutral league-average inputs."
+            )
+
+
+            all_game_display = []
+
+            for row in game_score_rows:
+
+                all_game_display.append({
+
+                    "Rank":
+                        row["Rank"],
+
+                    "Game":
+                        row["Game"],
+
+                    "Model Side":
+                        row["Model Side"],
+
+                    "Model Score":
+                        row[
+                            "Game Risk Index"
+                        ],
+
+                    "Top 1st Risk":
+                        row[
+                            "Top 1st Risk"
+                        ],
+
+                    "Bottom 1st Risk":
+                        row[
+                            "Bottom 1st Risk"
+                        ],
+
+                    "Data Quality":
+                        f"{row['Data Quality']:.0f}%",
+
+                    "Status":
+                        row["Status"],
+                })
+
+
+            st.dataframe(
+                pd.DataFrame(
+                    all_game_display
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+
+            # ---------------------------------------------
+            # HALF-INNING DETAIL
+            # ---------------------------------------------
+
+            with st.expander(
+                "View Half-Inning Risk Detail"
+            ):
+
+                st.dataframe(
+                    pd.DataFrame(
+                        half_score_rows
+                    ),
+                    use_container_width=True,
+                    hide_index=True,
+                )
 
 
     except Exception as error:
