@@ -45,6 +45,14 @@ from nrfi_data_logger import (
     save_slate_snapshot,
 )
 
+from nrfi_result_grader import (
+    grade_recent_results,
+)
+
+from nrfi_edge_dashboard import (
+    render_edge_performance_dashboard,
+)
+
 
 
 
@@ -3471,6 +3479,87 @@ if st.button(
                     "GITHUB_DATA_TOKEN or GITHUB_DATA_REPO "
                     "was not found in Streamlit secrets."
                 )
+
+
+            # ---------------------------------------------
+            # AUTOMATIC COMPLETED-GAME GRADING
+            # ---------------------------------------------
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    with st.spinner(
+                        "Checking recent completed games "
+                        "and grading saved FINAL pregame edges..."
+                    ):
+
+                        grading_summary = (
+                            grade_recent_results(
+                                token=
+                                    github_data_token,
+
+                                repo=
+                                    github_data_repo,
+
+                                reference_date=
+                                    TODAY,
+
+                                days_back=
+                                    7,
+                            )
+                        )
+
+
+                    st.caption(
+                        "Automatic result grading: "
+                        f"{grading_summary['graded_games']} "
+                        "completed games currently have a "
+                        "matched FINAL pregame model + market snapshot; "
+                        f"{grading_summary['result_files_updated']} "
+                        "daily result files were updated on this run."
+                    )
+
+                except Exception as error:
+
+                    st.warning(
+                        "Pregame logging completed, but automatic "
+                        "result grading could not finish: "
+                        f"{error}"
+                    )
+
+
+            # ---------------------------------------------
+            # LIVE EDGE PERFORMANCE DASHBOARD
+            # ---------------------------------------------
+
+            if (
+                github_data_token
+                and
+                github_data_repo
+            ):
+
+                try:
+
+                    render_edge_performance_dashboard(
+                        token=
+                            github_data_token,
+
+                        repo=
+                            github_data_repo,
+                    )
+
+                except Exception as error:
+
+                    st.warning(
+                        "The live scanner is working, but the "
+                        "edge performance dashboard could not load: "
+                        f"{error}"
+                    )
 
 
             # ---------------------------------------------
