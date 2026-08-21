@@ -4,7 +4,7 @@ import math
 import os
 import tomllib
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import lru_cache
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -39,6 +39,12 @@ from nrfi_result_grader import (
 
 from park_factors import (
     get_park_factors,
+)
+
+from pitcher_first_inning_windows import (
+    get_pitcher_first_inning_windows,
+    empty_pitcher_first_inning_windows,
+    flatten_pitcher_first_inning_windows,
 )
 
 
@@ -2098,6 +2104,110 @@ def main():
                 year=
                     year,
             )
+        )
+
+        # -------------------------------------------------
+        # Rolling pitcher first-inning history is research
+        # context only. It is logged for future validation
+        # and does NOT alter Model v1 probabilities.
+        # -------------------------------------------------
+
+        history_end_date = (
+            today
+            - timedelta(
+                days=1
+            )
+        )
+
+        pitcher_history_lookup = {}
+
+        unique_pitcher_ids = sorted({
+            int(pitcher_id)
+            for game in candidates
+            for pitcher_id in [
+                game.get(
+                    "Away SP ID"
+                ),
+                game.get(
+                    "Home SP ID"
+                ),
+            ]
+            if pitcher_id
+        })
+
+        for pitcher_id in unique_pitcher_ids:
+
+            try:
+
+                pitcher_history_lookup[
+                    pitcher_id
+                ] = get_pitcher_first_inning_windows(
+                    pitcher_id,
+                    year,
+                    history_end_date.isoformat(),
+                )
+
+            except Exception as error:
+
+                pitcher_history_lookup[
+                    pitcher_id
+                ] = empty_pitcher_first_inning_windows(
+                    pitcher_id=
+                        pitcher_id,
+                    season=
+                        year,
+                    end_date=
+                        history_end_date.isoformat(),
+                    error=
+                        error,
+                )
+
+
+        for row in probability_rows:
+
+            away_pitcher_id = row.get(
+                "Away SP ID"
+            )
+
+            home_pitcher_id = row.get(
+                "Home SP ID"
+            )
+
+            away_history = (
+                pitcher_history_lookup.get(
+                    int(away_pitcher_id)
+                )
+                if away_pitcher_id
+                else None
+            )
+
+            home_history = (
+                pitcher_history_lookup.get(
+                    int(home_pitcher_id)
+                )
+                if home_pitcher_id
+                else None
+            )
+
+            row.update(
+                flatten_pitcher_first_inning_windows(
+                    "Away Pitcher",
+                    away_history,
+                )
+            )
+
+            row.update(
+                flatten_pitcher_first_inning_windows(
+                    "Home Pitcher",
+                    home_history,
+                )
+            )
+
+
+        print(
+            "Rolling first-inning history logged for "
+            f"{len(unique_pitcher_ids)} pitcher(s) "
+            "(Season/L30/L20/L10; research only)."
         )
 
         print(

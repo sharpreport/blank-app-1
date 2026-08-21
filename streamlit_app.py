@@ -6,9 +6,10 @@ import io
 from urllib.request import urlopen, Request
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
-from first_inning_history import (
-    get_season_first_innings,
-    get_pitcher_first_inning_history,
+from pitcher_first_inning_windows import (
+    get_pitcher_first_inning_windows,
+    empty_pitcher_first_inning_windows,
+    flatten_pitcher_first_inning_windows,
 )
 
 from game_weather import (
@@ -2895,15 +2896,12 @@ if st.button(
                 )
 
 
-                season_first_innings = (
-                    get_season_first_innings(
-                        YEAR,
-                        history_end_date.isoformat()
-                    )
-                )
-
-
                 first_inning_rows = []
+
+                # Context/research only. These rolling first-inning
+                # windows are logged for future testing but are NOT
+                # included in SharpReport Model v1 probabilities.
+                pitcher_first_inning_windows = {}
 
 
                 for game in games:
@@ -2966,14 +2964,39 @@ if st.button(
                             continue
 
 
-                        history = (
-                            get_pitcher_first_inning_history(
-                                pitcher_id,
-                                YEAR,
-                                season_first_innings,
-                            )
-                        )
+                        try:
 
+                            rolling_history = (
+                                get_pitcher_first_inning_windows(
+                                    pitcher_id,
+                                    YEAR,
+                                    history_end_date.isoformat(),
+                                )
+                            )
+
+                        except Exception as error:
+
+                            rolling_history = (
+                                empty_pitcher_first_inning_windows(
+                                    pitcher_id=
+                                        pitcher_id,
+                                    season=
+                                        YEAR,
+                                    end_date=
+                                        history_end_date.isoformat(),
+                                    error=
+                                        error,
+                                )
+                            )
+
+
+                        pitcher_first_inning_windows[
+                            int(pitcher_id)
+                        ] = rolling_history
+
+                        history = rolling_history[
+                            "season_window"
+                        ]
 
                         starts = history[
                             "starts"
@@ -2983,20 +3006,20 @@ if st.button(
                         if starts:
 
                             scoreless_rate = (
-                                f"{history['scoreless_percent']:.1f}%"
+                                f"{history['scoreless_opponent_first_pct']:.1f}%"
                             )
 
                             runs_per_start = (
-                                f"{history['runs_per_start']:.2f}"
+                                f"{history['first_inning_runs_allowed_per_start']:.2f}"
                             )
 
                             nrfi_record = (
-                                f"{history['nrfi']}-"
-                                f"{history['yrfi']}"
+                                f"{history['game_nrfi']}-"
+                                f"{history['game_yrfi']}"
                             )
 
                             nrfi_rate = (
-                                f"{history['nrfi_percent']:.1f}%"
+                                f"{history['game_nrfi_pct']:.1f}%"
                             )
 
                         else:
@@ -3023,7 +3046,7 @@ if st.button(
 
                             "Scoreless 1st":
                                 history[
-                                    "scoreless"
+                                    "scoreless_opponent_first"
                                 ],
 
                             "Scoreless 1st %":
@@ -3357,6 +3380,51 @@ if st.button(
                     "ODDS_API_KEY was not found in "
                     "Streamlit secrets. Model probabilities "
                     "are available, but market edge is disabled."
+                )
+
+
+            # ---------------------------------------------
+            # ROLLING PITCHER FIRST-INNING RESEARCH CONTEXT
+            # ---------------------------------------------
+
+            for row in market_rows:
+
+                away_pitcher_id = row.get(
+                    "Away SP ID"
+                )
+
+                home_pitcher_id = row.get(
+                    "Home SP ID"
+                )
+
+                away_history = (
+                    pitcher_first_inning_windows.get(
+                        int(away_pitcher_id)
+                    )
+                    if away_pitcher_id
+                    else None
+                )
+
+                home_history = (
+                    pitcher_first_inning_windows.get(
+                        int(home_pitcher_id)
+                    )
+                    if home_pitcher_id
+                    else None
+                )
+
+                row.update(
+                    flatten_pitcher_first_inning_windows(
+                        "Away Pitcher",
+                        away_history,
+                    )
+                )
+
+                row.update(
+                    flatten_pitcher_first_inning_windows(
+                        "Home Pitcher",
+                        home_history,
+                    )
                 )
 
 
