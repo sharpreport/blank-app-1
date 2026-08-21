@@ -1,17 +1,14 @@
 import streamlit as st
 import pandas as pd
 import json
+import io
 
 from urllib.request import urlopen, Request
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from pybaseball import (
-    statcast_pitcher_expected_stats,
-    statcast_pitcher_exitvelo_barrels,
-    statcast_batter_expected_stats,
-    statcast_batter_exitvelo_barrels,
-)
+
+
 
 
 # =========================================================
@@ -36,7 +33,7 @@ YEAR = TODAY.year
 
 
 # =========================================================
-# BASIC JSON REQUEST
+# BASIC JSON / CSV REQUESTS
 # =========================================================
 
 def get_json(url):
@@ -52,6 +49,33 @@ def get_json(url):
     ) as response:
 
         return json.load(response)
+
+
+def get_csv(url):
+
+    request = Request(
+        url,
+        headers={"User-Agent": "Mozilla/5.0"}
+    )
+
+    with urlopen(
+        request,
+        timeout=30
+    ) as response:
+
+        text = response.read().decode(
+            "utf-8"
+        )
+
+    data = pd.read_csv(
+        io.StringIO(text)
+    )
+
+    data.columns = (
+        data.columns.str.strip()
+    )
+
+    return data
 
 
 # =========================================================
@@ -147,23 +171,39 @@ def format_lineup(lineup):
 )
 def get_savant_pitcher_data(year):
 
-    expected = (
-        statcast_pitcher_expected_stats(
-            year,
-            minPA=1
-        )
+    expected_url = (
+        "https://baseballsavant.mlb.com/"
+        "leaderboard/expected_statistics"
+        "?type=pitcher"
+        f"&year={year}"
+        "&position="
+        "&team="
+        "&filterType=pa"
+        "&min=1"
+        "&csv=true"
     )
 
-    barrels = (
-        statcast_pitcher_exitvelo_barrels(
-            year,
-            minBBE=1
-        )
+    barrel_url = (
+        "https://baseballsavant.mlb.com/"
+        "leaderboard/statcast"
+        "?type=pitcher"
+        f"&year={year}"
+        "&position="
+        "&team="
+        "&min=1"
+        "&csv=true"
+    )
+
+    expected = get_csv(
+        expected_url
+    )
+
+    barrels = get_csv(
+        barrel_url
     )
 
     xwoba = {}
     barrel_percent = {}
-
 
     for _, row in expected.iterrows():
 
@@ -221,23 +261,39 @@ def get_savant_pitcher_data(year):
 )
 def get_savant_hitter_data(year):
 
-    expected = (
-        statcast_batter_expected_stats(
-            year,
-            minPA=1
-        )
+    expected_url = (
+        "https://baseballsavant.mlb.com/"
+        "leaderboard/expected_statistics"
+        "?type=batter"
+        f"&year={year}"
+        "&position="
+        "&team="
+        "&filterType=pa"
+        "&min=1"
+        "&csv=true"
     )
 
-    barrels = (
-        statcast_batter_exitvelo_barrels(
-            year,
-            minBBE=1
-        )
+    barrel_url = (
+        "https://baseballsavant.mlb.com/"
+        "leaderboard/statcast"
+        "?type=batter"
+        f"&year={year}"
+        "&position="
+        "&team="
+        "&min=1"
+        "&csv=true"
+    )
+
+    expected = get_csv(
+        expected_url
+    )
+
+    barrels = get_csv(
+        barrel_url
     )
 
     xwoba = {}
     barrel_percent = {}
-
 
     for _, row in expected.iterrows():
 
