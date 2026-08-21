@@ -3644,332 +3644,111 @@ if st.button(
 
 
             # ---------------------------------------------
-            # LIVE EDGE PERFORMANCE DASHBOARD
+            # DAILY DECISION BOARD
             # ---------------------------------------------
 
-            if (
-                github_data_token
-                and
-                github_data_repo
-            ):
+            st.markdown(
+                """
+                <style>
+                .sr-decision-title {
+                    font-size: 1.75rem;
+                    font-weight: 800;
+                    margin-top: 0.35rem;
+                    margin-bottom: 0.15rem;
+                }
 
-                try:
+                .sr-decision-subtitle {
+                    color: #6b7280;
+                    margin-bottom: 1rem;
+                }
 
-                    render_edge_performance_dashboard(
-                        token=
-                            github_data_token,
+                .sr-summary-card {
+                    border: 1px solid rgba(128,128,128,0.25);
+                    border-radius: 12px;
+                    padding: 12px 14px;
+                    min-height: 82px;
+                    background: rgba(255,255,255,0.04);
+                }
 
-                        repo=
-                            github_data_repo,
-                    )
+                .sr-summary-label {
+                    font-size: 0.76rem;
+                    color: #7a7f87;
+                    text-transform: uppercase;
+                    letter-spacing: 0.04em;
+                    margin-bottom: 4px;
+                }
 
-                except Exception as error:
+                .sr-summary-value {
+                    font-size: 1.45rem;
+                    font-weight: 800;
+                    line-height: 1.1;
+                }
 
-                    st.warning(
-                        "The live scanner is working, but the "
-                        "edge performance dashboard could not load: "
-                        f"{error}"
-                    )
+                .sr-play-card {
+                    background: #FFF3A6;
+                    color: #111111;
+                    border: 2px solid #E3BD00;
+                    border-radius: 14px;
+                    padding: 14px 16px;
+                    margin: 8px 0 12px 0;
+                    box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+                }
 
+                .sr-play-rank {
+                    font-size: 0.76rem;
+                    font-weight: 800;
+                    letter-spacing: 0.05em;
+                    text-transform: uppercase;
+                }
 
-            # ---------------------------------------------
-            # NEAR-CLOSE / CLV TRACKING
-            # ---------------------------------------------
+                .sr-play-game {
+                    font-size: 1.08rem;
+                    font-weight: 800;
+                    margin-top: 2px;
+                    margin-bottom: 7px;
+                }
 
-            if (
-                github_data_token
-                and
-                github_data_repo
-            ):
+                .sr-play-line {
+                    font-size: 0.92rem;
+                    line-height: 1.45;
+                }
 
-                try:
-
-                    render_clv_dashboard(
-                        token=
-                            github_data_token,
-
-                        repo=
-                            github_data_repo,
-                    )
-
-                except Exception as error:
-
-                    st.warning(
-                        "The live scanner is working, but the "
-                        "near-close / CLV dashboard could not load: "
-                        f"{error}"
-                    )
-
-
-            # ---------------------------------------------
-            # MODEL GOVERNANCE DASHBOARD
-            # ---------------------------------------------
-
-            if (
-                github_data_token
-                and
-                github_data_repo
-            ):
-
-                try:
-
-                    render_model_governance_dashboard(
-                        token=
-                            github_data_token,
-
-                        repo=
-                            github_data_repo,
-                    )
-
-                except Exception as error:
-
-                    st.warning(
-                        "The live scanner is working, but the model "
-                        "governance dashboard could not load: "
-                        f"{error}"
-                    )
-
-
-            # ---------------------------------------------
-            # ROLLING PITCHER HISTORY CHALLENGER MONITOR
-            # ---------------------------------------------
-
-            if (
-                github_data_token
-                and
-                github_data_repo
-            ):
-
-                try:
-
-                    render_pitcher_history_research(
-                        token=
-                            github_data_token,
-
-                        repo=
-                            github_data_repo,
-                    )
-
-                except Exception as error:
-
-                    st.warning(
-                        "The live scanner is working, but the rolling "
-                        "pitcher-history research monitor could not load: "
-                        f"{error}"
-                    )
-
-
-            # ---------------------------------------------
-            # TOP MODEL PROBABILITIES
-            # ---------------------------------------------
-
-            st.subheader(
-                "Top Model Probabilities"
-            )
-
-            st.caption(
-                "Top four games ranked only by the trained model's "
-                "stronger NRFI/YRFI side probability. "
-                "This ranking ignores sportsbook price."
+                .sr-tier {
+                    display: inline-block;
+                    border: 1px solid rgba(0,0,0,0.30);
+                    border-radius: 999px;
+                    padding: 2px 8px;
+                    margin-left: 6px;
+                    font-size: 0.72rem;
+                    font-weight: 800;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
             )
 
 
-            top_model_display = []
-
-            for row in market_rows[:4]:
-
-                top_model_display.append({
-
-                    "Rank":
-                        row["Rank"],
-
-                    "Game":
-                        row["Game"],
-
-                    "Model Side":
-                        row["Model Side"],
-
-                    "Model Probability":
-                        format_probability(
-                            row["Model Probability"]
-                        ),
-
-                    "NRFI":
-                        format_probability(
-                            row["NRFI Probability"]
-                        ),
-
-                    "YRFI":
-                        format_probability(
-                            row["YRFI Probability"]
-                        ),
-
-                    "Input Completeness":
-                        f"{row['Input Completeness']:.0f}%",
-
-                    "Status":
-                        row["Status"],
-                })
-
-
-            st.dataframe(
-                pd.DataFrame(
-                    top_model_display
-                ),
-                use_container_width=True,
-                hide_index=True,
-            )
-
-
-            # ---------------------------------------------
-            # BEST FINAL EDGES
-            # ---------------------------------------------
-
-            st.subheader(
-                "Best Final Edges"
-            )
-
-            st.caption(
-                "Only games with FINAL model status appear here. "
-                "Price Edge compares the model probability directly "
-                "with the break-even probability of the best currently "
-                "available price. Market Edge compares the model with "
-                "the consensus no-vig market."
-            )
-
-
-            final_edge_rows = [
+            final_games = [
                 row
                 for row in market_rows
+                if row["Status"] == "FINAL"
+            ]
+
+            positive_final_rows = [
+                row
+                for row in final_games
                 if (
-                    row["Status"] == "FINAL"
-                    and
                     row["Price Edge"] is not None
                     and
                     row["Price Edge"] > 0
                 )
             ]
 
-            final_edge_rows.sort(
+            positive_final_rows.sort(
                 key=lambda row:
                     row["Price Edge"],
-                reverse=True
+                reverse=True,
             )
-
-
-            final_edge_display = []
-
-            for rank, row in enumerate(
-                final_edge_rows[:4],
-                start=1
-            ):
-
-                final_edge_display.append({
-
-                    "Edge Rank":
-                        rank,
-
-                    "Game":
-                        row["Game"],
-
-                    "Model Side":
-                        row["Model Side"],
-
-                    "Model":
-                        format_probability(
-                            row["Model Probability"]
-                        ),
-
-                    "Market No-Vig":
-                        format_probability(
-                            row["Market No-Vig"]
-                        ),
-
-                    "Market Edge":
-                        format_edge(
-                            row["Edge"]
-                        ),
-
-                    "Best Price":
-                        format_american_odds(
-                            row["Best Price"]
-                        ),
-
-                    "Break-Even":
-                        (
-                            format_probability(
-                                row["Market Raw Implied"]
-                            )
-                            if row["Market Raw Implied"] is not None
-                            else "—"
-                        ),
-
-                    "Price Edge":
-                        format_edge(
-                            row["Price Edge"]
-                        ),
-
-                    "Sportsbook":
-                        row["Best Book"]
-                        or "—",
-
-                    "Books":
-                        row["Books"],
-                })
-
-
-            if final_edge_display:
-
-                final_edge_df = pd.DataFrame(
-                    final_edge_display
-                )
-
-                # Yellow = actionable FINAL top plays.
-                # Provisional/watch-list games remain unhighlighted.
-                final_edge_styled = (
-                    final_edge_df.style
-                    .set_properties(
-                        **{
-                            "background-color": "#FFF3A6",
-                            "color": "#111111",
-                            "font-weight": "700",
-                        }
-                    )
-                )
-
-                st.caption(
-                    "🟨 Yellow rows = current FINAL top plays."
-                )
-
-                st.dataframe(
-                    final_edge_styled,
-                    use_container_width=True,
-                    hide_index=True,
-                )
-
-            else:
-
-                st.info(
-                    "No positive FINAL price edges are available yet. "
-                    "Re-run after confirmed lineups and starters are posted."
-                )
-
-
-            # ---------------------------------------------
-            # PROVISIONAL MARKET WATCH
-            # ---------------------------------------------
-
-            st.subheader(
-                "Provisional Market Watch"
-            )
-
-            st.caption(
-                "These games have live market prices but are still "
-                "waiting on confirmed Top-4 lineups. Their probabilities "
-                "and edges can change when the real lineup inputs arrive. "
-                "They are not treated as FINAL model edges."
-            )
-
 
             provisional_rows = [
                 row
@@ -3987,80 +3766,245 @@ if st.button(
             provisional_rows.sort(
                 key=lambda row:
                     row["Price Edge"],
-                reverse=True
+                reverse=True,
+            )
+
+            low_data_rows = [
+                row
+                for row in market_rows
+                if str(
+                    row.get(
+                        "Status",
+                        ""
+                    )
+                ).startswith(
+                    "LOW DATA"
+                )
+            ]
+
+            best_final_edge = (
+                positive_final_rows[
+                    0
+                ][
+                    "Price Edge"
+                ]
+                if positive_final_rows
+                else None
             )
 
 
-            provisional_display = []
+            st.markdown(
+                '<div class="sr-decision-title">'
+                'SharpReport Daily Decision Board'
+                '</div>',
+                unsafe_allow_html=True,
+            )
 
-            for rank, row in enumerate(
-                provisional_rows[:6],
-                start=1
-            ):
+            st.markdown(
+                '<div class="sr-decision-subtitle">'
+                'FINAL opportunities first. Provisional and research '
+                'information is separated below so the actionable slate '
+                'is easy to scan.'
+                '</div>',
+                unsafe_allow_html=True,
+            )
 
-                provisional_display.append({
 
-                    "Watch Rank":
-                        rank,
+            summary_columns = st.columns(
+                4
+            )
 
-                    "Game":
-                        row["Game"],
+            with summary_columns[0]:
 
-                    "Model Side":
-                        row["Model Side"],
+                st.markdown(
+                    f"""
+                    <div class="sr-summary-card">
+                        <div class="sr-summary-label">FINAL Games</div>
+                        <div class="sr-summary-value">{len(final_games)}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
-                    "Model":
-                        format_probability(
-                            row["Model Probability"]
-                        ),
+            with summary_columns[1]:
 
-                    "Market No-Vig":
-                        format_probability(
-                            row["Market No-Vig"]
-                        ),
+                st.markdown(
+                    f"""
+                    <div class="sr-summary-card">
+                        <div class="sr-summary-label">Positive FINAL Edges</div>
+                        <div class="sr-summary-value">{len(positive_final_rows)}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
-                    "Market Edge":
-                        format_edge(
-                            row["Edge"]
-                        ),
+            with summary_columns[2]:
 
-                    "Best Price":
-                        format_american_odds(
-                            row["Best Price"]
-                        ),
+                best_edge_text = (
+                    f"{best_final_edge:+.1f}%"
+                    if best_final_edge is not None
+                    else "—"
+                )
 
-                    "Break-Even":
-                        (
+                st.markdown(
+                    f"""
+                    <div class="sr-summary-card">
+                        <div class="sr-summary-label">Best FINAL Price Edge</div>
+                        <div class="sr-summary-value">{best_edge_text}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            with summary_columns[3]:
+
+                st.markdown(
+                    f"""
+                    <div class="sr-summary-card">
+                        <div class="sr-summary-label">Provisional Positive</div>
+                        <div class="sr-summary-value">{len(provisional_rows)}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+
+            # ---------------------------------------------
+            # ACTIONABLE FINAL TOP PLAYS
+            # ---------------------------------------------
+
+            st.subheader(
+                "🟨 FINAL Top Plays"
+            )
+
+            st.caption(
+                "Only FINAL games with a positive executable Price Edge "
+                "appear here. Yellow = current actionable model/market "
+                "opportunity. Edge tiers are working labels until the "
+                "forward performance sample validates an optimal cutoff."
+            )
+
+
+            if positive_final_rows:
+
+                for rank, row in enumerate(
+                    positive_final_rows[:4],
+                    start=1,
+                ):
+
+                    price_edge = row[
+                        "Price Edge"
+                    ]
+
+                    if price_edge >= 5.0:
+                        tier = "TOP TIER"
+                    elif price_edge >= 3.0:
+                        tier = "STRONG"
+                    elif price_edge >= 2.0:
+                        tier = "QUALIFIED"
+                    else:
+                        tier = "THIN EDGE"
+
+                    st.markdown(
+                        f"""
+                        <div class="sr-play-card">
+                            <div class="sr-play-rank">
+                                FINAL PLAY #{rank}
+                                <span class="sr-tier">{tier}</span>
+                            </div>
+                            <div class="sr-play-game">
+                                {row["Game"]} — {row["Model Side"]}
+                            </div>
+                            <div class="sr-play-line">
+                                <b>Model:</b> {format_probability(row["Model Probability"])}
+                                &nbsp;&nbsp;|&nbsp;&nbsp;
+                                <b>Best Price:</b> {format_american_odds(row["Best Price"])}
+                                at {row["Best Book"] or "—"}
+                            </div>
+                            <div class="sr-play-line">
+                                <b>Break-Even:</b> {
+                                    format_probability(row["Market Raw Implied"])
+                                    if row["Market Raw Implied"] is not None
+                                    else "—"
+                                }
+                                &nbsp;&nbsp;|&nbsp;&nbsp;
+                                <b>Price Edge:</b> {format_edge(row["Price Edge"])}
+                                &nbsp;&nbsp;|&nbsp;&nbsp;
+                                <b>Market Edge:</b> {format_edge(row["Edge"])}
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                final_edge_display = []
+
+                for rank, row in enumerate(
+                    positive_final_rows[:4],
+                    start=1,
+                ):
+
+                    final_edge_display.append({
+                        "Rank":
+                            rank,
+
+                        "Game":
+                            row["Game"],
+
+                        "Side":
+                            row["Model Side"],
+
+                        "Model":
                             format_probability(
-                                row["Market Raw Implied"]
-                            )
-                            if row["Market Raw Implied"] is not None
-                            else "—"
-                        ),
+                                row["Model Probability"]
+                            ),
 
-                    "Price Edge":
-                        format_edge(
-                            row["Price Edge"]
-                        ),
+                        "Best Price":
+                            format_american_odds(
+                                row["Best Price"]
+                            ),
 
-                    "Sportsbook":
-                        row["Best Book"]
-                        or "—",
+                        "Break-Even":
+                            (
+                                format_probability(
+                                    row["Market Raw Implied"]
+                                )
+                                if row["Market Raw Implied"] is not None
+                                else "—"
+                            ),
 
-                    "Input Completeness":
-                        f"{row['Input Completeness']:.0f}%",
+                        "Price Edge":
+                            format_edge(
+                                row["Price Edge"]
+                            ),
 
-                    "Status":
-                        row["Status"],
-                })
+                        "Market Edge":
+                            format_edge(
+                                row["Edge"]
+                            ),
 
+                        "Sportsbook":
+                            row["Best Book"]
+                            or "—",
+                    })
 
-            if provisional_display:
+                final_edge_df = pd.DataFrame(
+                    final_edge_display
+                )
+
+                final_edge_styled = (
+                    final_edge_df.style
+                    .set_properties(
+                        **{
+                            "background-color": "#FFF3A6",
+                            "color": "#111111",
+                            "font-weight": "700",
+                        }
+                    )
+                )
 
                 st.dataframe(
-                    pd.DataFrame(
-                        provisional_display
-                    ),
+                    final_edge_styled,
                     use_container_width=True,
                     hide_index=True,
                 )
@@ -4068,13 +4012,106 @@ if st.button(
             else:
 
                 st.info(
-                    "No positive provisional price edges "
-                    "are currently available."
+                    "No positive FINAL Price Edges are available right now. "
+                    "A game can be FINAL and still correctly remain off this "
+                    "list when the sportsbook price removes the edge."
                 )
 
 
             # ---------------------------------------------
-            # ALL GAMES RANKED
+            # PROVISIONAL WATCH
+            # ---------------------------------------------
+
+            with st.expander(
+                f"Provisional Market Watch ({len(provisional_rows)})",
+                expanded=False,
+            ):
+
+                st.caption(
+                    "Live market opportunities that are still waiting on "
+                    "confirmed Top-4 lineups. These are watch-list items, "
+                    "not FINAL plays."
+                )
+
+                provisional_display = []
+
+                for rank, row in enumerate(
+                    provisional_rows[:8],
+                    start=1,
+                ):
+
+                    provisional_display.append({
+                        "Watch Rank":
+                            rank,
+
+                        "Game":
+                            row["Game"],
+
+                        "Side":
+                            row["Model Side"],
+
+                        "Model":
+                            format_probability(
+                                row["Model Probability"]
+                            ),
+
+                        "Market No-Vig":
+                            format_probability(
+                                row["Market No-Vig"]
+                            ),
+
+                        "Market Edge":
+                            format_edge(
+                                row["Edge"]
+                            ),
+
+                        "Best Price":
+                            format_american_odds(
+                                row["Best Price"]
+                            ),
+
+                        "Break-Even":
+                            (
+                                format_probability(
+                                    row["Market Raw Implied"]
+                                )
+                                if row["Market Raw Implied"] is not None
+                                else "—"
+                            ),
+
+                        "Price Edge":
+                            format_edge(
+                                row["Price Edge"]
+                            ),
+
+                        "Sportsbook":
+                            row["Best Book"]
+                            or "—",
+
+                        "Input Completeness":
+                            f"{row['Input Completeness']:.0f}%",
+                    })
+
+                if provisional_display:
+
+                    st.dataframe(
+                        pd.DataFrame(
+                            provisional_display
+                        ),
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+
+                else:
+
+                    st.info(
+                        "No positive provisional Price Edges "
+                        "are currently available."
+                    )
+
+
+            # ---------------------------------------------
+            # ALL GAMES — DAILY OPERATING TABLE
             # ---------------------------------------------
 
             st.subheader(
@@ -4082,27 +4119,23 @@ if st.button(
             )
 
             st.caption(
-                "Market Edge = model probability minus consensus "
-                "no-vig market probability. Price Edge = model probability "
-                "minus the break-even probability of the best available price. "
-                "Before confirmed lineups are posted, unknown lineup inputs "
-                "are neutralized to the model's training means."
+                "The full slate remains visible for transparency. "
+                "Price Edge is model probability minus the break-even "
+                "probability of the best available price."
             )
-
 
             all_game_display = []
 
             for row in market_rows:
 
                 all_game_display.append({
-
                     "Rank":
                         row["Rank"],
 
                     "Game":
                         row["Game"],
 
-                    "Model Side":
+                    "Side":
                         row["Model Side"],
 
                     "Model":
@@ -4157,35 +4190,11 @@ if st.button(
                             row["YRFI Probability"]
                         ),
 
-                    "Top 1st Scores":
-                        format_probability(
-                            row[
-                                "Top 1st Score Probability"
-                            ]
-                        ),
-
-                    "Bottom 1st Scores":
-                        format_probability(
-                            row[
-                                "Bottom 1st Score Probability"
-                            ]
-                        ),
-
-                    "Run Factor":
-                        (
-                            f"{row['Model Run Factor']:.0f}"
-                            if row["Model Run Factor"] is not None
-                            else "100 (neutral)"
-                        ),
-
-                    "Input Completeness":
+                    "Inputs":
                         f"{row['Input Completeness']:.0f}%",
 
                     "Status":
                         row["Status"],
-
-                    "Market":
-                        row["Market Status"],
                 })
 
 
@@ -4196,6 +4205,170 @@ if st.button(
                 use_container_width=True,
                 hide_index=True,
             )
+
+
+            # ---------------------------------------------
+            # MODEL-ONLY RANKING
+            # ---------------------------------------------
+
+            with st.expander(
+                "Top Model Probabilities — Ignore Price",
+                expanded=False,
+            ):
+
+                st.caption(
+                    "The four strongest model-side probabilities before "
+                    "considering sportsbook price. A high probability is "
+                    "not automatically a betting edge."
+                )
+
+                top_model_display = []
+
+                for row in market_rows[:4]:
+
+                    top_model_display.append({
+                        "Rank":
+                            row["Rank"],
+
+                        "Game":
+                            row["Game"],
+
+                        "Model Side":
+                            row["Model Side"],
+
+                        "Model Probability":
+                            format_probability(
+                                row["Model Probability"]
+                            ),
+
+                        "NRFI":
+                            format_probability(
+                                row["NRFI Probability"]
+                            ),
+
+                        "YRFI":
+                            format_probability(
+                                row["YRFI Probability"]
+                            ),
+
+                        "Input Completeness":
+                            f"{row['Input Completeness']:.0f}%",
+
+                        "Status":
+                            row["Status"],
+                    })
+
+                st.dataframe(
+                    pd.DataFrame(
+                        top_model_display
+                    ),
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+
+            # ---------------------------------------------
+            # PERFORMANCE TRACKING — COLLAPSED
+            # ---------------------------------------------
+
+            with st.expander(
+                "Performance Tracking — ROI, Edge Bands & CLV",
+                expanded=False,
+            ):
+
+                if (
+                    github_data_token
+                    and
+                    github_data_repo
+                ):
+
+                    try:
+
+                        render_edge_performance_dashboard(
+                            token=
+                                github_data_token,
+
+                            repo=
+                                github_data_repo,
+                        )
+
+                    except Exception as error:
+
+                        st.warning(
+                            "The live scanner is working, but the "
+                            "edge performance dashboard could not load: "
+                            f"{error}"
+                        )
+
+                    try:
+
+                        render_clv_dashboard(
+                            token=
+                                github_data_token,
+
+                            repo=
+                                github_data_repo,
+                        )
+
+                    except Exception as error:
+
+                        st.warning(
+                            "The live scanner is working, but the "
+                            "near-close / CLV dashboard could not load: "
+                            f"{error}"
+                        )
+
+
+            # ---------------------------------------------
+            # MODEL RESEARCH & GOVERNANCE — COLLAPSED
+            # ---------------------------------------------
+
+            with st.expander(
+                "Model Research & Governance",
+                expanded=False,
+            ):
+
+                if (
+                    github_data_token
+                    and
+                    github_data_repo
+                ):
+
+                    try:
+
+                        render_model_governance_dashboard(
+                            token=
+                                github_data_token,
+
+                            repo=
+                                github_data_repo,
+                        )
+
+                    except Exception as error:
+
+                        st.warning(
+                            "The live scanner is working, but the model "
+                            "governance dashboard could not load: "
+                            f"{error}"
+                        )
+
+                    try:
+
+                        render_pitcher_history_research(
+                            token=
+                                github_data_token,
+
+                            repo=
+                                github_data_repo,
+                        )
+
+                    except Exception as error:
+
+                        st.warning(
+                            "The live scanner is working, but the rolling "
+                            "pitcher-history research monitor could not load: "
+                            f"{error}"
+                        )
 
 
             # ---------------------------------------------
