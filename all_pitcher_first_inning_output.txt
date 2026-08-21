@@ -1,0 +1,147 @@
+SHARPREPORT ALL-PITCHER FIRST-INNING TEST
+======================================================================
+
+Pitcher: Michael McGreevy
+Starts: 25
+Scoreless 1st: 20
+Scoreless 1st %: 80.0%
+1st-Inning Runs/Start: 0.24
+NRFI Record: 12-13
+NRFI %: 48.0%
+----------------------------------------------------------------------
+Pitcher: Brady Singer
+Starts: 25
+Scoreless 1st: 15
+Scoreless 1st %: 60.0%
+1st-Inning Runs/Start: 0.56
+NRFI Record: 12-13
+NRFI %: 48.0%
+----------------------------------------------------------------------
+Pitcher: Landen Roupp
+Starts: 25
+Scoreless 1st: 20
+Scoreless 1st %: 80.0%
+1st-Inning Runs/Start: 0.36
+NRFI Record: 18-7
+NRFI %: 72.0%
+----------------------------------------------------------------------
+Pitcher: Gavin Williams
+Starts: 26
+Scoreless 1st: 20
+Scoreless 1st %: 76.9%
+1st-Inning Runs/Start: 0.42
+NRFI Record: 17-9
+NRFI %: 65.4%
+----------------------------------------------------------------------
+Pitcher: Shane Bieber
+Starts: 11
+Scoreless 1st: 7
+Scoreless 1st %: 63.6%
+1st-Inning Runs/Start: 0.73
+NRFI Record: 6-5
+NRFI %: 54.5%
+----------------------------------------------------------------------
+Pitcher: Ian Seymour
+Starts: 11
+Scoreless 1st: 9
+Scoreless 1st %: 81.8%
+1st-Inning Runs/Start: 0.18
+NRFI Record: 5-6
+NRFI %: 45.5%
+----------------------------------------------------------------------
+Pitcher: Gage Jump
+Starts: 16
+Scoreless 1st: 11
+Scoreless 1st %: 68.8%
+1st-Inning Runs/Start: 0.44
+NRFI Record: 9-7
+NRFI %: 56.2%
+----------------------------------------------------------------------
+Pitcher: Randy Dobnak
+Starts: 7
+Scoreless 1st: 6
+Scoreless 1st %: 85.7%
+1st-Inning Runs/Start: 0.14
+NRFI Record: 3-4
+NRFI %: 42.9%
+----------------------------------------------------------------------
+Pitcher: Grant Holmes
+Starts: 24
+Scoreless 1st: 20
+Scoreless 1st %: 83.3%
+1st-Inning Runs/Start: 0.38
+NRFI Record: 14-10
+NRFI %: 58.3%
+----------------------------------------------------------------------
+Pitcher: Anthony Kay
+Starts: 24
+Scoreless 1st: 16
+Scoreless 1st %: 66.7%
+1st-Inning Runs/Start: 0.42
+NRFI Record: 11-13
+NRFI %: 45.8%
+----------------------------------------------------------------------
+Pitcher: George Kirby
+Starts: 24
+Scoreless 1st: 15
+Scoreless 1st %: 62.5%
+1st-Inning Runs/Start: 0.67
+NRFI Record: 10-14
+NRFI %: 41.7%
+----------------------------------------------------------------------
+Pitcher: Robert Gasser
+Starts: 15
+Scoreless 1st: 9
+Scoreless 1st %: 60.0%
+1st-Inning Runs/Start: 0.40
+NRFI Record: 6-9
+NRFI %: 40.0%
+----------------------------------------------------------------------
+Pitcher: Gerrit Cole
+Starts: 16
+Scoreless 1st: 13
+Scoreless 1st %: 81.2%
+1st-Inning Runs/Start: 0.19
+NRFI Record: 13-3
+NRFI %: 81.2%
+----------------------------------------------------------------------
+Pitcher: Kyle Bradish
+Starts: 25
+Scoreless 1st: 23
+Scoreless 1st %: 92.0%
+1st-Inning Runs/Start: 0.08
+NRFI Record: 18-7
+NRFI %: 72.0%
+----------------------------------------------------------------------
+Pitcher: Andrew Alvarez
+Starts: 11
+Scoreless 1st: 11
+Scoreless 1st %: 100.0%
+1st-Inning Runs/Start: 0.00
+NRFI Record: 7-4
+NRFI %: 63.6%
+----------------------------------------------------------------------
+Pitcher: Jacob deGrom
+Starts: 24
+Scoreless 1st: 14
+Scoreless 1st %: 58.3%
+1st-Inning Runs/Start: 0.83
+NRFI Record: 9-15
+NRFI %: 37.5%
+----------------------------------------------------------------------
+Pitcher: Grayson Rodriguez
+Starts: 14
+Scoreless 1st: 9
+Scoreless 1st %: 64.3%
+1st-Inning Runs/Start: 0.86
+NRFI Record: 7-7
+NRFI %: 50.0%
+----------------------------------------------------------------------
+Pitcher: Peter Lambert
+Starts: 22
+Scoreless 1st: 16
+Scoreless 1st %: 72.7%
+1st-Inning Runs/Start: 0.32
+NRFI Record: 10-12
+NRFI %: 45.5%
+----------------------------------------------------------------------
