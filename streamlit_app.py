@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import json
 import io
+import base64
+
+from pathlib import Path
 
 from urllib.request import urlopen, Request
 from datetime import datetime, timedelta
@@ -75,16 +78,379 @@ from nrfi_model_governance import (
 # =========================================================
 
 st.set_page_config(
-    page_title="SharpReport NRFI Scanner",
+    page_title="SharpReport NRFI / YRFI Scanner",
+    page_icon="📊",
     layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
-st.title("⚾ SharpReport NRFI Scanner")
 
-st.write(
-    "Automatic MLB schedule, confirmed lineups, "
-    "starting pitchers, and trained NRFI/YRFI probabilities."
+APP_DIR = Path(
+    __file__
+).resolve().parent
+
+ASSET_DIR = (
+    APP_DIR
+    / "assets"
 )
+
+
+def _asset_data_uri(
+    filename,
+):
+    path = (
+        ASSET_DIR
+        / filename
+    )
+
+    if not path.exists():
+        return None
+
+    suffix = (
+        path.suffix
+        .lower()
+        .lstrip(".")
+    )
+
+    mime = (
+        "image/jpeg"
+        if suffix in {
+            "jpg",
+            "jpeg",
+        }
+        else "image/png"
+    )
+
+    encoded = base64.b64encode(
+        path.read_bytes()
+    ).decode(
+        "ascii"
+    )
+
+    return (
+        f"data:{mime};base64,"
+        f"{encoded}"
+    )
+
+
+SHARPREPORT_LOGO_URI = (
+    _asset_data_uri(
+        "sharpreport_logo.jpeg"
+    )
+)
+
+SHARPREPORT_BACKGROUND_URI = (
+    _asset_data_uri(
+        "sharpreport_background.jpeg"
+    )
+)
+
+
+background_css = (
+    f'url("{SHARPREPORT_BACKGROUND_URI}")'
+    if SHARPREPORT_BACKGROUND_URI
+    else "none"
+)
+
+
+st.markdown(
+    f"""
+    <style>
+    :root {{
+        --sr-black: #050505;
+        --sr-panel: #101010;
+        --sr-panel-2: #171717;
+        --sr-gold: #F6C431;
+        --sr-gold-bright: #FFD95A;
+        --sr-gold-deep: #B98408;
+        --sr-white: #F7F7F7;
+        --sr-muted: #B7B7B7;
+        --sr-border: rgba(246, 196, 49, 0.32);
+    }}
+
+    .stApp {{
+        background:
+            radial-gradient(
+                circle at 78% 0%,
+                rgba(246,196,49,0.10),
+                transparent 28rem
+            ),
+            linear-gradient(
+                180deg,
+                #080808 0%,
+                #050505 44%,
+                #050505 100%
+            );
+        color: var(--sr-white);
+    }}
+
+    [data-testid="stHeader"] {{
+        background: rgba(5,5,5,0.90);
+        border-bottom: 1px solid rgba(246,196,49,0.16);
+    }}
+
+    [data-testid="stToolbar"] {{
+        right: 0.5rem;
+    }}
+
+    .block-container {{
+        max-width: 1500px;
+        padding-top: 1.15rem;
+        padding-bottom: 4rem;
+    }}
+
+    .sr-brand-hero {{
+        min-height: 235px;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        padding: 1.35rem 1.55rem;
+        margin-bottom: 1.15rem;
+        border: 1px solid var(--sr-border);
+        border-radius: 18px;
+        overflow: hidden;
+        background-image:
+            linear-gradient(
+                90deg,
+                rgba(0,0,0,0.96) 0%,
+                rgba(0,0,0,0.82) 37%,
+                rgba(0,0,0,0.36) 72%,
+                rgba(0,0,0,0.48) 100%
+            ),
+            {background_css};
+        background-size: cover;
+        background-position: center;
+        box-shadow:
+            0 14px 40px rgba(0,0,0,0.42),
+            inset 0 0 45px rgba(246,196,49,0.035);
+    }}
+
+    .sr-brand-logo {{
+        width: 145px;
+        height: 145px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid rgba(255,217,90,0.72);
+        box-shadow:
+            0 0 0 5px rgba(246,196,49,0.08),
+            0 0 30px rgba(246,196,49,0.20);
+        flex: 0 0 auto;
+    }}
+
+    .sr-brand-copy {{
+        max-width: 610px;
+    }}
+
+    .sr-brand-eyebrow {{
+        color: var(--sr-gold);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-bottom: 0.35rem;
+    }}
+
+    .sr-brand-title {{
+        color: #FFFFFF;
+        font-size: 2.25rem;
+        line-height: 1.03;
+        font-weight: 900;
+        letter-spacing: -0.035em;
+        text-shadow: 0 2px 15px rgba(0,0,0,0.75);
+    }}
+
+    .sr-brand-title span {{
+        color: var(--sr-gold-bright);
+    }}
+
+    .sr-brand-subtitle {{
+        margin-top: 0.65rem;
+        color: #D2D2D2;
+        font-size: 0.98rem;
+        line-height: 1.45;
+        max-width: 560px;
+    }}
+
+    h1, h2, h3 {{
+        color: #FFFFFF !important;
+        letter-spacing: -0.02em;
+    }}
+
+    h2 {{
+        border-bottom: 1px solid rgba(246,196,49,0.18);
+        padding-bottom: 0.32rem;
+    }}
+
+    p, li, label {{
+        color: #D6D6D6;
+    }}
+
+    a {{
+        color: var(--sr-gold-bright) !important;
+    }}
+
+    div[data-testid="stButton"] > button {{
+        background:
+            linear-gradient(
+                180deg,
+                #FFDA57 0%,
+                #E8B51E 100%
+            );
+        color: #090909;
+        border: 1px solid #FFDD62;
+        border-radius: 10px;
+        font-weight: 900;
+        letter-spacing: 0.015em;
+        box-shadow:
+            0 5px 18px rgba(246,196,49,0.16);
+        min-height: 3rem;
+    }}
+
+    div[data-testid="stButton"] > button:hover {{
+        color: #000000;
+        border-color: #FFF0A5;
+        box-shadow:
+            0 7px 24px rgba(246,196,49,0.26);
+        transform: translateY(-1px);
+    }}
+
+    div[data-testid="stDataFrame"] {{
+        border: 1px solid rgba(246,196,49,0.19);
+        border-radius: 11px;
+        overflow: hidden;
+        background: rgba(10,10,10,0.76);
+    }}
+
+    div[data-testid="stExpander"] {{
+        border: 1px solid rgba(246,196,49,0.20);
+        border-radius: 11px;
+        background: rgba(13,13,13,0.78);
+    }}
+
+    div[data-testid="stAlert"] {{
+        border-radius: 11px;
+    }}
+
+    [data-testid="stCaptionContainer"] {{
+        color: #AFAFAF;
+    }}
+
+    hr {{
+        border-color: rgba(246,196,49,0.16) !important;
+    }}
+
+    @media (max-width: 800px) {{
+        .block-container {{
+            padding-left: 0.72rem;
+            padding-right: 0.72rem;
+            padding-top: 0.65rem;
+        }}
+
+        .sr-brand-hero {{
+            min-height: 205px;
+            padding: 1rem;
+            align-items: flex-end;
+            background-position: 63% center;
+        }}
+
+        .sr-brand-logo {{
+            width: 86px;
+            height: 86px;
+        }}
+
+        .sr-brand-eyebrow {{
+            font-size: 0.64rem;
+            letter-spacing: 0.12em;
+        }}
+
+        .sr-brand-title {{
+            font-size: 1.52rem;
+        }}
+
+        .sr-brand-subtitle {{
+            font-size: 0.83rem;
+            line-height: 1.35;
+        }}
+
+        div[data-testid="stButton"] > button {{
+            width: 100%;
+        }}
+
+        .sr-play-card {{
+            padding: 11px 12px !important;
+        }}
+
+        .sr-play-game {{
+            font-size: 0.98rem !important;
+        }}
+
+        .sr-play-line {{
+            font-size: 0.80rem !important;
+        }}
+    }}
+
+    @media (max-width: 520px) {{
+        .sr-brand-hero {{
+            display: block;
+            min-height: 240px;
+            background-position: 69% center;
+        }}
+
+        .sr-brand-logo {{
+            width: 74px;
+            height: 74px;
+            margin-bottom: 0.65rem;
+        }}
+
+        .sr-brand-title {{
+            font-size: 1.38rem;
+        }}
+
+        .sr-brand-subtitle {{
+            max-width: 92%;
+        }}
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+if SHARPREPORT_LOGO_URI:
+
+    logo_html = (
+        f'<img class="sr-brand-logo" '
+        f'src="{SHARPREPORT_LOGO_URI}" '
+        f'alt="SharpReport logo">'
+    )
+
+else:
+
+    logo_html = ""
+
+
+st.markdown(
+    f"""
+    <div class="sr-brand-hero">
+        {logo_html}
+        <div class="sr-brand-copy">
+            <div class="sr-brand-eyebrow">
+                Analytics · Performance · Results
+            </div>
+            <div class="sr-brand-title">
+                MLB <span>NRFI / YRFI</span> Scanner
+            </div>
+            <div class="sr-brand-subtitle">
+                Trained probability model, confirmed-lineup inputs,
+                live first-inning market pricing, executable edge,
+                automated tracking, and forward model validation.
+            </div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 ET = ZoneInfo("America/New_York")
 TODAY = datetime.now(ET).date()
@@ -3651,47 +4017,68 @@ if st.button(
                 """
                 <style>
                 .sr-decision-title {
+                    color: #FFD95A;
                     font-size: 1.75rem;
-                    font-weight: 800;
+                    font-weight: 900;
+                    letter-spacing: -0.025em;
                     margin-top: 0.35rem;
                     margin-bottom: 0.15rem;
+                    text-shadow: 0 0 18px rgba(246,196,49,0.12);
                 }
 
                 .sr-decision-subtitle {
-                    color: #6b7280;
+                    color: #BEBEBE;
                     margin-bottom: 1rem;
                 }
 
                 .sr-summary-card {
-                    border: 1px solid rgba(128,128,128,0.25);
+                    border: 1px solid rgba(246,196,49,0.28);
                     border-radius: 12px;
                     padding: 12px 14px;
                     min-height: 82px;
-                    background: rgba(255,255,255,0.04);
+                    background:
+                        linear-gradient(
+                            145deg,
+                            rgba(24,24,24,0.94),
+                            rgba(10,10,10,0.92)
+                        );
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.03),
+                        0 5px 16px rgba(0,0,0,0.22);
                 }
 
                 .sr-summary-label {
                     font-size: 0.76rem;
-                    color: #7a7f87;
+                    color: #D5B44D;
                     text-transform: uppercase;
-                    letter-spacing: 0.04em;
+                    letter-spacing: 0.06em;
                     margin-bottom: 4px;
+                    font-weight: 800;
                 }
 
                 .sr-summary-value {
+                    color: #FFFFFF;
                     font-size: 1.45rem;
-                    font-weight: 800;
+                    font-weight: 900;
                     line-height: 1.1;
                 }
 
                 .sr-play-card {
-                    background: #FFF3A6;
-                    color: #111111;
-                    border: 2px solid #E3BD00;
+                    background:
+                        linear-gradient(
+                            135deg,
+                            #FFE978 0%,
+                            #F6C431 52%,
+                            #DDAA16 100%
+                        );
+                    color: #090909;
+                    border: 2px solid #FFF0A0;
                     border-radius: 14px;
                     padding: 14px 16px;
                     margin: 8px 0 12px 0;
-                    box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+                    box-shadow:
+                        0 8px 24px rgba(246,196,49,0.18),
+                        inset 0 1px 0 rgba(255,255,255,0.55);
                 }
 
                 .sr-play-rank {
@@ -3873,8 +4260,12 @@ if st.button(
             # ACTIONABLE FINAL TOP PLAYS
             # ---------------------------------------------
 
-            st.subheader(
-                "🟨 FINAL Top Plays"
+            st.markdown(
+                '<div style="font-size:1.55rem;font-weight:900;'
+                'color:#FFD95A;margin-top:0.6rem;margin-bottom:0.15rem;">'
+                'FINAL Top Plays'
+                '</div>',
+                unsafe_allow_html=True,
             )
 
             st.caption(
