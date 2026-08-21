@@ -1,0 +1,35 @@
+Connecting to Baseball Savant...
+
+PITCHER DATA READY
+
+Number of pitchers returned:
+812
+
+COLUMN NAMES:
+
+last_name, first_name
+player_id
+year
+pa
+bip
+ba
+est_ba
+est_ba_minus_ba_diff
+slg
+est_slg
+est_slg_minus_slg_diff
+woba
+est_woba
+est_woba_minus_woba_diff
+era
+xera
+era_minus_xera_diff
+
+FIRST 5 PITCHERS:
+
+  last_name, first_name  player_id  year   pa  bip     ba  est_ba  est_ba_minus_ba_diff    slg  est_slg  est_slg_minus_slg_diff   woba  est_woba  est_woba_minus_woba_diff   era  xera  era_minus_xera_diff
+0      Alcantara, Sandy     645261  2026  728  543  0.240   0.249                -0.009  0.367    0.367                   0.000  0.294     0.297                    -0.003  3.46  3.68               -0.216
+1   Sánchez, Cristopher     650911  2026  673  443  0.253   0.237                 0.016  0.358    0.358                   0.000  0.293     0.284                     0.009  2.50  3.34               -0.835
+2        Wacha, Michael     608379  2026  632  466  0.237   0.250                -0.013  0.418    0.417                   0.001  0.309     0.314                    -0.005  3.58  4.15               -0.565
+3            Baz, Shane     669358  2026  623  439  0.264   0.252                 0.012  0.404    0.396                   0.008  0.316     0.312                     0.004  4.02  4.09               -0.074
+4        Luzardo, Jesús     666200  2026  621  381  0.227   0.207                 0.020  0.345    0.304                   0.041  0.286     0.264                     0.022  3.23  2.88                0.353

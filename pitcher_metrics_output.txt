@@ -1,0 +1,46 @@
+SHARPREPORT PITCHER METRICS TEST
+==================================================
+
+LOADING FANGRAPHS PITCHING DATA...
+
+FANGRAPHS ERROR:
+Error accessing 'https://www.fangraphs.com/leaders-legacy.aspx'. Received status code 403
+
+==================================================
+
+LOADING BASEBALL SAVANT BARREL DATA...
+Pitchers returned: 811
+
+BARREL DATA COLUMN NAMES:
+
+last_name, first_name
+player_id
+attempts
+avg_hit_angle
+anglesweetspotpercent
+max_hit_speed
+avg_hit_speed
+ev50
+fbld
+gb
+max_distance
+avg_distance
+avg_hr_distance
+ev95plus
+ev95percent
+barrels
+brl_percent
+brl_pa
+
+POSSIBLE BARREL COLUMNS:
+
+barrels
+
+FIRST 5 PITCHERS:
+
+  last_name, first_name  player_id  attempts  avg_hit_angle  anglesweetspotpercent  max_hit_speed  avg_hit_speed  ev50  fbld    gb  max_distance  avg_distance  avg_hr_distance  ev95plus  ev95percent  barrels  brl_percent  brl_pa
+0      Alcantara, Sandy     645261       543           12.9                   32.0          111.3           88.4  77.8  92.1  86.1           430           157            395.0       191         35.2       29          5.3     4.0
+1        Wacha, Michael     608379       466           17.1                   33.9          115.8           88.7  78.2  92.8  84.9           444           176            399.0       173         37.1       33          7.1     5.2
+2        Martinez, Nick     607259       466           17.4                   35.4          113.3           87.1  75.8  91.6  83.5           433           178            403.0       154         33.0       34          7.3     5.9
+3    Rodriguez, Eduardo     593958       460           15.0                   34.8          111.4           87.9  76.8  92.3  83.9           432           170            414.0       162         35.2       38          8.3     6.2
+4            Lugo, Seth     607625       455           14.0                   36.9          111.5           89.9  79.4  92.8  87.9           448           176            401.0       195         42.9       36          7.9     5.8

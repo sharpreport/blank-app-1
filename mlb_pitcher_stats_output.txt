@@ -1,0 +1,75 @@
+SHARPREPORT MLB PITCHER TEST
+=============================================
+
+Player ID: 645261
+Strikeouts: 131
+Walks: 47
+Batters Faced: 728
+
+K%: 18.0%
+BB%: 6.5%
+
+ALL AVAILABLE STAT FIELDS:
+
+age: 30
+gamesPlayed: 27
+gamesStarted: 27
+groundOuts: 181
+airOuts: 201
+runs: 73
+doubles: 27
+triples: 2
+homeRuns: 18
+strikeOuts: 131
+baseOnBalls: 47
+intentionalWalks: 0
+hits: 161
+hitByPitch: 7
+avg: .240
+atBats: 670
+obp: .296
+slg: .367
+ops: .663
+caughtStealing: 6
+stolenBases: 12
+stolenBasePercentage: .667
+caughtStealingPercentage: .333
+groundIntoDoublePlay: 12
+numberOfPitches: 2667
+era: 3.46
+inningsPitched: 176.2
+wins: 13
+losses: 8
+saves: 0
+saveOpportunities: 0
+holds: 0
+blownSaves: 0
+earnedRuns: 68
+whip: 1.18
+battersFaced: 728
+outs: 530
+gamesPitched: 27
+completeGames: 1
+shutouts: 1
+strikes: 1783
+strikePercentage: .670
+hitBatsmen: 7
+balks: 2
+wildPitches: 1
+pickoffs: 0
+totalBases: 246
+groundOutsToAirouts: 0.90
+winPercentage: .619
+pitchesPerInning: 15.10
+gamesFinished: 0
+strikeoutWalkRatio: 2.79
+strikeoutsPer9Inn: 6.67
+walksPer9Inn: 2.39
+hitsPer9Inn: 8.20
+runsScoredPer9: 3.72
+homeRunsPer9: 0.92
+inheritedRunners: 0
+inheritedRunnersScored: 0
+catchersInterference: 0
+sacBunts: 1
+sacFlies: 3
