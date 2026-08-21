@@ -1,0 +1,14 @@
+SHARPREPORT HITTER METRICS TEST
+==================================================
+
+Test Hitter: JJ Wetherholt
+MLB Player ID: 802139
+
+Plate Appearances: 557
+Strikeouts: 87
+Walks: 62
+
+xwOBA: 0.348
+K%: 15.6%
+BB%: 11.1%
+Barrel%: 7.2%

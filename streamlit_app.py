@@ -9,12 +9,14 @@ from zoneinfo import ZoneInfo
 from pybaseball import (
     statcast_pitcher_expected_stats,
     statcast_pitcher_exitvelo_barrels,
+    statcast_batter_expected_stats,
+    statcast_batter_exitvelo_barrels,
 )
 
 
-# ---------------------------------------------------------
+# =========================================================
 # PAGE SETUP
-# ---------------------------------------------------------
+# =========================================================
 
 st.set_page_config(
     page_title="SharpReport NRFI Scanner",
@@ -25,7 +27,7 @@ st.title("⚾ SharpReport NRFI Scanner")
 
 st.write(
     "Automatic MLB schedule, confirmed lineups, "
-    "probable starting pitchers, and pitcher model inputs."
+    "starting pitchers, and NRFI model inputs."
 )
 
 ET = ZoneInfo("America/New_York")
@@ -33,17 +35,15 @@ TODAY = datetime.now(ET).date()
 YEAR = TODAY.year
 
 
-# ---------------------------------------------------------
+# =========================================================
 # BASIC JSON REQUEST
-# ---------------------------------------------------------
+# =========================================================
 
 def get_json(url):
 
     request = Request(
         url,
-        headers={
-            "User-Agent": "Mozilla/5.0"
-        }
+        headers={"User-Agent": "Mozilla/5.0"}
     )
 
     with urlopen(
@@ -54,9 +54,9 @@ def get_json(url):
         return json.load(response)
 
 
-# ---------------------------------------------------------
+# =========================================================
 # LINEUPS
-# ---------------------------------------------------------
+# =========================================================
 
 def get_team_top4(team_data):
 
@@ -74,10 +74,8 @@ def get_team_top4(team_data):
 
     for player_id in batting_order[:4]:
 
-        key = f"ID{player_id}"
-
         player = players.get(
-            key,
+            f"ID{player_id}",
             {}
         )
 
@@ -88,7 +86,11 @@ def get_team_top4(team_data):
         )
 
         if name:
-            top4.append(name)
+
+            top4.append({
+                "id": int(player_id),
+                "name": name,
+            })
 
     return top4
 
@@ -129,12 +131,15 @@ def format_lineup(lineup):
     if not lineup:
         return "Not posted"
 
-    return " | ".join(lineup)
+    return " | ".join(
+        player["name"]
+        for player in lineup
+    )
 
 
-# ---------------------------------------------------------
+# =========================================================
 # BASEBALL SAVANT PITCHER DATA
-# ---------------------------------------------------------
+# =========================================================
 
 @st.cache_data(
     ttl=3600,
@@ -157,8 +162,8 @@ def get_savant_pitcher_data(year):
     )
 
     xwoba = {}
-
     barrel_percent = {}
+
 
     for _, row in expected.iterrows():
 
@@ -175,7 +180,9 @@ def get_savant_pitcher_data(year):
             and pd.notna(value)
         ):
 
-            xwoba[int(player_id)] = float(value)
+            xwoba[
+                int(player_id)
+            ] = float(value)
 
 
     for _, row in barrels.iterrows():
@@ -198,12 +205,89 @@ def get_savant_pitcher_data(year):
             ] = float(value)
 
 
-    return xwoba, barrel_percent
+    return (
+        xwoba,
+        barrel_percent
+    )
 
 
-# ---------------------------------------------------------
+# =========================================================
+# BASEBALL SAVANT HITTER DATA
+# =========================================================
+
+@st.cache_data(
+    ttl=3600,
+    show_spinner=False
+)
+def get_savant_hitter_data(year):
+
+    expected = (
+        statcast_batter_expected_stats(
+            year,
+            minPA=1
+        )
+    )
+
+    barrels = (
+        statcast_batter_exitvelo_barrels(
+            year,
+            minBBE=1
+        )
+    )
+
+    xwoba = {}
+    barrel_percent = {}
+
+
+    for _, row in expected.iterrows():
+
+        player_id = row.get(
+            "player_id"
+        )
+
+        value = row.get(
+            "est_woba"
+        )
+
+        if (
+            pd.notna(player_id)
+            and pd.notna(value)
+        ):
+
+            xwoba[
+                int(player_id)
+            ] = float(value)
+
+
+    for _, row in barrels.iterrows():
+
+        player_id = row.get(
+            "player_id"
+        )
+
+        value = row.get(
+            "brl_percent"
+        )
+
+        if (
+            pd.notna(player_id)
+            and pd.notna(value)
+        ):
+
+            barrel_percent[
+                int(player_id)
+            ] = float(value)
+
+
+    return (
+        xwoba,
+        barrel_percent
+    )
+
+
+# =========================================================
 # MLB PITCHER K% / BB%
-# ---------------------------------------------------------
+# =========================================================
 
 @st.cache_data(
     ttl=1800,
@@ -215,7 +299,6 @@ def get_mlb_pitcher_rates(
 ):
 
     if not player_id:
-
         return None, None, None
 
 
@@ -255,7 +338,6 @@ def get_mlb_pitcher_rates(
 
 
         if not batters_faced:
-
             return None, None, 0
 
 
@@ -284,9 +366,90 @@ def get_mlb_pitcher_rates(
         return None, None, None
 
 
-# ---------------------------------------------------------
+# =========================================================
+# MLB HITTER K% / BB%
+# =========================================================
+
+@st.cache_data(
+    ttl=1800,
+    show_spinner=False
+)
+def get_mlb_hitter_rates(
+    player_id,
+    year
+):
+
+    if not player_id:
+        return None, None, None
+
+
+    url = (
+        "https://statsapi.mlb.com/"
+        f"api/v1/people/{player_id}/stats"
+        "?stats=season"
+        "&group=hitting"
+        f"&season={year}"
+    )
+
+
+    try:
+
+        data = get_json(url)
+
+        stat = (
+            data["stats"][0]
+            ["splits"][0]
+            ["stat"]
+        )
+
+        plate_appearances = stat.get(
+            "plateAppearances",
+            0
+        )
+
+        strikeouts = stat.get(
+            "strikeOuts",
+            0
+        )
+
+        walks = stat.get(
+            "baseOnBalls",
+            0
+        )
+
+
+        if not plate_appearances:
+            return None, None, 0
+
+
+        k_percent = (
+            strikeouts
+            / plate_appearances
+            * 100
+        )
+
+        bb_percent = (
+            walks
+            / plate_appearances
+            * 100
+        )
+
+
+        return (
+            k_percent,
+            bb_percent,
+            plate_appearances
+        )
+
+
+    except Exception:
+
+        return None, None, None
+
+
+# =========================================================
 # MLB SCHEDULE
-# ---------------------------------------------------------
+# =========================================================
 
 def get_mlb_schedule(date):
 
@@ -325,6 +488,7 @@ def get_mlb_schedule(date):
             game_pk = game.get(
                 "gamePk"
             )
+
 
             away_team = (
                 game
@@ -382,14 +546,18 @@ def get_mlb_schedule(date):
             )
 
 
-            away_top4, home_top4 = (
-                get_lineups(game_pk)
+            (
+                away_top4,
+                home_top4
+            ) = get_lineups(
+                game_pk
             )
 
 
             if (
                 len(away_top4) == 4
-                and len(home_top4) == 4
+                and
+                len(home_top4) == 4
             ):
 
                 lineup_status = (
@@ -406,6 +574,7 @@ def get_mlb_schedule(date):
             game_date = game.get(
                 "gameDate"
             )
+
 
             if game_date:
 
@@ -461,9 +630,7 @@ def get_mlb_schedule(date):
                     away_pitcher_id,
 
                 "Away Top 4":
-                    format_lineup(
-                        away_top4
-                    ),
+                    away_top4,
 
                 "Home Team":
                     home_team,
@@ -475,9 +642,7 @@ def get_mlb_schedule(date):
                     home_pitcher_id,
 
                 "Home Top 4":
-                    format_lineup(
-                        home_top4
-                    ),
+                    home_top4,
 
                 "Lineups":
                     lineup_status,
@@ -507,9 +672,9 @@ def get_mlb_schedule(date):
     return games
 
 
-# ---------------------------------------------------------
+# =========================================================
 # FORMATTERS
-# ---------------------------------------------------------
+# =========================================================
 
 def format_xwoba(value):
 
@@ -527,7 +692,7 @@ def format_percent(value):
     return f"{value:.1f}%"
 
 
-def format_bf(value):
+def format_number(value):
 
     if value is None:
         return "—"
@@ -535,9 +700,23 @@ def format_bf(value):
     return int(value)
 
 
-# ---------------------------------------------------------
-# BUILD PITCHER TABLE
-# ---------------------------------------------------------
+def strict_average(values):
+
+    valid = [
+        value
+        for value in values
+        if value is not None
+    ]
+
+    if len(valid) != 4:
+        return None
+
+    return sum(valid) / 4
+
+
+# =========================================================
+# PITCHER TABLE
+# =========================================================
 
 def build_pitcher_table(
     games,
@@ -545,7 +724,7 @@ def build_pitcher_table(
     barrel_data
 ):
 
-    pitcher_rows = []
+    rows = []
 
 
     for game in games:
@@ -578,37 +757,28 @@ def build_pitcher_table(
 
             if not pitcher_id:
 
-                pitcher_rows.append({
+                rows.append({
 
                     "Game": matchup,
                     "Team": team,
-                    "Pitcher":
-                        pitcher_name,
-
-                    "xwOBA Allowed":
-                        "—",
-
-                    "K%":
-                        "—",
-
-                    "BB%":
-                        "—",
-
-                    "Barrel% Allowed":
-                        "—",
-
-                    "Batters Faced":
-                        "—",
+                    "Pitcher": pitcher_name,
+                    "xwOBA Allowed": "—",
+                    "K%": "—",
+                    "BB%": "—",
+                    "Barrel% Allowed": "—",
+                    "Batters Faced": "—",
                 })
 
                 continue
 
 
-            k_percent, bb_percent, bf = (
-                get_mlb_pitcher_rates(
-                    pitcher_id,
-                    YEAR
-                )
+            (
+                k_percent,
+                bb_percent,
+                batters_faced
+            ) = get_mlb_pitcher_rates(
+                pitcher_id,
+                YEAR
             )
 
 
@@ -621,7 +791,7 @@ def build_pitcher_table(
             )
 
 
-            pitcher_rows.append({
+            rows.append({
 
                 "Game":
                     matchup,
@@ -653,18 +823,228 @@ def build_pitcher_table(
                     ),
 
                 "Batters Faced":
-                    format_bf(
-                        bf
+                    format_number(
+                        batters_faced
                     ),
             })
 
 
-    return pitcher_rows
+    return rows
 
 
-# ---------------------------------------------------------
+# =========================================================
+# HITTER TABLES
+# =========================================================
+
+def build_hitter_tables(
+    games,
+    hitter_xwoba,
+    hitter_barrels
+):
+
+    individual_rows = []
+    team_rows = []
+
+
+    for game in games:
+
+        offenses = [
+
+            {
+                "team":
+                    game["Away Team"],
+
+                "opponent_sp":
+                    game["Home SP"],
+
+                "top4":
+                    game["Away Top 4"],
+            },
+
+            {
+                "team":
+                    game["Home Team"],
+
+                "opponent_sp":
+                    game["Away SP"],
+
+                "top4":
+                    game["Home Top 4"],
+            },
+        ]
+
+
+        for offense in offenses:
+
+            team = offense["team"]
+
+            opponent_sp = (
+                offense["opponent_sp"]
+            )
+
+            top4 = offense["top4"]
+
+
+            xwoba_values = []
+            k_values = []
+            bb_values = []
+            barrel_values = []
+
+            total_pa = 0
+
+
+            for batting_spot, player in enumerate(
+                top4,
+                start=1
+            ):
+
+                player_id = player["id"]
+                player_name = player["name"]
+
+
+                (
+                    k_percent,
+                    bb_percent,
+                    plate_appearances
+                ) = get_mlb_hitter_rates(
+                    player_id,
+                    YEAR
+                )
+
+
+                xwoba = hitter_xwoba.get(
+                    player_id
+                )
+
+                barrel = hitter_barrels.get(
+                    player_id
+                )
+
+
+                xwoba_values.append(
+                    xwoba
+                )
+
+                k_values.append(
+                    k_percent
+                )
+
+                bb_values.append(
+                    bb_percent
+                )
+
+                barrel_values.append(
+                    barrel
+                )
+
+
+                if plate_appearances:
+                    total_pa += plate_appearances
+
+
+                individual_rows.append({
+
+                    "Game":
+                        game["Game"],
+
+                    "Team":
+                        team,
+
+                    "Batting Spot":
+                        batting_spot,
+
+                    "Hitter":
+                        player_name,
+
+                    "xwOBA":
+                        format_xwoba(
+                            xwoba
+                        ),
+
+                    "K%":
+                        format_percent(
+                            k_percent
+                        ),
+
+                    "BB%":
+                        format_percent(
+                            bb_percent
+                        ),
+
+                    "Barrel%":
+                        format_percent(
+                            barrel
+                        ),
+
+                    "PA":
+                        format_number(
+                            plate_appearances
+                        ),
+                })
+
+
+            team_xwoba = strict_average(
+                xwoba_values
+            )
+
+            team_k = strict_average(
+                k_values
+            )
+
+            team_bb = strict_average(
+                bb_values
+            )
+
+            team_barrel = strict_average(
+                barrel_values
+            )
+
+
+            team_rows.append({
+
+                "Game":
+                    game["Game"],
+
+                "Offense":
+                    team,
+
+                "Opposing SP":
+                    opponent_sp,
+
+                "Top-4 xwOBA":
+                    format_xwoba(
+                        team_xwoba
+                    ),
+
+                "Top-4 K%":
+                    format_percent(
+                        team_k
+                    ),
+
+                "Top-4 BB%":
+                    format_percent(
+                        team_bb
+                    ),
+
+                "Top-4 Barrel%":
+                    format_percent(
+                        team_barrel
+                    ),
+
+                "Combined Top-4 PA":
+                    total_pa,
+            })
+
+
+    return (
+        team_rows,
+        individual_rows
+    )
+
+
+# =========================================================
 # APP
-# ---------------------------------------------------------
+# =========================================================
 
 st.write(
     f"**Date:** "
@@ -696,6 +1076,7 @@ if st.button(
                 "for today."
             )
 
+
         else:
 
             confirmed = sum(
@@ -710,6 +1091,10 @@ if st.button(
                 - confirmed
             )
 
+
+            # ---------------------------------------------
+            # MLB SLATE
+            # ---------------------------------------------
 
             st.subheader(
                 "Today's MLB Slate"
@@ -744,13 +1129,17 @@ if st.button(
                         game["Away SP"],
 
                     "Away Top 4":
-                        game["Away Top 4"],
+                        format_lineup(
+                            game["Away Top 4"]
+                        ),
 
                     "Home SP":
                         game["Home SP"],
 
                     "Home Top 4":
-                        game["Home Top 4"],
+                        format_lineup(
+                            game["Home Top 4"]
+                        ),
 
                     "Lineups":
                         game["Lineups"],
@@ -778,33 +1167,37 @@ if st.button(
             )
 
 
+            # ---------------------------------------------
+            # PITCHER DATA
+            # ---------------------------------------------
+
             st.subheader(
-                "Starting Pitcher "
-                "Model Inputs"
+                "Starting Pitcher Model Inputs"
             )
 
             st.caption(
-                "Season-to-date 2026 "
-                "pitcher statistics."
+                "Season-to-date pitcher "
+                "statistics."
             )
 
 
             with st.spinner(
-                "Loading Baseball Savant "
-                "and MLB pitcher metrics..."
+                "Loading pitcher metrics..."
             ):
 
-                xwoba_data, barrel_data = (
-                    get_savant_pitcher_data(
-                        YEAR
-                    )
+                (
+                    pitcher_xwoba,
+                    pitcher_barrels
+                ) = get_savant_pitcher_data(
+                    YEAR
                 )
+
 
                 pitcher_rows = (
                     build_pitcher_table(
                         games,
-                        xwoba_data,
-                        barrel_data,
+                        pitcher_xwoba,
+                        pitcher_barrels,
                     )
                 )
 
@@ -816,6 +1209,71 @@ if st.button(
                 use_container_width=True,
                 hide_index=True,
             )
+
+
+            # ---------------------------------------------
+            # HITTER DATA
+            # ---------------------------------------------
+
+            st.subheader(
+                "Top-4 Offensive Model Inputs"
+            )
+
+            st.caption(
+                "Equal-weight average of the "
+                "first four confirmed hitters "
+                "in each batting order."
+            )
+
+
+            with st.spinner(
+                "Loading top-four hitter "
+                "metrics..."
+            ):
+
+                (
+                    hitter_xwoba,
+                    hitter_barrels
+                ) = get_savant_hitter_data(
+                    YEAR
+                )
+
+
+                (
+                    team_hitter_rows,
+                    individual_hitter_rows
+                ) = build_hitter_tables(
+                    games,
+                    hitter_xwoba,
+                    hitter_barrels,
+                )
+
+
+            st.dataframe(
+                pd.DataFrame(
+                    team_hitter_rows
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+
+            # ---------------------------------------------
+            # INDIVIDUAL HITTER DETAIL
+            # ---------------------------------------------
+
+            with st.expander(
+                "View Individual Top-4 "
+                "Hitter Metrics"
+            ):
+
+                st.dataframe(
+                    pd.DataFrame(
+                        individual_hitter_rows
+                    ),
+                    use_container_width=True,
+                    hide_index=True,
+                )
 
 
     except Exception as error:
