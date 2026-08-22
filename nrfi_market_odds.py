@@ -349,10 +349,15 @@ def _point_is_half(
         "point"
     )
 
+    # NRFI/YRFI is specifically the 0.5-run first-inning total.
+    #
+    # totals_1st_1_innings can contain a featured first-inning
+    # total other than 0.5 (for example 1.5). If a bookmaker
+    # omits the point, we cannot safely infer that it means 0.5.
+    # Reject unknown points rather than risk treating an Over 1.5
+    # price as a YRFI price.
     if point is None:
-        # Some books may omit the point if the market
-        # definition itself already implies 0.5.
-        return True
+        return False
 
     try:
         return abs(
