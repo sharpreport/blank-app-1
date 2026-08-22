@@ -2255,6 +2255,11 @@ def format_probability(value):
     return f"{value:.1f}%"
 
 
+# Historical out-of-sample qualification line for Model v1.
+# Probabilities in this app are stored in percentage-point form.
+NRFI_PLAY_THRESHOLD = 57.0
+
+
 
 
 # =========================================================
@@ -4185,6 +4190,15 @@ if st.button(
                 reverse=True,
             )
 
+            qualified_final_nrfi_rows = [
+                row
+                for row in final_nrfi_rows
+                if row.get(
+                    "NRFI Probability",
+                    -1.0,
+                ) >= NRFI_PLAY_THRESHOLD
+            ]
+
             positive_final_rows = [
                 row
                 for row in final_games
@@ -4312,8 +4326,8 @@ if st.button(
                 st.markdown(
                     f"""
                     <div class="sr-summary-card">
-                        <div class="sr-summary-label">Positive FINAL Edges</div>
-                        <div class="sr-summary-value">{len(positive_final_rows)}</div>
+                        <div class="sr-summary-label">Qualified NRFI Plays</div>
+                        <div class="sr-summary-value">{len(qualified_final_nrfi_rows)}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -4324,8 +4338,8 @@ if st.button(
                 st.markdown(
                     f"""
                     <div class="sr-summary-card">
-                        <div class="sr-summary-label">Provisional Positive</div>
-                        <div class="sr-summary-value">{len(provisional_rows)}</div>
+                        <div class="sr-summary-label">Positive FINAL Edges</div>
+                        <div class="sr-summary-value">{len(positive_final_rows)}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -4339,15 +4353,16 @@ if st.button(
             st.markdown(
                 '<div style="font-size:1.55rem;font-weight:900;'
                 'color:#FFD95A;margin-top:0.6rem;margin-bottom:0.15rem;">'
-                'Highest Probability FINAL NRFI Plays'
+                'Highest Probability FINAL NRFI Board'
                 '</div>',
                 unsafe_allow_html=True,
             )
 
             st.caption(
                 "FINAL games ranked strictly by Model v1 NRFI probability. "
+                "A game is a Qualified NRFI Play only at 57.0% or higher. "
                 "Sportsbook price, break-even probability, and market edge "
-                "do NOT determine this ranking."
+                "do NOT determine the probability ranking."
             )
 
             if final_nrfi_rows:
@@ -4357,11 +4372,18 @@ if st.button(
                     start=1,
                 ):
 
+                    qualification = (
+                        "QUALIFIED NRFI PLAY"
+                        if row["NRFI Probability"]
+                        >= NRFI_PLAY_THRESHOLD
+                        else "WATCH — BELOW 57% QUALIFICATION"
+                    )
+
                     st.markdown(
                         f"""
                         <div class="sr-play-card">
                             <div class="sr-play-rank">
-                                NRFI MODEL RANK #{rank}
+                                NRFI MODEL RANK #{rank} · {qualification}
                             </div>
                             <div class="sr-play-game">
                                 {row["Game"]} — NRFI
@@ -4389,6 +4411,13 @@ if st.button(
                     start=1,
                 ):
 
+                    qualification = (
+                        "QUALIFIED PLAY"
+                        if row["NRFI Probability"]
+                        >= NRFI_PLAY_THRESHOLD
+                        else "WATCH"
+                    )
+
                     final_nrfi_display.append({
                         "Rank":
                             rank,
@@ -4400,6 +4429,9 @@ if st.button(
                             format_probability(
                                 row["NRFI Probability"]
                             ),
+
+                        "Qualification":
+                            qualification,
 
                         "Input Completeness":
                             f"{row['Input Completeness']:.0f}%",
@@ -4428,6 +4460,22 @@ if st.button(
                     use_container_width=True,
                     hide_index=True,
                 )
+
+                if qualified_final_nrfi_rows:
+
+                    st.success(
+                        f"{len(qualified_final_nrfi_rows)} FINAL game(s) "
+                        "currently meet the official 57.0% Model v1 "
+                        "NRFI qualification threshold."
+                    )
+
+                else:
+
+                    st.info(
+                        "No FINAL game currently reaches the official "
+                        "57.0% Model v1 NRFI qualification threshold. "
+                        "The ranked games above are WATCHES, not plays."
+                    )
 
             else:
 
