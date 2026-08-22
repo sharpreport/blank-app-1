@@ -3508,7 +3508,8 @@ if st.button(
 
             with st.expander(
                 "View Individual Top-4 "
-                "Hitter Metrics"
+                "Hitter Metrics",
+                expanded=True,
             ):
 
                 st.dataframe(
@@ -4164,6 +4165,26 @@ if st.button(
                 if row["Status"] == "FINAL"
             ]
 
+            # Primary decision-board ranking:
+            # FINAL games sorted ONLY by Model v1 NRFI probability.
+            # Sportsbook price and market edge do not affect this order.
+            final_nrfi_rows = [
+                row
+                for row in final_games
+                if row.get(
+                    "NRFI Probability"
+                ) is not None
+            ]
+
+            final_nrfi_rows.sort(
+                key=lambda row:
+                    row.get(
+                        "NRFI Probability",
+                        -1.0,
+                    ),
+                reverse=True,
+            )
+
             positive_final_rows = [
                 row
                 for row in final_games
@@ -4232,9 +4253,9 @@ if st.button(
 
             st.markdown(
                 '<div class="sr-decision-subtitle">'
-                'FINAL opportunities first. Provisional and research '
-                'information is separated below so the actionable slate '
-                'is easy to scan.'
+                'Highest-probability FINAL NRFI games first. Market value '
+                'remains a separate secondary view, and sections open by '
+                'default so the full slate can be reviewed by scrolling.'
                 '</div>',
                 unsafe_allow_html=True,
             )
@@ -4258,11 +4279,29 @@ if st.button(
 
             with summary_columns[1]:
 
+                highest_final_nrfi = (
+                    final_nrfi_rows[
+                        0
+                    ].get(
+                        "NRFI Probability"
+                    )
+                    if final_nrfi_rows
+                    else None
+                )
+
+                highest_final_nrfi_text = (
+                    format_probability(
+                        highest_final_nrfi
+                    )
+                    if highest_final_nrfi is not None
+                    else "—"
+                )
+
                 st.markdown(
                     f"""
                     <div class="sr-summary-card">
-                        <div class="sr-summary-label">Positive FINAL Edges</div>
-                        <div class="sr-summary-value">{len(positive_final_rows)}</div>
+                        <div class="sr-summary-label">Highest FINAL NRFI</div>
+                        <div class="sr-summary-value">{highest_final_nrfi_text}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -4270,17 +4309,11 @@ if st.button(
 
             with summary_columns[2]:
 
-                best_edge_text = (
-                    f"{best_final_edge:+.1f}%"
-                    if best_final_edge is not None
-                    else "—"
-                )
-
                 st.markdown(
                     f"""
                     <div class="sr-summary-card">
-                        <div class="sr-summary-label">Best FINAL Price Edge</div>
-                        <div class="sr-summary-value">{best_edge_text}</div>
+                        <div class="sr-summary-label">Positive FINAL Edges</div>
+                        <div class="sr-summary-value">{len(positive_final_rows)}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -4300,86 +4333,136 @@ if st.button(
 
 
             # ---------------------------------------------
-            # ACTIONABLE FINAL TOP PLAYS
+            # HIGHEST-PROBABILITY FINAL NRFI PLAYS
             # ---------------------------------------------
 
             st.markdown(
                 '<div style="font-size:1.55rem;font-weight:900;'
                 'color:#FFD95A;margin-top:0.6rem;margin-bottom:0.15rem;">'
-                'FINAL Top Plays'
+                'Highest Probability FINAL NRFI Plays'
                 '</div>',
                 unsafe_allow_html=True,
             )
 
             st.caption(
-                "Only FINAL games with a positive executable Price Edge "
-                "appear here. Yellow = current actionable model/market "
-                "opportunity. Edge tiers are working labels until the "
-                "forward performance sample validates an optimal cutoff."
+                "FINAL games ranked strictly by Model v1 NRFI probability. "
+                "Sportsbook price, break-even probability, and market edge "
+                "do NOT determine this ranking."
             )
 
-
-            if positive_final_rows:
+            if final_nrfi_rows:
 
                 for rank, row in enumerate(
-                    positive_final_rows[:4],
+                    final_nrfi_rows[:4],
                     start=1,
                 ):
-
-                    price_edge = row[
-                        "Price Edge"
-                    ]
-
-                    if price_edge >= 5.0:
-                        tier = "TOP TIER"
-                    elif price_edge >= 3.0:
-                        tier = "STRONG"
-                    elif price_edge >= 2.0:
-                        tier = "QUALIFIED"
-                    else:
-                        tier = "THIN EDGE"
 
                     st.markdown(
                         f"""
                         <div class="sr-play-card">
                             <div class="sr-play-rank">
-                                FINAL PLAY #{rank}
-                                <span class="sr-tier">{tier}</span>
+                                NRFI MODEL RANK #{rank}
                             </div>
                             <div class="sr-play-game">
-                                {row["Game"]} — {row["Model Side"]}
+                                {row["Game"]} — NRFI
                             </div>
                             <div class="sr-play-line">
-                                <b>Model:</b> {format_probability(row["Model Probability"])}
-                                &nbsp;&nbsp;|&nbsp;&nbsp;
-                                <b>Best Price:</b> {format_american_odds(row["Best Price"])}
-                                at {row["Best Book"] or "—"}
-                            </div>
-                            <div class="sr-play-line">
-                                <b>Break-Even:</b> {
-                                    format_probability(row["Market Raw Implied"])
-                                    if row["Market Raw Implied"] is not None
-                                    else "—"
+                                <b>Model NRFI Probability:</b> {
+                                    format_probability(
+                                        row["NRFI Probability"]
+                                    )
                                 }
                                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                                <b>Price Edge:</b> {format_edge(row["Price Edge"])}
-                                &nbsp;&nbsp;|&nbsp;&nbsp;
-                                <b>Market Edge:</b> {format_edge(row["Edge"])}
+                                <b>Inputs:</b> {
+                                    f'{row["Input Completeness"]:.0f}%'
+                                }
                             </div>
                         </div>
                         """,
                         unsafe_allow_html=True,
                     )
 
-                final_edge_display = []
+                final_nrfi_display = []
+
+                for rank, row in enumerate(
+                    final_nrfi_rows[:4],
+                    start=1,
+                ):
+
+                    final_nrfi_display.append({
+                        "Rank":
+                            rank,
+
+                        "Game":
+                            row["Game"],
+
+                        "Model NRFI":
+                            format_probability(
+                                row["NRFI Probability"]
+                            ),
+
+                        "Input Completeness":
+                            f"{row['Input Completeness']:.0f}%",
+
+                        "Status":
+                            row["Status"],
+                    })
+
+                final_nrfi_df = pd.DataFrame(
+                    final_nrfi_display
+                )
+
+                final_nrfi_styled = (
+                    final_nrfi_df.style
+                    .set_properties(
+                        **{
+                            "background-color": "#FFF3A6",
+                            "color": "#111111",
+                            "font-weight": "700",
+                        }
+                    )
+                )
+
+                st.dataframe(
+                    final_nrfi_styled,
+                    use_container_width=True,
+                    hide_index=True,
+                )
+
+            else:
+
+                st.info(
+                    "No FINAL games are available yet. Once both starting "
+                    "pitchers and both confirmed Top-4 lineups are available, "
+                    "the highest Model v1 NRFI probabilities will appear here."
+                )
+
+
+            # ---------------------------------------------
+            # SECONDARY: BEST MARKET VALUE — FINAL
+            # ---------------------------------------------
+
+            st.subheader(
+                "Best Market Value — FINAL"
+            )
+
+            st.caption(
+                "Separate secondary view. FINAL games are ranked here by "
+                "positive executable Price Edge. This section does not alter "
+                "the NRFI probability ranking above."
+            )
+
+            if positive_final_rows:
+
+                market_value_display = []
 
                 for rank, row in enumerate(
                     positive_final_rows[:4],
                     start=1,
                 ):
 
-                    final_edge_display.append({
-                        "Rank":
+                    market_value_display.append({
+                        "Value Rank":
                             rank,
 
                         "Game":
@@ -4422,23 +4505,10 @@ if st.button(
                             or "—",
                     })
 
-                final_edge_df = pd.DataFrame(
-                    final_edge_display
-                )
-
-                final_edge_styled = (
-                    final_edge_df.style
-                    .set_properties(
-                        **{
-                            "background-color": "#FFF3A6",
-                            "color": "#111111",
-                            "font-weight": "700",
-                        }
-                    )
-                )
-
                 st.dataframe(
-                    final_edge_styled,
+                    pd.DataFrame(
+                        market_value_display
+                    ),
                     use_container_width=True,
                     hide_index=True,
                 )
@@ -4447,8 +4517,8 @@ if st.button(
 
                 st.info(
                     "No positive FINAL Price Edges are available right now. "
-                    "A game can be FINAL and still correctly remain off this "
-                    "list when the sportsbook price removes the edge."
+                    "A game can still rank highly for NRFI probability even "
+                    "when the current sportsbook price offers no positive edge."
                 )
 
 
@@ -4458,7 +4528,7 @@ if st.button(
 
             with st.expander(
                 f"Provisional Market Watch ({len(provisional_rows)})",
-                expanded=False,
+                expanded=True,
             ):
 
                 st.caption(
@@ -4646,8 +4716,8 @@ if st.button(
             # ---------------------------------------------
 
             with st.expander(
-                "Top Model Probabilities — Ignore Price",
-                expanded=False,
+                "Highest Model Probability — Either Side",
+                expanded=True,
             ):
 
                 st.caption(
@@ -4707,7 +4777,7 @@ if st.button(
 
             with st.expander(
                 "Performance Tracking — ROI, Edge Bands & CLV",
-                expanded=False,
+                expanded=True,
             ):
 
                 if (
@@ -4759,7 +4829,7 @@ if st.button(
 
             with st.expander(
                 "Model Research & Governance",
-                expanded=False,
+                expanded=True,
             ):
 
                 if (
@@ -4828,7 +4898,8 @@ if st.button(
             # ---------------------------------------------
 
             with st.expander(
-                "View Half-Inning Probability Detail"
+                "View Half-Inning Probability Detail",
+                expanded=True,
             ):
 
                 half_probability_rows = []
