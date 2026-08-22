@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import io
 import base64
+import html
 
 from pathlib import Path
 
@@ -327,6 +328,59 @@ st.markdown(
         background: rgba(10,10,10,0.76);
     }}
 
+    .sr-responsive-wrap {{
+        width: 100%;
+        overflow: hidden;
+        margin: 0.45rem 0 0.8rem 0;
+        border: 1px solid rgba(246,196,49,0.22);
+        border-radius: 12px;
+        background: rgba(8,8,8,0.88);
+    }}
+
+    .sr-responsive-table {{
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+        color: #F4F4F4;
+        font-size: 0.84rem;
+    }}
+
+    .sr-responsive-table th {{
+        padding: 0.68rem 0.62rem;
+        text-align: left;
+        color: #D8D8D8;
+        background: #0B0B0B;
+        border-bottom: 1px solid rgba(246,196,49,0.28);
+        font-weight: 800;
+        white-space: nowrap;
+    }}
+
+    .sr-responsive-table td {{
+        padding: 0.70rem 0.62rem;
+        vertical-align: top;
+        border-bottom: 1px solid rgba(255,255,255,0.075);
+        line-height: 1.30;
+    }}
+
+    .sr-responsive-table tr:last-child td {{
+        border-bottom: 0;
+    }}
+
+    .sr-responsive-table .sr-game-cell {{
+        font-weight: 800;
+        min-width: 220px;
+    }}
+
+    .sr-responsive-table .sr-qualified {{
+        color: #FFD95A;
+        font-weight: 900;
+    }}
+
+    .sr-responsive-table .sr-watch {{
+        color: #D6D6D6;
+        font-weight: 800;
+    }}
+
     div[data-testid="stExpander"] {{
         border: 1px solid rgba(246,196,49,0.20);
         border-radius: 11px;
@@ -392,6 +446,68 @@ st.markdown(
 
         .sr-play-line {{
             font-size: 0.80rem !important;
+        }}
+
+        .sr-responsive-wrap {{
+            border: 0;
+            background: transparent;
+            overflow: visible;
+        }}
+
+        .sr-responsive-table,
+        .sr-responsive-table tbody,
+        .sr-responsive-table tr,
+        .sr-responsive-table td {{
+            display: block;
+            width: 100%;
+        }}
+
+        .sr-responsive-table thead {{
+            display: none;
+        }}
+
+        .sr-responsive-table tr {{
+            box-sizing: border-box;
+            margin: 0 0 0.78rem 0;
+            padding: 0.30rem 0.80rem;
+            border: 1px solid rgba(246,196,49,0.30);
+            border-radius: 12px;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(24,24,24,0.98) 0%,
+                    rgba(10,10,10,0.98) 100%
+                );
+            box-shadow: 0 5px 16px rgba(0,0,0,0.20);
+        }}
+
+        .sr-responsive-table td {{
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: minmax(104px, 38%) minmax(0, 62%);
+            gap: 0.60rem;
+            padding: 0.52rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.82rem;
+            overflow-wrap: anywhere;
+        }}
+
+        .sr-responsive-table td:last-child {{
+            border-bottom: 0;
+        }}
+
+        .sr-responsive-table td::before {{
+            content: attr(data-label);
+            color: #AFAFAF;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }}
+
+        .sr-responsive-table .sr-game-cell {{
+            min-width: 0;
+            font-size: 0.91rem;
         }}
     }}
 
@@ -1199,6 +1315,122 @@ def format_number(value):
         return "—"
 
     return int(value)
+
+
+def render_responsive_results(
+    rows,
+    *,
+    game_column="Game",
+    qualification_column=None,
+):
+    """
+    Render result rows as a normal table on desktop and as
+    stacked full-width cards on mobile. Every field stays visible
+    without horizontal scrolling.
+    """
+
+    if not rows:
+        return
+
+    columns = list(
+        rows[0].keys()
+    )
+
+    header_html = "".join(
+        f"<th>{html.escape(str(column))}</th>"
+        for column in columns
+    )
+
+    body_rows = []
+
+    for row in rows:
+
+        cells = []
+
+        for column in columns:
+
+            value = row.get(
+                column,
+                "—",
+            )
+
+            if (
+                value is None
+                or value == ""
+            ):
+                value = "—"
+
+            class_names = []
+
+            if column == game_column:
+                class_names.append(
+                    "sr-game-cell"
+                )
+
+            if (
+                qualification_column
+                and
+                column == qualification_column
+            ):
+
+                value_text = str(
+                    value
+                ).upper()
+
+                if "QUALIFIED" in value_text:
+                    class_names.append(
+                        "sr-qualified"
+                    )
+
+                elif "WATCH" in value_text:
+                    class_names.append(
+                        "sr-watch"
+                    )
+
+            class_attr = (
+                f' class="{" ".join(class_names)}"'
+                if class_names
+                else ""
+            )
+
+            cells.append(
+                f'<td data-label="{html.escape(str(column))}"'
+                f'{class_attr}>'
+                f'{html.escape(str(value))}'
+                f'</td>'
+            )
+
+        body_rows.append(
+            "<tr>"
+            + "".join(
+                cells
+            )
+            + "</tr>"
+        )
+
+    st.markdown(
+        """
+        <div class="sr-responsive-wrap">
+            <table class="sr-responsive-table">
+                <thead>
+                    <tr>
+        """
+        + header_html
+        + """
+                    </tr>
+                </thead>
+                <tbody>
+        """
+        + "".join(
+            body_rows
+        )
+        + """
+                </tbody>
+            </table>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def strict_average(values):
@@ -4362,7 +4594,9 @@ if st.button(
                 "FINAL games ranked strictly by Model v1 NRFI probability. "
                 "A game is a Qualified NRFI Play only at 57.0% or higher. "
                 "Sportsbook price, break-even probability, and market edge "
-                "do NOT determine the probability ranking."
+                "do NOT determine the probability ranking. On mobile, result "
+                "tables automatically stack so every field is visible without "
+                "sideways scrolling."
             )
 
             if final_nrfi_rows:
@@ -4440,25 +4674,10 @@ if st.button(
                             row["Status"],
                     })
 
-                final_nrfi_df = pd.DataFrame(
-                    final_nrfi_display
-                )
-
-                final_nrfi_styled = (
-                    final_nrfi_df.style
-                    .set_properties(
-                        **{
-                            "background-color": "#FFF3A6",
-                            "color": "#111111",
-                            "font-weight": "700",
-                        }
-                    )
-                )
-
-                st.dataframe(
-                    final_nrfi_styled,
-                    use_container_width=True,
-                    hide_index=True,
+                render_responsive_results(
+                    final_nrfi_display,
+                    qualification_column=
+                        "Qualification",
                 )
 
                 if qualified_final_nrfi_rows:
@@ -4553,12 +4772,8 @@ if st.button(
                             or "—",
                     })
 
-                st.dataframe(
-                    pd.DataFrame(
-                        market_value_display
-                    ),
-                    use_container_width=True,
-                    hide_index=True,
+                render_responsive_results(
+                    market_value_display
                 )
 
             else:
@@ -4646,12 +4861,8 @@ if st.button(
 
                 if provisional_display:
 
-                    st.dataframe(
-                        pd.DataFrame(
-                            provisional_display
-                        ),
-                        use_container_width=True,
-                        hide_index=True,
+                    render_responsive_results(
+                        provisional_display
                     )
 
                 else:
@@ -4750,12 +4961,8 @@ if st.button(
                 })
 
 
-            st.dataframe(
-                pd.DataFrame(
-                    all_game_display
-                ),
-                use_container_width=True,
-                hide_index=True,
+            render_responsive_results(
+                all_game_display
             )
 
 
@@ -4810,12 +5017,8 @@ if st.button(
                             row["Status"],
                     })
 
-                st.dataframe(
-                    pd.DataFrame(
-                        top_model_display
-                    ),
-                    use_container_width=True,
-                    hide_index=True,
+                render_responsive_results(
+                    top_model_display
                 )
 
 
